@@ -20,7 +20,7 @@ $ kubectl run multitool --image=praqma/network-multitool
 deployment "multitool" created
 ```
 
-What this command does behind the scenes is, it creates a deployment named multitool, starts a pod using this docker image (praqma/network-multitool), and makes that pod a memeber of that deployment. You don't need to confuse yourself with all these details at this stage. This is just extra (but vital) information. Just so you know what we are talking about, check the list of pods and deployments:
+What this command does behind the scenes is, it creates a deployment named multitool, starts a pod using this docker image (praqma/network-multitool), and makes that pod a member of that deployment. You don't need to confuse yourself with all these details at this stage. This is just extra (but vital) information. Just so you know what we are talking about, check the list of pods and deployments:
 
 List of pods:
 ```
@@ -72,8 +72,8 @@ rs/nginx-1480123054       1         1         1         14s
 ```
 
 
-## Alternate / preffered way to deploy pods:
-You can also use the `nginx-simple-deployment.yaml` file to create the same nginx deployment. The file is in suport-files directory of this repo. However before you execute the command shown below, note that it will try to create a deployment with the name **nginx**. If you already have a deployment named **nginx** running, as done in the previous step, then you will need to delete that first.
+## Alternate / preferred way to deploy pods:
+You can also use the `nginx-simple-deployment.yaml` file to create the same nginx deployment. The file is in support-files directory of this repo. However before you execute the command shown below, note that it will try to create a deployment with the name **nginx**. If you already have a deployment named **nginx** running, as done in the previous step, then you will need to delete that first.
 
 Delete the existing deployment using the following command:
 ```
@@ -139,7 +139,7 @@ multitool-3148954972-k8q06   1/1       Running   0          1h
 nginx-431080787-9r0lx        1/1       Running   0          40s
 ```
 
-## Deleting a pod, the kubernetes promise of resilience:
+## Deleting a pod, the Kubernetes promise of resilience:
 
 Before we move forward, lets see if we can delete a pod, and if it comes to life automatically:
 ```
@@ -242,7 +242,7 @@ You can of-course use `... describe pod ...` , ` ... describe deployment ...` , 
 
 
 **Additional notes about the Cluster-IP:**
-* The IPs assigned to services as Cluster-IP are from a different Kubernetes network called *Service Network*, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labelling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
+* The IPs assigned to services as Cluster-IP are from a different Kubernetes network called *Service Network*, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labeling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
 * No matter what type of service you choose while *exposing* your deployment, Cluster-IP is always assigned to that particular service.
 * Every service has end-points, which point to the actual pods service as a backend of a particular service.
 * As soon as a service is created, and is assigned a Cluster-IP, an entry is made in Kubernetes' internal DNS against that service, with this service name and the Cluster-IP. e.g. `nginx.default.svc.cluster.local` would point to `100.70.204.237` . 
@@ -335,7 +335,7 @@ Now, we can access this service without using any special port numbers:
 
 # High Availability:
 
-So far we have seen pods, deployments and services. We have also seen Kubernetes keeping up it's promise of resilience. Now we see how we can have **high availability** on Kubernetes. The easiest and preffered way to do this is by having multiple replicas for a deployment.
+So far we have seen pods, deployments and services. We have also seen Kubernetes keeping up it's promise of resilience. Now we see how we can have **high availability** on Kubernetes. The easiest and preferred way to do this is by having multiple replicas for a deployment.
 
 
 Lets increase the number of replicas of our nginx deployment to four(4):
@@ -362,7 +362,7 @@ nginx-569477d6d8-s6lsn       1/1       Running   0          34s
 nginx-569477d6d8-v8srx       1/1       Running   0          35s
 ```
 
-**Notice:** The nginx deployment says Desired=4, Current=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was aready running (being older), and the other three are started just now.
+**Notice:** The nginx deployment says Desired=4, Current=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was already running (being older), and the other three are started just now.
 
 
 You can also scale down! - e.g. to 2:
@@ -382,7 +382,7 @@ nginx-569477d6d8-s6lsn       0/1       Terminating   0          1m
 nginx-569477d6d8-v8srx       1/1       Running       0          2m
 ```
 
-Notice that un-necessary pods are killed immediately.
+Notice that unnecessary pods are killed immediately.
 
 ```
 $ kubectl get pods
@@ -456,7 +456,7 @@ NAME                     READY     STATUS    RESTARTS   AGE
 nginx-4217019353-fk9ph   1/1       Running   0          10s
 ```
 
-So, you get the idea. You include `-n <namespacename>` in any kubectl invokation, and it will operate on the given namespace only. You can also use `--all-namespaces=true" to get objects from all namespaces.
+So, you get the idea. You include `-n <namespacename>` in any kubectl invocation, and it will operate on the given namespace only. You can also use `--all-namespaces=true" to get objects from all namespaces.
 
 The yaml files for the coming exercises will give you a better impression of what is sensible.
 
