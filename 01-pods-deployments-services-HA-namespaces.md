@@ -392,6 +392,107 @@ nginx-569477d6d8-4msf8       1/1       Running   0          22m
 nginx-569477d6d8-v8srx       1/1       Running   0          2m
 ```
 
+You can delete the nginx deployment and service at this point. We have no use for these anymore. Besides, you can always re-create them.
+
+```
+$ kubectl delete deployment nginx
+
+$ kubectl delete service nginx
+```
+
+## Small exercise for HA:
+To prove that multiple pods of the same deployment provide high availability, we do a small exercise. To visualize it, we need to run a small web server which could return us some uniqe content when we access it. We will use our trusted multitool for it. Lets run it as a separate deployment and access it from our local computer.
+
+```
+$ kubectl run customnginx --image=praqma/network-multitool --replicas=4
+deployment "customnginx" created
+```
+
+```
+$ kubectl get pods
+NAME                           READY     STATUS    RESTARTS   AGE
+customnginx-3557040084-1z489   1/1       Running   0          49s
+customnginx-3557040084-3hhlt   1/1       Running   0          49s
+customnginx-3557040084-c6skw   1/1       Running   0          49s
+customnginx-3557040084-fw1t3   1/1       Running   0          49s
+```
+
+Lets create a service for this deployment as a type=LoadBalancer: 
+
+```
+$ kubectl expose deployment customnginx --port=80 --type=LoadBalancer 
+service "customnginx" exposed
+```
+
+Verify the service and note the public IP address:
+```
+$ kubectl get services
+NAME          TYPE           CLUSTER-IP    EXTERNAL-IP        PORT(S)        AGE
+customnginx   LoadBalancer   100.67.40.4   35.205.60.41       80:30087/TCP   1m
+kubernetes    ClusterIP      100.64.0.1    <none>             443/TCP        17h
+```
+
+Query the service, so we know it works as expected:
+```
+$ curl -s 35.205.60.41 | grep IP
+Container IP: 100.96.1.150 <BR></p>
+```
+
+Next, setup a small bash loop on your local computer to curl this IP address, and get it's IP address.
+```
+$ while true; do sleep 1; curl -s 35.205.60.41 | grep IP; done
+Container IP: 100.96.2.36 <BR></p>
+Container IP: 100.96.1.150 <BR></p>
+Container IP: 100.96.2.37 <BR></p>
+Container IP: 100.96.2.37 <BR></p>
+Container IP: 100.96.2.36 <BR></p>
+^C
+```
+
+We see that when we query the LoadBalancer IP, it is giving us result/content from all four containers. None of the curl commands is timed out. Now, if we kill three out of four pods, the service should still respond, without timing out. We let the loop run in a separate terminal, and kill three pods of this deployment from another terminal. 
+
+```
+$ kubectl delete pod customnginx-3557040084-1z489 customnginx-3557040084-3hhlt customnginx-3557040084-c6skw 
+pod "customnginx-3557040084-1z489" deleted
+pod "customnginx-3557040084-3hhlt" deleted
+pod "customnginx-3557040084-c6skw" deleted
+```
+
+Immediately check the other terminal for any failed curl commands or timeouts. 
+```
+Container IP: 100.96.1.150 <BR></p>
+Container IP: 100.96.1.150 <BR></p>
+Container IP: 100.96.2.37 <BR></p>
+Container IP: 100.96.1.149 <BR></p>
+Container IP: 100.96.1.149 <BR></p>
+Container IP: 100.96.1.150 <BR></p>
+Container IP: 100.96.2.36 <BR></p>
+Container IP: 100.96.2.37 <BR></p>
+Container IP: 100.96.2.37 <BR></p>
+Container IP: 100.96.2.38 <BR></p>
+Container IP: 100.96.2.38 <BR></p>
+Container IP: 100.96.2.38 <BR></p>
+Container IP: 100.96.1.151 <BR></p>
+```
+
+We notice that no curl command failed, and actually we have started seeing new IPs. Why is that? It is because, as soon as the pods are deleted, the deployment sees that it's desired state is four pods, and there is only one running, so it immediately starts three more to reach that desired state. And, while the pods are in process of starting, one surviving pod takes the traffic.
+
+```
+[kamran@kworkhorse kubernetes-katas]$ kubectl get pods
+NAME                           READY     STATUS        RESTARTS   AGE
+customnginx-3557040084-0s7l8   1/1       Running       0          15s
+customnginx-3557040084-1z489   1/1       Terminating   0          16m
+customnginx-3557040084-3hhlt   1/1       Terminating   0          16m
+customnginx-3557040084-bvtnh   1/1       Running       0          15s
+customnginx-3557040084-c6skw   1/1       Terminating   0          16m
+customnginx-3557040084-fw1t3   1/1       Running       0          16m
+customnginx-3557040084-xqk1n   1/1       Running       0          15s
+[kamran@kworkhorse kubernetes-katas]$ 
+```
+This proves, Kubernets provides us High Availability, using multiple replicas of a pod. 
+
+
+
 ------ 
 
 
@@ -431,6 +532,7 @@ $ kubectl get namespaces
 NAME          STATUS    AGE
 default       Active    2d
 dev           Active    12s
+kube-system   Active	2d
 prod          Active    5s
 test          Active    8s
 ```
