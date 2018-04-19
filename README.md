@@ -2,7 +2,7 @@
 Deliberate exercises for Kubernetes on Googles Compute Engine.
 
 * [Setup kubectl](00-setup-kubectl.md)
-* [01-pods-deployments-services-namespaces.md](01-pods-deployments-services-namespaces.md)
+* [01-pods-deployments-services-HA-namespaces.md](01-pods-deployments-services-HA-namespaces.md)
 * [02-rolling-updates.md](02-rolling-updates.md)
 * [03-secrets-ssl-certs-in-nginx.md](03-secrets-ssl-certs-in-nginx.md)
 * [03-secrets-alternate-example.md](03-secrets-alternate-example.md)
