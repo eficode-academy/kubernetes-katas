@@ -32,7 +32,7 @@ pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            Delete     
 ```
 
 
-Update your nginx-ssl.yaml file to update storage/volume directives:
+Create nginx-persistent-storage.yaml file to use storage/volume directives:
 ```
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -51,12 +51,6 @@ spec:
         app: nginx
     spec:
       volumes:
-      - name: certs-volume
-        secret:
-          secretName: nginx-certs
-      - name: config-volume
-        configMap:
-          name: nginx-config
       - name: nginx-htmldir-volume
         persistentVolumeClaim:
           claimName: pvc-nginx
@@ -67,10 +61,6 @@ spec:
         - containerPort: 443
         - containerPort: 80
         volumeMounts:
-        - mountPath: /certs
-          name: certs-volume
-        - mountPath: /etc/nginx/conf.d
-          name: config-volume
         - mountPath: "/usr/share/nginx/html"
           name: nginx-htmldir-volume
 ```
@@ -93,12 +83,12 @@ Now, you can curl it. You should get a "403 Forbidden", because now the volume y
 [root@multitool-69d6b7fc59-gbghn /]# 
 ```
 
-Create a file in the htmldir inside the nginx pod:
+Create a file in the htmldir inside the nginx pod and add some text in it:
 
 ```
 [demo@kworkhorse exercises]$ kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 bash
 
-root@nginx-deployment-6665c87fd8-cc8k9:/# echo "<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage. This should exist no matter how many times we kill this pod. <HR><b>We NEVER lose</b>" > /usr/share/nginx/html/index.html
+root@nginx-deployment-6665c87fd8-cc8k9:/# echo "<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage."  > /usr/share/nginx/html/index.html
 root@nginx-deployment-6665c87fd8-cc8k9:/#
 ```
 
@@ -108,7 +98,7 @@ From the multitool, curl again , you should see the web page:
 
 [root@multitool-69d6b7fc59-gbghn /]#
  curl 10.0.96.7
-<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage. This should exist no matter how many times we kill this pod. <HR><b>We NEVER lose</b>
+<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage.
 [root@multitool-69d6b7fc59-gbghn /]#
 ```
 
@@ -132,7 +122,7 @@ Again, from multitool, curl the new nginx pod. You should see the page you creat
 ```
 [demo@kworkhorse exercises]$ kubectl exec -it multitool-69d6b7fc59-gbghn bash
 [root@multitool-69d6b7fc59-gbghn /]# curl 10.0.96.8
-<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage. This should exist no matter how many times we kill this pod. <HR><b>We NEVER lose</b>
+<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage.
 [root@multitool-69d6b7fc59-gbghn /]# 
 ```
 
