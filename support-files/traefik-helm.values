@@ -33,7 +33,7 @@ acme:
 
 dashboard:
   enabled: true
-  domain: traefik.novelda.no
+  domain: traefik.example.com
   ingress:
     annotations:
       kubernetes.io/ingress.class: traefik
