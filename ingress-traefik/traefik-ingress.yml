@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: traefik-ui.local
+  - host: traefik-ui.example.com
     http:
       paths:
       - backend:

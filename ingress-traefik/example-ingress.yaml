@@ -1,0 +1,18 @@
+# This example expects a nginx deployment running, exposed as a service named 'nginx', on port 80.
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: default
+  name: example-nginx-ingress
+  labels:
+    app: nginx
+spec:
+  rules:
+  - host: www.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nginx
+          servicePort: 80
+

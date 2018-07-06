@@ -1,6 +1,6 @@
 # Ingress on google cloud
 
-GoogleKubernetesEngine (GKE) does Ingress a bit differently. For reference, those brave of you who want to play with Minikube, I have two more you can do - [nginx](03-ingress-nginx.md) and [traefik](03-ingress-traefik.md).
+GoogleKubernetesEngine (GKE) does Ingress a bit differently. For reference, those brave of you who want to play with Minikube, I have two more you can do - [nginx](05-ingress-nginx.md) and [traefik](05-ingress-traefik.md).
 
 However because we are running things on GKE, we are going to focus on that today. 
 
@@ -9,7 +9,7 @@ An ingress is loosely translatable to DNS namespace, and makes it so that:
 - A name call to (example) myapplication.example.local gets translated to an IP and then routed to a container.
 
 
-Create an nginx deployment and service, exposing the service as a nodeport. If you need a hint as to how this is done, look at [the getting started](01-getting-started.md).
+Create an nginx deployment and service, exposing the service as a nodeport. If you need a hint as to how this is done, look at [the getting started](01-pods-deployments-services-HA-namespaces.md).
 
 GKE automatically exposes NodePorts through a Loadbalancer, but the 'correct' way is the ingress rule, which will work on all infrastructure. 
 

@@ -7,7 +7,7 @@ metadata:
   labels:
     k8s-app: traefik-ingress-lb
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       k8s-app: traefik-ingress-lb
@@ -24,10 +24,10 @@ spec:
         name: traefik-ingress-lb
         resources:
           limits:
-            cpu: 200m
-            memory: 30Mi
-          requests:
             cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 20m
             memory: 20Mi
         ports:
         - containerPort: 80

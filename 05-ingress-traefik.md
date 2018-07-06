@@ -1,8 +1,8 @@
 # Ingress
-If we look at Service as an endpoint, then the Kubernetes ingress object is a DNS.
+If we look at Service as an endpoint, then the Kubernetes ingress object is a DNS look-alike.
 It takes care of things like load balancing traffic, terminating SSL and naming among other things. 
 
-To enable an ingress object, we need an ingress controller. In this example we will be using [Træfik](https://traefik.io/). If you prefer [NGINX there is another exercise doing it with NGINX](./03-ingress-nginx.md).
+To enable an ingress object, we need an ingress controller. In this example we will be using [Træfik](https://traefik.io/). If you prefer [NGINX there is another exercise doing it with NGINX](./05-ingress-nginx.md).
 
 So, therefore we start with the ingress controller: 
 ```
