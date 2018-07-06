@@ -171,7 +171,6 @@ OR. If you have a domain under your control, setup DNS accordingly. You can use 
 
 Now visit the address `traefik-ui.example.com` , you should see a dashboard.
 
-(screenshot here) (todo)
 
 ## Setup additional ingress for your application(s):
 Its time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
@@ -240,7 +239,7 @@ kubectl create -f ingress-traefik/example-nginx-deployment.yaml
 
 If you visit the Traefik dashboard now, you should be able to see a new ingress pop up. Visit the web page `www.example.com` to verify that you can access the nginx web server.
 
-
+![](ingress-traefik/traefik-ingress.png)
 
 
 ------------
