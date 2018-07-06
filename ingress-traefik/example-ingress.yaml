@@ -1,4 +1,39 @@
-# This example expects a nginx deployment running, exposed as a service named 'nginx', on port 80.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    name: nginx
+    app: nginx
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: nginx
+
+---
+
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
