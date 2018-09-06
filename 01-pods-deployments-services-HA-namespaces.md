@@ -498,7 +498,7 @@ This proves, Kubernets provides us High Availability, using multiple replicas of
 
 
 # Namespaces:
-Namespaces are the default way for kubernetes to separate resources. Namespaces do not share anything between them, which is important to know. This is quite powerful concept, but not unusual, as in computing - we are used to having isolated environments such as home directories, jailed environments, etc. Kubernetes clusters come with a namespace called **default**.
+Namespaces are the default way for Kubernetes to separate resources, and most Kubernetes resources such as pods and deployments must belong to a namespace. Namespaces is a quite powerful concept, but not unusual, as in computing - we are used to having isolated environments such as home directories, jailed environments, etc. Kubernetes clusters come with a namespace called **default**. However, namespaces in Kubernetes are not necessarily strongly separated and e.g. by default Kubernetes allows network connectivily between pods in different namespaces.
 
 When you execute a kubectl command without specifying a namespace, it is run in/against the namespace named **default** !. So far all the commands you have executed above, have been executed in the *default* namespace. You can optionally use the namespace flag (-n mynamespace) to execute the command a specific namespace. When you are creating Kubernetes objects though *yaml* files, you can specify a namespace for a particular resource. 
 
