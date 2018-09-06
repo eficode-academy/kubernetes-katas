@@ -244,7 +244,7 @@ You can of-course use `... describe pod ...` , ` ... describe deployment ...` , 
 **Additional notes about the Cluster-IP:**
 * The IPs assigned to services as Cluster-IP are from a different Kubernetes network called *Service Network*, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labeling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
 * No matter what type of service you choose while *exposing* your deployment, Cluster-IP is always assigned to that particular service.
-* Every service has end-points, which point to the actual pods service as a backend of a particular service.
+* Every service has end-points, which point to the actual pods serving as a backends of a particular service.
 * As soon as a service is created, and is assigned a Cluster-IP, an entry is made in Kubernetes' internal DNS against that service, with this service name and the Cluster-IP. e.g. `nginx.default.svc.cluster.local` would point to `100.70.204.237` . 
 
 
@@ -440,7 +440,7 @@ Container IP: 100.96.1.150 <BR></p>
 
 Next, setup a small bash loop on your local computer to curl this IP address, and get it's IP address.
 ```
-$ while true; do sleep 1; curl -s 35.205.60.41 | grep IP; done
+$ while true; do sleep 1; curl -s 35.205.60.41; done
 Container IP: 100.96.2.36 <BR></p>
 Container IP: 100.96.1.150 <BR></p>
 Container IP: 100.96.2.37 <BR></p>
