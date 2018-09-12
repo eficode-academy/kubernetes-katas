@@ -44,7 +44,7 @@ OR
 ```
 sudo apt-get update && sudo apt-get install -y apt-transport-https
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-sudo touch /etc/apt/sources.list.d/kubernetes.list 
+sudo touch /etc/apt/sources.list.d/kubernetes.list
 echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update
 sudo apt-get install -y kubectl
@@ -52,7 +52,7 @@ sudo apt-get install -y kubectl
 
 
 
-Kubectl is a *go* binary which allows you to execute commands on your cluster. Where, "your cluster" could be: a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. 
+Kubectl is a *go* binary which allows you to execute commands on your cluster. Where, "your cluster" could be: a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP.
 
 **Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as both master-node and worker-node.
 
@@ -60,7 +60,7 @@ For the remainder of this workshop, we assume you have a Kubernetes cluster on g
 
 
 # Authenticate to your Google k8s cluster:
-In some workshops we provide a preconfigured **config** file, which you simply save as ~/.kube/config on your local computer, and you are golden. 
+In some workshops we provide a preconfigured **config** file, which you simply save as ~/.kube/config on your local computer, and you are golden.
 However, in other setups, you may need to actually authenticate to the cluster, and get a config file directly from GCP. Actually, the instructors may also need to use/do the following steps when they are setting up individual VMs for each student. Either way, the access to cluster can only be obtained after authenticating to google. To authenticate against your cluster, you will need google cloud SDK installed on your computer, and a gmail account. Assuming you already have a gmail account, we proceed to install google SDK on the local computer. To do that we have provided a summary of steps you need to perform. For more details, visit [this URL](https://cloud.google.com/sdk/install) .
 
 
@@ -77,7 +77,7 @@ gcloud init
 curl https://sdk.cloud.google.com | bash
 exec -l $SHELL
 gcloud init
-``` 
+```
 
 OR
 
@@ -163,7 +163,7 @@ users:
 ```
 
 
-You should now have access to the google cloud cluster! Verify by looking at the nodes for the cluster: 
+You should now have access to the google cloud cluster! Verify by looking at the nodes for the cluster:
 
 ```
 kubectl get nodes
