@@ -7,11 +7,11 @@ It is assumed that you are provided with a kubernetes cluster by the instructor.
 $ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
 ```
 
-Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. 
+Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP.
 
 **Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as node.
 
-For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to various types of Kubernetes cluster, check [this article](https://kubernetes.io/docs/tasks/tools/install-kubectl/#configure-kubectl) 
+For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to various types of Kubernetes cluster, check [this article](https://kubernetes.io/docs/tasks/tools/install-kubectl/#configure-kubectl)
 
 
 ## Authenticate to your Google k8s cluster:
@@ -33,7 +33,7 @@ vi keyfile.json
 gcloud auth activate-service-account --key-file keyfile.json
 
  # Get the cluster credentials for kubectl
-gcloud container clusters get-credentials cluster-london --zone europe-west1-b --project praqma-education
+gcloud container clusters get-credentials training-cluster --zone europe-west1-b --project praqma-education
 ```
 
 Google will do some magic under the hood, which does a few things:
@@ -73,7 +73,7 @@ users:
 ```
 
 
-Furthermore you should now have access to the google cloud cluster! Verify by looking at the nodes for the cluster: 
+Furthermore you should now have access to the google cloud cluster! Verify by looking at the nodes for the cluster:
 
 ```
 kubectl get nodes
