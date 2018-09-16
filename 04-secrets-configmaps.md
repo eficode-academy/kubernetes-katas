@@ -1,4 +1,4 @@
-# Secrets (and configmaps)
+# Secrets and ConfigMaps
 
 Before we start, make sure you have set your working namespace
 ````
