@@ -25,6 +25,7 @@ Notice, there are two services listed here. The first one is named **kubernetes*
 The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using the service IP, not the pod IP. Lets see if we can access this service from our multitool.
 
 ```
+[demo@kworkhorse exercises]$ kubectl exec -it multitool-5c8676565d-n9rvz bash
 [root@multitool-3148954972-k8q06 /]# curl -s 100.70.204.237 | grep h1
 <h1>Welcome to nginx!</h1>
 [root@multitool-3148954972-k8q06 /]# 
