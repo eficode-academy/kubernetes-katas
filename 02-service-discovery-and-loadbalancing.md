@@ -47,7 +47,11 @@ To access a service in a different namespace, use its full DNS name:
 <h1>Welcome to nginx!</h1>
 ```
 
-You can also use the `describe` command to describe any Kubernetes object in more detail. e.g. we use `describe` to see more details about our nginx service:
+Now log out of the bash on the multi-tool pod by typing `ctrl+d` to get out of the pod.
+
+#### Describe
+
+You can use the `describe` command to describe any Kubernetes object in more detail. e.g. we use `describe` to see more details about our nginx service:
 
 ```shell
 $ kubectl describe service nginx
@@ -67,7 +71,7 @@ Events:            <none>
 
 You can of-course use `... describe pod ...` , `... describe deployment ...` , etc.
 
-**Additional notes about the Cluster-IP:**
+#### Additional notes about the Cluster-IP
 
 * The IPs assigned to services as Cluster-IP are from a different Kubernetes network called *Service Network*, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labeling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
 * No matter what type of service you choose while *exposing* your deployment, Cluster-IP is always assigned to that particular service.
