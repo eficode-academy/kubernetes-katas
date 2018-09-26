@@ -1,5 +1,13 @@
 # Replicas and Rolling update:
 
+Recreate the nginx that we did earlier:
+
+`kubectl run nginx --image=nginx:1.7.9`
+
+And make a load balancer service:
+
+`kubectl expose deployment nginx --port 80 --type LoadBalancer`
+
 Increase replicas:
 ```
 kubectl scale deployment nginx --replicas=4
