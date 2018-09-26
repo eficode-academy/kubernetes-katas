@@ -41,8 +41,9 @@ But there's more...we can also access the nginx using dns:
 [root@multitool-3148954972-k8q06 /]# 
 ```
 
+Now log out of the bash on the multi-tool pod by type `ctrl+d` to get out of the pod.
 
-You can also use the `describe` command to describe any Kubernetes object in more detail. e.g. we use `describe` to see more details about our nginx service:
+You can use the `describe` command to describe any Kubernetes object in more detail. e.g. we use `describe` to see more details about our nginx service:
 
 ```
 $ kubectl describe service nginx
