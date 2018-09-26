@@ -49,6 +49,8 @@ deployment.extensions/envtest created
 
 Expose the deployment on a nodeport, so you can see the running container.
 
+> You learned about exposing nodeports in the [service discovery](02-service-discovery-and-loadbalancing.md) exercise. And remember that the application is running on port ´3000´
+
 Despite the default value in the Dockerfile, it should now be overwritten by the deployment env values!
 
 However we just moved it from being hardcoded in our app to being hardcoded in our Dockerfile.
@@ -116,7 +118,9 @@ To:
               key: API_KEY
 ```
 
-You should now see the variables being loaded from the configmap and secret respectively.
+After you have edited the `deployment.yml` file, you need to apply the new edition of the file by issuing: `kubectl apply -f deployment.yml` .
+
+You should now see the variables being loaded from configmap and secret respectively.
 
 To hot swap the values, you need to keep in mind that pods have a cache, so it becomes a two step process:
 

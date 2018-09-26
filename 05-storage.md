@@ -5,7 +5,9 @@ Check the storage class:
 kubectl get storageclass
 ```
 
-Create a Dynamically Provisioned PVC for nginx:
+Create a Dynamically Provisioned PVC for nginx. 
+
+The `pvc-nginx.yaml` is situated in the `support-files` folder.
 ```
 kubectl create -f pvc-nginx.yaml
 ```
@@ -32,7 +34,7 @@ pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            Delete     
 ```
 
 
-Create nginx-persistent-storage.yaml file to use storage/volume directives:
+We are going to use the file `nginx-persistent-storage.yaml` file to use storage/volume directives:
 ```
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -65,13 +67,17 @@ spec:
           name: nginx-htmldir-volume
 ```
 
-Deploy nginx again. After it starts, you may want to examine it by using `kubectl describe pod nginx`.
+Deploy nginx again. 
+
+After it starts, you may want to examine it by using `kubectl describe pod nginx`.
 
 
 Now, you can curl it. You should get a "403 Forbidden", because now the volume you mounted is empty.
 
+Try to reach the nginx pod by executing a bash on your multitool pod:
+
 ```
-[demo@kworkhorse exercises]$ kubectl exec -it multitool-69d6b7fc59-gbghn bash
+[demo@kworkhorse exercises]$ kubectl exec -it multitool-<ID> bash
 [root@multitool-69d6b7fc59-gbghn /]# curl 10.0.96.7
 <html>
 <head><title>403 Forbidden</title></head>
@@ -82,6 +88,7 @@ Now, you can curl it. You should get a "403 Forbidden", because now the volume y
 </html>
 [root@multitool-69d6b7fc59-gbghn /]# 
 ```
+Exit the multitool pod again.
 
 Create a file in the htmldir inside the nginx pod and add some text in it:
 
