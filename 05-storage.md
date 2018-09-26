@@ -74,8 +74,10 @@ After it starts, you may want to examine it by using `kubectl describe pod nginx
 
 Now, you can curl it. You should get a "403 Forbidden", because now the volume you mounted is empty.
 
+Try to reach the nginx pod by executing a bash on your multitool pod:
+
 ```
-[demo@kworkhorse exercises]$ kubectl exec -it multitool-69d6b7fc59-gbghn bash
+[demo@kworkhorse exercises]$ kubectl exec -it multitool-<ID> bash
 [root@multitool-69d6b7fc59-gbghn /]# curl 10.0.96.7
 <html>
 <head><title>403 Forbidden</title></head>
@@ -86,6 +88,7 @@ Now, you can curl it. You should get a "403 Forbidden", because now the volume y
 </html>
 [root@multitool-69d6b7fc59-gbghn /]# 
 ```
+Exit the multitool pod again.
 
 Create a file in the htmldir inside the nginx pod and add some text in it:
 
