@@ -45,6 +45,8 @@ kubectl apply -f deployment.yml
 
 Expose the deployment on a nodeport, so you can see the running container. 
 
+> You learned about exposing nodeports in the [service discovery](02-service-discovery-and-loadbalancing.md) exercise. And remember that the application is running on port ´3000´ 
+
 Despite the default value in the Dockerfile, it should now be overwritten by the deployment env values! 
 
 However we just moved it from being hardcoded in our app to being hardcoded in our Dockerfile. 
