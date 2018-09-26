@@ -51,7 +51,7 @@ We start by creating our first deployment. Normally people will run an nginx con
 Here is the command to do it:
 
 ```shell
-kubectl run multitool  --image=praqma/network-multitool
+kubectl run multitool --image=praqma/network-multitool
 ```
 
 You should be able to see the following output:
@@ -199,9 +199,11 @@ $ kubectl get pods
 NAME                         READY     STATUS              RESTARTS   AGE
 multitool-3148954972-k8q06   1/1       Running             0          1h
 nginx-431080787-tx5m7        0/1       ContainerCreating   0          5s
+```
 
-(after few more seconds)
+.. and after few more seconds:
 
+```shell
 $ kubectl get pods
 NAME                         READY     STATUS    RESTARTS   AGE
 multitool-3148954972-k8q06   1/1       Running   0          1h
