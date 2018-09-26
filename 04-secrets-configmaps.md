@@ -101,6 +101,8 @@ To:
               key: API_KEY
 ```
 
+After you have edited the `deployment.yml` file, you need to apply the new edition of the file by issuing: `kubectl apply -f deployment.yml` .
+
 You should now see the variables being loaded from configmap and secret respectively.
 
 To hot swap the values, you need to keep in mind that pods have a cache, so it becomes a two step process: 
