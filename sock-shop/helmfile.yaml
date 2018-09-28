@@ -1,0 +1,19 @@
+
+releases:
+  - name: prometheus
+    namespace: default
+    chart: stable/prometheus
+    version: 7.1.3
+    #version: 6.7.2
+    values:
+    - values-prometheus.yaml
+
+  - name: grafana
+    namespace: default
+    chart: stable/grafana
+    version: 1.11.1
+    values:
+    - values-grafana.yaml
+    set:
+    - name: adminPassword
+      value: {{ env "GRAFANA_ADMIN_PASSWD" | default "" | quote }}
