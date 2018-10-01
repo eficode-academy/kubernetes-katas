@@ -2,8 +2,9 @@
 
 This is a deployment of [Sock-shop](https://github.com/microservices-demo/microservices-demo), Prometheus and Grafana.
 
-Prerequisites is a clean cluster, with a local kubectl authenticated towards the
-cluster.
+Prerequisites is a empty cluster, with a local kubectl authenticated towards the
+cluster.  Helm and helmfile are used to deploy Prometheus and Grafana and should
+thus be available on the host from where spinup.sh is executed.
 
 Prometheus has been configured with a scape interval of 10s and has been
 auto-configured as a datasource in Grafana.

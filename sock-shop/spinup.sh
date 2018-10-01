@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -uex
+
 kubectl create -f tiller-serviceaccount.yaml
 helm init --wait --service-account tiller-kube-system --tiller-image gcr.io/kubernetes-helm/tiller:v2.10.0
 
