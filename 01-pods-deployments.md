@@ -92,15 +92,15 @@ Ok. The bottom line is that we wanted to have a pod running, and we have that.
 > ## Testing access to our Pod.
 >
 > We are getting a little ahead of our exercises here, but just to illustrate that we actually have
-> a functioning web-server running in our pod, you can execute the following commands:
+> a functioning web-server running in our pod, you can execute the following commands. Note that you can safely skip this part since its not essential to the current exercise.
 >
 > $ kubectl expose deployment multitool --port 80 --type NodePort
 > $ kubectl get service multitool
 >
 > You will then see output similar to the following - take note of the second port number (32458 in the example below):
 >
-> NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE  
-> multitool   NodePort   10.96.223.218   <none>        80:32458/TCP   12s
+>     NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE  
+>     multitool   NodePort   10.96.223.218   <none>        80:32458/TCP   12s
 >
 > Second, look up the IP address of a node in the cluster with (any IP from the 'EXTERTNAL IP' will do):
 >
