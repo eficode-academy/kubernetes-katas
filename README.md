@@ -1,4 +1,5 @@
-# kubernetes-katas Deliberate exercises for Kubernetes.
+# kubernetes-katas
+Deliberate exercises for Kubernetes.
 
 Below are some exercises ordered in the way we think it makes sence to introduce
 Kubernetes concepts.  There are tree variants of the ingress exercise - one of
