@@ -94,8 +94,8 @@ Ok. The bottom line is that we wanted to have a pod running, and we have that.
 > We are getting a little ahead of our exercises here, but just to illustrate that we actually have
 > a functioning web-server running in our pod, you can execute the following commands. Note that you can safely skip this part since its not essential to the current exercise.
 >
-> $ kubectl expose deployment multitool --port 80 --type NodePort
-> $ kubectl get service multitool
+>     kubectl expose deployment multitool --port 80 --type NodePort
+>     kubectl get service multitool
 >
 > You will then see output similar to the following - take note of the second port number (32458 in the example below):
 >
@@ -104,7 +104,7 @@ Ok. The bottom line is that we wanted to have a pod running, and we have that.
 >
 > Second, look up the IP address of a node in the cluster with (any IP from the 'EXTERTNAL IP' will do):
 >
-> $ kubectl get nodes -o wide
+>     kubectl get nodes -o wide
 >
 > Now point your web browser to the URL `<host-IP>:<port>` to access the web server in the pod.  The next exercise will cover what we did here in more detail.
 
