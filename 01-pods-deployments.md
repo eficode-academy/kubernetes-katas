@@ -89,6 +89,25 @@ multitool-3148954972   1         1         1         3m
 
 Ok. The bottom line is that we wanted to have a pod running, and we have that.
 
+> ## Testing access to our Pod.
+>
+> We are getting a little ahead of our exercises here, but just to illustrate that we actually have
+> a functioning web-server running in our pod, you can execute the following commands:
+>
+> $ kubectl expose deployment multitool --port 80 --type NodePort
+> $ kubectl get service multitool
+>
+> You will then see output similar to the following - take note of the second port number (32458 in the example below):
+>
+> NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE  
+> multitool   NodePort   10.96.223.218   <none>        80:32458/TCP   12s
+>
+> Second, look up the IP address of a node in the cluster with (any IP from the 'EXTERTNAL IP' will do):
+>
+> $ kubectl get nodes -o wide
+>
+> Now point your web browser to the URL `<host-IP>:<port>` to access the web server in the pod.  The next exercise will cover what we did here in more detail.
+
 Lets setup another pod, a traditional nginx deployment, with a specific version - 1.7.9.
 
 Setup an nginx deployment with nginx:1.7.9
@@ -116,7 +135,7 @@ rs/nginx-1480123054       1         1         1         14s
 
 ## 1.4 Deploying applications using declarative configuration files
 
-You can also use the `nginx-simple-deployment.yaml` file to create the same nginx deployment. You can find the file in the `support-files` directory of this repo. However before you execute the command shown below, note that it will try to create a deployment with the name **nginx**. If you already have a deployment named **nginx** running, as done in the previous step, then you will need to delete that first.
+You can also use the `support-files/nginx-simple-deployment.yaml` file to create the same nginx deployment. However before you execute the command shown below, note that it will try to create a deployment with the name **nginx**. If you already have a deployment named **nginx** running, as done in the previous step, then you will need to delete that first.
 
 Delete the existing deployment using the following command:
 
@@ -133,11 +152,11 @@ deployment "nginx" deleted
 Now you are ready to proceed with the example below:
 
 ```shell
-$ kubectl create -f nginx-simple-deployment.yaml
+$ kubectl create -f support-files/nginx-simple-deployment.yaml
 deployment "nginx" created
 ```
 
-The contents of `nginx-simple-deployment.yaml` are as follows:
+The contents of `support-files/nginx-simple-deployment.yaml` are as follows:
 
 ```shell
 # Everything after a hashtag, is a comment
