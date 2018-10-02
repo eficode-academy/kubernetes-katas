@@ -142,19 +142,4 @@ Access it in a webbrowser again, to see the updated values.
 
 This concludes the exercise on secrets and configuration maps.
 
-# Cheatsheet
-
-```shell
-## Create a service for a deployment nginx, which connects to the containers on port 3000
-kubectl expose deployment envtest --type=NodePort --port=3000
-
-# Delete pod with name <podname>
-kubectl delete pod <podname>
-
-# Describe commands with verbose output
-kubectl describe configmap language
-kubectl describe secret apikey
-kubectl describe service envtest
-```
-
 If you are stuck - take a look at `secrets/final.deployment.yml`.
