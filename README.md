@@ -1,8 +1,10 @@
-# kubernetes-katas Deliberate exercises for Kubernetes.  Below are some
-exercises ordered in the way we think it makes sence to introduce Kubernetes
-concepts.  There are tree variants of the ingress exercise - one of them is
-Google Kubernetes Engine (gke) specific, whereas
-the two others are generic and should work on any Kubernetes cluster.
+# kubernetes-katas
+Deliberate exercises for Kubernetes.
+
+Below are some exercises ordered in the way we think it makes sence to introduce
+Kubernetes concepts.  There are tree variants of the ingress exercise - one of
+them is Google Kubernetes Engine (gke) specific, whereas the two others are
+generic and should work on any Kubernetes cluster.
 
 You can find a summary of many of the commands used in the exercises in the
 [cheatsheet.md](cheatsheet.md).
