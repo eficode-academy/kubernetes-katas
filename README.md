@@ -1,15 +1,27 @@
 # kubernetes-katas
-Deliberate exercises for Kubernetes.
 
-Below are some exercises ordered in the way we think it makes sence to introduce
-Kubernetes concepts.  There are tree variants of the ingress exercise - one of
+A selection of exercises for Kubernetes (K8s).
+
+The exercises are ordered in the way we think it makes sense to introduce
+Kubernetes concepts.
+
+
+There are tree variants of the ingress exercise - one of
 them is Google Kubernetes Engine (gke) specific, whereas the two others are
 generic and should work on any Kubernetes cluster.
 
 You can find a summary of many of the commands used in the exercises in the
 [cheatsheet.md](cheatsheet.md).
 
-* [Setup kubectl](00-setup-kubectl.md)
+## Setup
+
+* [00-setup-kubectl](00-setup-kubectl.md) -
+    Skip if you've already installed `kubectl` and have access to a cluster.
+* [00-setup-namespace](00-setup-namespace.md) -
+    Skip if you've already created a personal namespace and set it as your default.
+
+## Exercises
+
 * [01-pods-deployments.md](01-pods-deployments.md)
 * [02-service-discovery-and-loadbalancing.md](02-service-discovery-and-loadbalancing.md)
 * [03-rolling-updates.md](03-rolling-updates.md)

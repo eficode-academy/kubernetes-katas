@@ -22,32 +22,70 @@ kubernetes   ClusterIP   100.64.0.1       <none>        443/TCP   2d
 nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
 ```
 
-Notice, there are two services listed here. The first one is named **kubernetes**, which is the default service created (automatically) when a kubernetes cluster is created for the first time. It does not have any EXTERNAL-IP. This service is not our focus right now.
+Notice, there are two services listed here. The first one is named **kubernetes**, which is the default service created (automatically) when a kubernetes cluster is created for the first time. It does not have any `EXTERNAL-IP`. This service is not our focus right now.
 
-The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using the service IP, not the pod IP. Lets see if we can access this service from our multitool.
+The service in focus is nginx, which does not have any external IP either, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using its `CLUSTER-IP`. Lets see if we can access this service from our within multitool, from the Pods and Deployments exercise.
+
+> NB: if you don't have the multitool running, you can start it with
+> ```shell
+> $ kubectl run multitool --image=praqma/network-multitool
+> deployment.apps "multitool" created
+> ```
+
+Get the name of the `multitool` pod with:
 
 ```shell
-$ kubectl exec -it multitool-5c8676565d-n9rvz bash
-[root@multitool-3148954972-k8q06 /]# curl -s 100.70.204.237 | grep h1
+$ kubectl get pods
+NAME                         READY     STATUS    RESTARTS   AGE
+multitool-5c8676565d-rc982   1/1       Running   0          3s
+```
+
+Run an interactive shell inside the `multitool`-container in the pod with:
+
+```shell
+$ kubectl exec -it multitool-5c8676565d-rc982 bash
+bash-4.4#
+```
+
+> `kubectl exec` can be used to run a command inside a container inside a pod.
+> since the multitool-5c8676565d-rc982 pod only runs a single container, called `multitool`,
+> we do not have to specify it explicitly, i.e.
+> ```shell
+> kubectl exec -it multitool-5c8676565d-rc982 -c multitool bash
+> ```
+> Would yield the same result.
+> `-it` attaches our terminal interactively to the container,
+> and `bash` is the command we enter the container with.
+
+Try to `curl` the `CLUSTER-IP` of the `nginx`-service above:
+
+```shell
+bash-4.4# curl -s 100.70.204.237 | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-It worked! But there's more...we can also access the nginx using DNS:
+It worked! But there's more.. we can also access a service using DNS.
+
+The DNS shortname of a service is simply its name:
 
 ```shell
-[root@multitool-3148954972-k8q06 /]# curl -s nginx | grep h1
+bash-4.4# curl -s nginx | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-To access a service in a different namespace, use its full DNS name:
-    `my-svc.my-namespace.svc.cluster.local`:
+We can use this to access services in our current namespace.
+    To access a service in a different namespace, use its full DNS name:
+    `<service name>.<namespace>.svc.cluster.local`:
+
+If you're doing this exercise along others, try to `curl` their nginx-service with:
 
 ```shell
-[root@multitool-3148954972-k8q06 /]# curl -s nginx.<my-namespace>.svc.cluster.local | grep h1
+bash-4.4# curl -s nginx.<namespace>.svc.cluster.local | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-Now log out of the bash on the multi-tool pod by typing `ctrl+d` to get out of the pod.
+Log out of the bash in the multitool container with the `exit` command,
+    or by pressing `ctrl+d`.
 
 #### Describe
 
@@ -115,7 +153,7 @@ gke-dcn-cluster-35-default-pool-dacbcf6d-3918   Ready     <none>    17h       v1
 gke-dcn-cluster-35-default-pool-dacbcf6d-c87z   Ready     <none>    17h       v1.8.8-gke.0   35.187.90.36    Container-Optimized OS from Google   4.4.111+         docker://17.3.2
 ```
 
-Even though we have only one pod (and two worker nodes), we can access any of the node with this port, and it will eventually be routed to our pod. So, lets try to access it from our local work computer:
+Even though we have only one pod (and two worker nodes), we can access any of the nodes with this port, and it will eventually be routed to our pod. Let's try to access it from our local work computer:
 
 ```shell
 $ curl -s 35.205.22.139:32593 | grep h1

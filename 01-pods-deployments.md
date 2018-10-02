@@ -1,122 +1,87 @@
-# Pods and Deployments:
+# Pods and Deployments
 
-A **Pod** (*not container*) is the basic building-block/worker-unit in Kubernetes. Normally a pod is a part of a **Deployment**.
-
-## 1.1 Create a namespace
-
-```shell
-kubectl create namespace <name>
-kubectl get pods -n <name>
-```
-
-Namespaces are the default way for kubernetes to separate resources. Namespaces do not share anything between them, which is important to know.
-
-This is quite powerful. On a user level, it is also possible to limit namespaces and resources by users but it is a bit too involved for your first experience with Kubernetes. Therefore, please be aware that other people's namespaces are off limits for this workshop even if you do have access. ;)
-
-Every time you run a kubectl command, you can opt to use the namespace flag (-n mynamespace) to execute the command on that namespace.
-
-Similarly in the yaml files, you can specify namespace. Most errors you will get throughout the rest of the workshop will 99% be deploying into a namespace where someone already did that before you so ensure you are using your newly created namespace!
-
-Kubernetes clusters come with a namespace called `default`, which might contain some pods deployed previously by Praqma.
-
-The below commands do the same thing, because kubernetes commands will default to the default namespace:
-
-```shell
-kubectl get pods -n default
-kubectl get pods
-```
+A **Pod** (*not container*) is the smallest building-block/worker-unit in Kubernetes,
+  it has a specification of one or more containers and exists for the duration of the containers;
+  if all the containers stops or terminates, the Pod is stopped.
+  Usually a pod will be part of a **Deployment**; a more controlled or robust way of running Pods.
+  A deployment can be configured to automatically delete stopped or exited Pods and start new ones,
+  as well as run a number of identical Pods e.g. to provide high-availability.
 
 So let's try to use some of the Kubernetes objects, starting with a deployment.
 
-## 1.2 Set your default namespace
+## 1.1 Creating pods using 'run' command
 
-You want to target your own namespace instead of default one every time you use `kubectl`, but it gets tedious to specify the `-n=<my-namespace>` parameter. Run:
-
-```shell
-kubectl config set-context $(kubectl config current-context) --namespace=<my-namespace>
-```
-
-To overwrite the default namespace for your current `context`. You can verify that you've updated your current `context` by running:
-
-```shell
-kubectl config get-contexts
-```
-
-Notice that the namespace column has the value of `<my-namespace>`.
-
-## 1.3 Creating pods using 'run' command:
-
-We start by creating our first deployment. Normally people will run an nginx container/pod as first example o deployment. You can surely do that. But, we will run a different container image as our first exercise. The reason is that it will work as a multitool for testing and debugging throughout this course. Besides it too runs nginx!
+We start by creating our first deployment. Normally people will run a pod with an Nginx container as a first example.
+  You can surely do that.
+  But, we will start at little differently by creating a deployment with a pod that has a container with a different container image, as our first exercise.
+  The reason is that this pod will work as a multitool for testing and debugging throughout this course; besides it too runs Nginx!
 
 Here is the command to do it:
 
 ```shell
-kubectl run multitool --image=praqma/network-multitool
-```
-
-You should be able to see the following output:
-
-```shell
 $ kubectl run multitool --image=praqma/network-multitool
-deployment "multitool" created
+deployment.apps "multitool" created
 ```
 
-This command creates a deployment named multitool, starts a pod using this docker image (praqma/network-multitool), and makes that pod a member of that deployment. You don't need to confuse yourself with all these details at this stage. This is just extra (but vital) information. Just so you know what we are talking about, check the list of pods and deployments:
+So what happened? The `run`-command is great for imperative testing, and getting something up and running fast.
+  It creates a _deployment_ named `multitool`, which creates a _replicaset_, which starts a _pod_ using the docker image `praqma/network-multitool`. You don't need to confuse yourself with all these details at this stage, this is just extra (but vital) information.
 
-List of pods:
+Just so you know what we're talking about,
+  you can check the objects you've created with `get <object>`,
+  either one at a time, or all-together like below:
 
 ```shell
-$ kubectl get pods
-NAME                         READY     STATUS    RESTARTS   AGE
-multitool-3148954972-k8q06   1/1       Running   0          3m
+$ kubectl get deployment,replicaset,pod
+NAME                              DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.extensions/multitool   1         1         1            1           1m
+
+NAME                                         DESIRED   CURRENT   READY     AGE
+replicaset.extensions/multitool-5c8676565d   1         1         1         1m
+
+NAME                             READY     STATUS    RESTARTS   AGE
+pod/multitool-5c8676565d-wnw2v   1/1       Running   0          1m
 ```
 
-List of deployments:
+> A ReplicaSet is something which deals with the number of copies of this pod.
+It will be covered in later exercise, but is mentioned and shown above just for the sake of completeness.
 
-```shell
-$ kubectl get deployments
-NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-multitool   1         1         1            1           3m
-```
+## 1.1.1 Testing access to our Pod (optional)
 
-There is actually also a replicaset, which is created as a result of the `run` command above, but that is not super important to know at this point. A ReplicaSet is something which deals with the number of copies of this pod. It will be covered in later exercise. It is shown below just for the sake of completeness.
-
-```shell
-$ kubectl get replicasets
-NAME                   DESIRED   CURRENT   READY     AGE
-multitool-3148954972   1         1         1         3m
-```
-
-Ok. The bottom line is that we wanted to have a pod running, and we have that.
-
-> ## Testing access to our Pod.
->
 > We are getting a little ahead of our exercises here, but just to illustrate that we actually have
-> a functioning web-server running in our pod, you can execute the following commands. Note that you can safely skip this part since its not essential to the current exercise.
+> a functioning web-server running in our pod. First execute the following commands:
+> ```shell
+> $ kubectl expose deployment multitool --port 80 --type NodePort
+> service "multitool" exposed
+> $ kubectl get service multitool
+> ```
+> You will then see output similar to the following -
+> take note of the second port number (`32458` in the example below):
 >
->     kubectl expose deployment multitool --port 80 --type NodePort
->     kubectl get service multitool
->
-> You will then see output similar to the following - take note of the second port number (32458 in the example below):
->
->     NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE  
+>     NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 >     multitool   NodePort   10.96.223.218   <none>        80:32458/TCP   12s
 >
-> Second, look up the IP address of a node in the cluster with (any IP from the 'EXTERTNAL IP' will do):
+> Secondly, look up the IP address of a node in the cluster with:
 >
->     kubectl get nodes -o wide
+> ```shell
+> $ kubectl get nodes -o wide
+> NAME    STATUS   . . .   EXTERNAL-IP     . . .
+> node1   Ready    . . .   35.240.20.246   . . .
+> ```
 >
-> Now point your web browser to the URL `<host-IP>:<port>` to access the web server in the pod.  The next exercise will cover what we did here in more detail.
+> And point your web browser to the URL `<host-IP>:<port>`;
+> Any IP from the 'EXTERTNAL IP' will do.
+> The next exercise will cover what we did here in more detail.
 
-Lets setup another pod, a traditional nginx deployment, with a specific version - 1.7.9.
+## 1.2 Specifying the image version
 
-Setup an nginx deployment with nginx:1.7.9
+Lets setup another pod, a traditional nginx deployment, with a specific version i.e. `1.7.9`.
 
 ```shell
-kubectl run nginx --image=nginx:1.7.9
+$ kubectl run nginx --image=nginx:1.7.9
+deployment.apps "nginx" created
 ```
 
-You get another deployment and a replicaset as a result of above command, shown below, so you know what to expect:
+You get another deployment and a replicaset as a result of above command; shown below, so you know what to expect:
 
 ```shell
 $ kubectl get pods,deployments,replicasets
@@ -133,23 +98,24 @@ rs/multitool-3148954972   1         1         1         25m
 rs/nginx-1480123054       1         1         1         14s
 ```
 
-## 1.4 Deploying applications using declarative configuration files
+## 1.3 Deploying applications using declarative configuration files
 
-You can also use the `support-files/nginx-simple-deployment.yaml` file to create the same nginx deployment. However before you execute the command shown below, note that it will try to create a deployment with the name **nginx**. If you already have a deployment named **nginx** running, as done in the previous step, then you will need to delete that first.
+Although the `kubctl run` command allows us to specify a number of flags
+  to configure which kind of deployment should be created,
+  it's a bit easier to work with if we instead specify it in a _deployment spec_-file
+  and `create` that instead.
 
-Delete the existing deployment using the following command:
+To create the `nginx` deployment above, you can use the provided `support-files/nginx-simple-deployment.yaml` file.
 
-```shell
-$ kubectl get deployments
-NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-multitool   1         1         1            1           32m
-nginx       1         1         1            1           7m
+> NB: before you execute the command shown below, note that it will try to create a deployment with the name **nginx**. If you already have a deployment named **nginx** running from the previous step you will need to delete that first.
+> You can delete an existing deployment called `nginx` with the following command:
+> ```shell
+> $ kubectl delete deployment nginx
+> deployment "nginx" deleted
+> ```
+> Now you are ready to proceed with the example below.
 
-$ kubectl delete deployment nginx
-deployment "nginx" deleted
-```
-
-Now you are ready to proceed with the example below:
+To create one or more objects specified by a file, run:
 
 ```shell
 $ kubectl create -f support-files/nginx-simple-deployment.yaml
@@ -159,7 +125,7 @@ deployment "nginx" created
 The contents of `support-files/nginx-simple-deployment.yaml` are as follows:
 
 ```shell
-# Everything after a hashtag, is a comment
+# a comment
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -204,14 +170,20 @@ nginx-431080787-9r0lx        1/1       Running   0          40s
 
 ## 1.5 Testing Kubernetes promise of resilience by deleting a pod
 
-Before we move forward, lets see if we can delete a pod, and if it comes to life automatically:
+> A great first mistake that many newcomers make,
+> is to create a _deployment_, and when they're done,
+> delete the pod.. and what happens then? - A new pod is created in its place.
+
+Let's see this in action:
 
 ```shell
 $ kubectl delete pod nginx-431080787-9r0lx
 pod "nginx-431080787-9r0lx" deleted
 ```
 
-As soon as we delete a pod, a new one is created, satisfying the desired state by the deployment, which is - it needs at least one pod running nginx. So we see that a **new** nginx pod is created (with a new ID):
+As soon as we delete a pod, a new one is created, satisfying the desired state by the deployment, which is - it needs at least one pod running nginx.
+
+So rightfully we see that a **new** nginx pod is created (with a new name):
 
 ```shell
 $ kubectl get pods
@@ -227,4 +199,13 @@ $ kubectl get pods
 NAME                         READY     STATUS    RESTARTS   AGE
 multitool-3148954972-k8q06   1/1       Running   0          1h
 nginx-431080787-tx5m7        1/1       Running   0          12s
+```
+
+## Clean up
+
+Delete the `nginx` deployment:
+
+```shell
+$ kubectl delete deployment nginx
+deployment "nginx" deleted
 ```
