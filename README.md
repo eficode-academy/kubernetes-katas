@@ -15,7 +15,7 @@ You can find a summary of many of the commands used in the exercises in the
 
 ## Setup
 
-* [00-setup-kubectl](00-setup-kubectl.md) -
+* [00-setup-kubectl-linux](00-setup-kubectl-linux.md) -
     Skip if you've already installed `kubectl` and have access to a cluster.
 * [00-setup-namespace](00-setup-namespace.md) -
     Skip if you've already created a personal namespace and set it as your default.
