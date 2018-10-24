@@ -21,7 +21,7 @@ GKE automatically exposes NodePorts through a Loadbalancer, but the 'correct' wa
 Google cloud need an address created. All the steps running gcloud commands, are unusual and can be disregarded for a normal Kubernetes setup outside of GKE.
 
 ```shell
-$ gcloud compute addresses create <my-address-name> --global
+$ gcloud compute addresses create <my-address-name> --global --project praqma-education
 Created [https://www.googleapis.com/compute/v1/projects/praqma-education/global/addresses/<my-address-name>].
 ```
 
