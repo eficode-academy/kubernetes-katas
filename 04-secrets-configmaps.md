@@ -16,7 +16,7 @@ We will look at both these in this coming exercise.
 
 ## Secrets as environment variables
 
-Our [maginificent app](./secrets/secretapp.js) requries it's API key and language.  Rather than hardcode this sensitive information and commit it to git for all the world to see, we source these values from environment variables.
+Our [magnificent app](./secrets/secretapp.js) requries it's API key and language.  Rather than hardcode this sensitive information and commit it to git for all the world to see, we source these values from environment variables.
 
 The first step to fixing it, would be to make our variables as environmental variables.
 
