@@ -1,6 +1,6 @@
 # Ingress on Google Cloud
 
-GoogleKubernetesEngine (GKE) does Ingress a bit differently. For reference, those brave of you who want to play with Minikube, I have two more you can do - [nginx](05-ingress-nginx.md) and [traefik](05-ingress-traefik.md).
+GoogleKubernetesEngine (GKE) does Ingress a bit differently. For reference, those brave of you who want to play with Minikube, I have two more you can do - [nginx](06-ingress-nginx.md) and [traefik](06-ingress-traefik.md).
 
 However because we are running things on GKE, we are going to focus on that today.
 
