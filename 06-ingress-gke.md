@@ -28,7 +28,7 @@ Created [https://www.googleapis.com/compute/v1/projects/praqma-education/global/
 You can see the allocated IP of the address you created by running the following command:
 
 ```shell
-$ gcloud compute addresses describe <my-address-name> --global --format='value(address)'
+$ gcloud compute addresses describe <my-address-name> --global --format='value(address)' --project praqma-education
 <your-ip>
 ```
 
