@@ -58,4 +58,4 @@ Kubernetes clusters come with a namespace called `default`, which in this case m
     and usually one called `kube-system` which will contain some of the kubernetes services running in the cluster.
 
 You might see later that the namespace is specified directly in the yaml files describing the resources.
-    This makest it possible to have the resource created in the specific namespace without specifying the `-n` flag on creation.
+    This makes it possible to have the resource created in the specific namespace without specifying the `-n` flag on creation.
