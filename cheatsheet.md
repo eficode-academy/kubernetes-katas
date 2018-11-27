@@ -3,6 +3,8 @@
 ```bash
 kubectl config get-contexts                              # See all available contexts
 kubectl config view                                      # See current cluster context
+kubectl config set-context $(kubectl config current-context) --namespace=my-namespace
+                                                         # Change default namespace
 
 kubectl help run                                         # See help about run (or other commands)
 kubectl explain pod.spec                                 # Documenation on any resource attribute
@@ -20,7 +22,7 @@ kubectl create namespace my-namespace                    # Create namespace
 kubectl config set-context $(kubectl config current-context) --namespace=<my-namespace>
 
 kubectl run multitool --image=praqma/network-multitool --restart Never   # Create plain pod
-kubectl run nginx --image=nginx:1.7.9                    # Create deployment
+kubectl create deployment nginx --image=nginx:1.7.9      # Create deployment
 
 kubectl set image deployment/nginx nginx=nginx:1.9.1     # Update image in deployment pod template
 kubectl scale deployment nginx --replicas=4              # Scale deployment
