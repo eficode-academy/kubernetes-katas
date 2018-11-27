@@ -9,7 +9,7 @@ A **Pod** (*not container*) is the smallest building-block/worker-unit in Kubern
 
 So let's try to use some of the Kubernetes objects, starting with a deployment.
 
-## 1.1 Creating pods using 'run' command
+## 1.1 Creating deployments using 'create' command
 
 We start by creating our first deployment. Normally people will run a pod with an Nginx container as a first example.
   You can surely do that.
@@ -19,11 +19,17 @@ We start by creating our first deployment. Normally people will run a pod with a
 Here is the command to do it:
 
 ```shell
-$ kubectl run multitool --image=praqma/network-multitool
-deployment.apps "multitool" created
+$ kubectl create deployment multitool --image=praqma/network-multitool
+deployment.apps/multitool created
 ```
 
-So what happened? The `run`-command is great for imperative testing, and getting something up and running fast.
+> With older versions of kubectl (< v1.12.0), the 'run' command was typically used to create deployments, i.e. in older guides you would have seen the following command. This approach is however being deprecated for deployments.
+> ```shell
+> $ kubectl run multitool --image=praqma/network-multitool
+> deployment.apps "multitool" created
+> ```
+
+So what happened? The `create`-command is great for imperative testing, and getting something up and running fast.
   It creates a _deployment_ named `multitool`, which creates a _replicaset_, which starts a _pod_ using the docker image `praqma/network-multitool`. You don't need to concern yourself with all these details at this stage, this is just extra (however notable) information.
 
 Just so you know what we're talking about,
@@ -53,7 +59,7 @@ It will be covered in later exercise, but it's mentioned and shown above just fo
 > First use the following command to create a `service` for your `deployment`:
 > ```shell
 > $ kubectl expose deployment multitool --port 80 --type NodePort
-> service "multitool" exposed
+> service/multitool exposed
 > ```
 >
 > Get the `service` called `multitool` and note down the NodePort:
@@ -70,14 +76,16 @@ It will be covered in later exercise, but it's mentioned and shown above just fo
 >
 > ```shell
 > $ kubectl get nodes -o wide           # The -o wide flag makes the output more verbose, i.e. to include the IPs
-> NAME    STATUS   . . .   EXTERNAL-IP     . . .
-> node1   Ready    . . .   35.240.20.246   . . .
-> node2   Ready    . . .   35.205.245.42   . . .
+> NAME    STATUS   . . . INTERNAL-IP  EXTERNAL-IP     . . .
+> node1   Ready    . . . 10.123.0.8   35.240.20.246   . . .
+> node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
 > ```
 >
 > Since your `service` is of type `NodePort` it will be exposed on _any_ of the nodes,
 > on the port from before, so choose once of the `EXTERNAL-IP`'s,
-> and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`.
+> and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`. Alternatively, if you
+> use e.g. curl from within the training infrastructure, you should use the <INTERNAL-IP>
+> address.
 >
 > The next exercise will cover what we did here in more detail.
 
@@ -86,8 +94,8 @@ It will be covered in later exercise, but it's mentioned and shown above just fo
 Lets setup another pod, a traditional nginx deployment, with a specific version i.e. `1.7.9`.
 
 ```shell
-$ kubectl run nginx --image=nginx:1.7.9
-deployment.apps "nginx" created
+$ kubectl create deployment nginx --image=nginx:1.7.9
+deployment.apps/nginx created
 ```
 
 You get another deployment and a replicaset as a result of above command; shown below, so you know what to expect:
@@ -109,7 +117,7 @@ rs/nginx-1480123054       1         1         1         14s
 
 ## 1.3 Deploying applications using declarative configuration files
 
-Although the `kubctl run` command allows us to specify a number of flags
+Although the `kubctl create` command allows us to specify a number of flags
   to configure which kind of deployment should be created,
   it's a bit easier to work with if we instead specify it in a _deployment spec_-file
   and `create` that instead.
@@ -128,7 +136,7 @@ To create one or more objects specified by a file, run:
 
 ```shell
 $ kubectl create -f support-files/nginx-simple-deployment.yaml
-deployment "nginx" created
+deployment.extensions/nginx created
 ```
 
 The contents of `support-files/nginx-simple-deployment.yaml` are as follows:
@@ -216,5 +224,5 @@ Delete the `nginx` deployment:
 
 ```shell
 $ kubectl delete deployment nginx
-deployment "nginx" deleted
+$ kubectl delete deployment multitool
 ```

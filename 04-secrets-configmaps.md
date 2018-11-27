@@ -1,11 +1,5 @@
 # Secrets and ConfigMaps
 
-Before we start, make sure you have set your working namespace
-
-```shell
-kubectl config set-context $(kubectl config current-context) --namespace=<insert-namespace-name-here>
-```
-
 Secrets are a way to store things that you do not want floating around in your code.
 
 It's things like passwords for databases, API keys and certificates.
@@ -43,7 +37,7 @@ This image is available as `praqma/secrets-demo`. We can run that in our Kuberne
 Set your namespace in the file and run the deployment by writing:
 
 ```shell
-$ kubectl apply -f deployment.yml
+$ kubectl apply -f secrets/deployment.yml
 deployment.extensions/envtest created
 ```
 
@@ -88,7 +82,14 @@ NAME       DATA      AGE
 language   1         2m
 ```
 
-> Try to describe the secret.
+> Try to investigate the secret by using the kubectl describe command:
+> ```shell
+> $ kubectl describe secret apikey
+> ```
+> Note that the actual value of API_KEY is not shown. To see the encoded value use:
+> ```shell
+> $ kubectl get secret apikey -o yaml
+> ```
 
 Last step is to change the Kubernetes deployment file to use the secrets.
 
@@ -118,11 +119,14 @@ To:
               key: API_KEY
 ```
 
-After you have edited the `deployment.yml` file, you need to apply the new edition of the file by issuing: `kubectl apply -f deployment.yml` .
+After you have edited the `deployment.yml` file (or you can use the prepared one
+`secrets/final.deployment.yml`), you need to apply the new edition of the file
+by issuing: `kubectl apply -f deployment.yml` .
 
 You should now see the variables being loaded from configmap and secret respectively.
 
-To hot swap the values, you need to keep in mind that pods have a cache, so it becomes a two step process:
+Pods are not recreated automatically when serets or configmaps change, i.e. to
+hot swapping the values becomes a two step process:
 
 ```shell
 $ kubectl create configmap language --from-literal=LANGUAGE=Elvish -o yaml --dry-run | kubectl replace -f -
@@ -140,6 +144,11 @@ pod "envtest-3380598928-kgj9d" deleted
 
 Access it in a webbrowser again, to see the updated values.
 
-This concludes the exercise on secrets and configuration maps.
+## Clean up
 
-If you are stuck - take a look at `secrets/final.deployment.yml`.
+```shell
+$ kubectl delete deployment envtest
+$ kubectl delete service envtest
+$ kubectl delete configmap language
+$ kubectl delete secret apikey
+```

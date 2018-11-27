@@ -4,13 +4,21 @@
 
 To access any service inside any given pod (e.g. nginx web service), we need to *expose* the related deployment as a *service*. We have three main ways of exposing the deployment , or in other words, we have three ways to define a *service* , which we can access in three different ways. A service is (normally) created on top of an existing deployment.
 
+> NB: this exercise assumes you have the nginx and multitool deployments from exercise 1 running. If not, you can start them with
+> ```shell
+> $ kubectl create deployment multitool --image=praqma/network-multitool
+> deployment.apps/multitool created
+> $ kubectl create deployment nginx --image=nginx:1.7.9
+> deployment.apps/nginx created
+> ```
+
 ### Service type: ClusterIP
 
 Expose the deployment as a service - type=ClusterIP:
 
 ```shell
 $ kubectl expose deployment nginx --port 80 --type ClusterIP
-service "nginx" exposed
+service/nginx exposed
 ```
 
 Check the list of services:
@@ -26,12 +34,6 @@ Notice, there are two services listed here. The first one is named **kubernetes*
 
 The service in focus is nginx, which does not have any external IP either, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using its `CLUSTER-IP`. Lets see if we can access this service from our within multitool, from the Pods and Deployments exercise.
 
-> NB: if you don't have the multitool running, you can start it with
-> ```shell
-> $ kubectl run multitool --image=praqma/network-multitool
-> deployment.apps "multitool" created
-> ```
-
 Get the name of the `multitool` pod with:
 
 ```shell
@@ -43,19 +45,19 @@ multitool-5c8676565d-rc982   1/1       Running   0          3s
 Run an interactive shell inside the `multitool`-container in the pod with:
 
 ```shell
-$ kubectl exec -it multitool-5c8676565d-rc982 bash
+$ kubectl exec -it multitool-5c8676565d-rc982 -c network-multitool -- bash
 bash-4.4#
 ```
 
-> `kubectl exec` can be used to run a command inside a container inside a pod.
-> since the multitool-5c8676565d-rc982 pod only runs a single container, called `multitool`,
-> we do not have to specify it explicitly, i.e.
+> `kubectl exec` can be used to execute a command inside a container inside a pod.
+> Since the multitool-5c8676565d-rc982 pod only runs a single container, called `multitool`,
+> we do not have to specify the container explicitly, i.e.
 > ```shell
-> kubectl exec -it multitool-5c8676565d-rc982 -c multitool bash
+> kubectl exec -it multitool-5c8676565d-rc982 -- bash
 > ```
 > Would yield the same result.
 > `-it` attaches our terminal interactively to the container,
-> and `bash` is the command we enter the container with.
+> and `bash` is the command we enter the container with. The `--` separates the kubectl command from the command being run inside the container and is particularly important when the command have arguments.
 
 Try to `curl` the `CLUSTER-IP` of the `nginx`-service above:
 
@@ -134,7 +136,7 @@ service "nginx" deleted
 
 ```shell
 $ kubectl expose deployment nginx --port 80 --type NodePort
-service "nginx" exposed
+service/nginx exposed
 ```
 
 ```shell
@@ -173,7 +175,7 @@ service "nginx" deleted
 
 ```shell
 $ kubectl expose deployment nginx --port 80 --type LoadBalancer
-service "nginx" exposed
+service/nginx exposed
 ```
 
 ```shell
@@ -211,7 +213,7 @@ Lets increase the number of replicas of our nginx deployment to four(4):
 
 ```shell
 $ kubectl scale deployment nginx --replicas=4
-deployment "nginx" scaled
+deployment.extensions/nginx scaled
 ```
 
 Check the deployment and pods:
@@ -239,7 +241,7 @@ You can also scale down! - e.g. to 2:
 
 ```shell
 $ kubectl scale deployment nginx --replicas=2
-deployment "nginx" scaled
+deployment.extensions/nginx scaled
 ```
 
 ```shell
@@ -276,8 +278,10 @@ service "nginx" deleted
 To prove that multiple pods of the same deployment provide high availability, we do a small exercise. To visualize it, we need to run a small web server which could return us some uniqe content when we access it. We will use our trusted multitool for it. Lets run it as a separate deployment and access it from our local computer.
 
 ```shell
-$ kubectl run customnginx --image=praqma/network-multitool --replicas=4
-deployment "customnginx" created
+$ kubectl create deployment customnginx --image=praqma/network-multitool
+deployment.apps/customnginx created
+$ kubectl scale deployment customnginx --replicas=4
+deployment.extensions/customnginx scaled
 ```
 
 ```shell
@@ -287,13 +291,14 @@ customnginx-3557040084-1z489   1/1       Running   0          49s
 customnginx-3557040084-3hhlt   1/1       Running   0          49s
 customnginx-3557040084-c6skw   1/1       Running   0          49s
 customnginx-3557040084-fw1t3   1/1       Running   0          49s
+multitool-5f9bdcb789-k7f4q     1/1       Running   0          19m
 ```
 
 Lets create a service for this deployment as a type=LoadBalancer:
 
 ```shell
 $ kubectl expose deployment customnginx --port=80 --type=LoadBalancer
-service "customnginx" exposed
+service/customnginx exposed
 ```
 
 Verify the service and note the public IP address:
@@ -316,11 +321,11 @@ Next, setup a small bash loop on your local computer to curl this IP address, an
 
 ```shell
 $ while true; do sleep 1; curl -s 35.205.60.41; done
-Container IP: 100.96.2.36 <BR></p>
-Container IP: 100.96.1.150 <BR></p>
-Container IP: 100.96.2.37 <BR></p>
-Container IP: 100.96.2.37 <BR></p>
-Container IP: 100.96.2.36 <BR></p>
+Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.36 <BR></p>
+Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.1.150 <BR></p>
+Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.37 <BR></p>
+Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.37 <BR></p>
+Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.36 <BR></p>
 ^C
 ```
 
@@ -367,14 +372,12 @@ customnginx-3557040084-xqk1n   1/1       Running       0          15s
 
 This proves, Kubernets provides us High Availability, using multiple replicas of a pod.
 
-------
+## Clean up
 
-## Useful commands
+Delete deployments and services as follow:
 
-    kubectl config current-context
-    kubectl config use-context docker-for-desktop
-    kubectl version
-    kubectl cluster-info
-    kubectl get nodes
-    kubectl get all
-    kubectl describe
+```shell
+$ kubectl delete deployment customnginx
+$ kubectl delete deployment multitool
+$ kubectl delete service customnginx
+```
