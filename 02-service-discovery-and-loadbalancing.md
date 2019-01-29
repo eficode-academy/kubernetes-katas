@@ -40,7 +40,7 @@ NAME                         READY     STATUS    RESTARTS   AGE
 multitool-5c8676565d-rc982   1/1       Running   0          3s
 ```
 
-Run an interactive shell inside the `multitool`-container in the pod with:
+Run an interactive shell inside the `network-multitool`-container in the pod with:
 
 ```shell
 $ kubectl exec -it multitool-5c8676565d-rc982 -c network-multitool -- bash
@@ -48,7 +48,7 @@ bash-4.4#
 ```
 
 > `kubectl exec` can be used to execute a command inside a container inside a pod.
-> Since the multitool-5c8676565d-rc982 pod only runs a single container, called `multitool`,
+> Since the multitool-5c8676565d-rc982 pod only runs a single container, called `network-multitool`,
 > we do not have to specify the container explicitly, i.e.
 > ```shell
 > kubectl exec -it multitool-5c8676565d-rc982 -- bash
