@@ -26,7 +26,6 @@ Check the list of services:
 ```shell
 $ kubectl get services
 NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   100.64.0.1       <none>        443/TCP   2d
 nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
 ```
 
