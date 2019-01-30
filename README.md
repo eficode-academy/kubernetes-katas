@@ -37,6 +37,23 @@ You can find a summary of many of the commands used in the exercises in the
 * [Setup your own cluster with kubeadm](beyond-this-course-setting-up-your-own.md)
 * [Spinup a Sock-Shop application with Grafana and Prometheus monitoring](sock-shop/README.md)
 
+# kubectl autocompletion
+
+On Linux, using bash, run the following commands:
+
+```shell
+$ echo "source <(kubectl completion bash)" >> ~/.bashrc
+$ . ~/.bashrc
+```
+
+The commands above will enable kubectl autocompletion when you start a new bash
+    session and source (reload) bashrc i.e. enable kubectl autocompletion in
+    your current session.
+
+See:
+[Kubernetes.io - Enabling shell autocompletion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)
+for more info.
+
 # Cheatsheet
 
 A collection of useful commands to use throughout the exercises:
