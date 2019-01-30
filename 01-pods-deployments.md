@@ -185,7 +185,7 @@ multitool-3148954972-k8q06   1/1       Running   0          1h
 nginx-431080787-9r0lx        1/1       Running   0          40s
 ```
 
-## 1.5 Testing Kubernetes promise of resilience by deleting a pod
+## 1.4 Testing Kubernetes promise of resilience by deleting a pod
 
 > A great first mistake that many newcomers make,
 > is to create a _deployment_, and when they're done,
