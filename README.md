@@ -36,3 +36,31 @@ You can find a summary of many of the commands used in the exercises in the
 
 * [Setup your own cluster with kubeadm](beyond-this-course-setting-up-your-own.md)
 * [Spinup a Sock-Shop application with Grafana and Prometheus monitoring](sock-shop/README.md)
+
+# Cheatsheet
+
+A collection of useful commands to use throughout the exercises:
+
+```shell
+$ kubectl api-resources         # List resource types
+
+
+$ kubectl explain <resource>    # Show information about a resource
+$ kubectl explain deployment
+
+
+# List resources in cluster
+$ kubectl get <resource>                    # In current namespace
+$ kubectl get <resource> -n <namespace>     # In specific namespace
+$ kubectl get <resource> --all-namespaces   # In all namespaces
+$ kubectl get <resource> -o wide            # Add extended information
+$ kubectl get <resource> -o yaml            # output in YAML format
+$ kubectl get <resource> -o json            # output in JSON format
+
+# Example
+$ kubectl get pods [-n abc|--all-namespaces] [-o wide|yaml|json]
+
+```
+
+See: [kubectl - Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+for a more extended overview of the `kubectl` command.
