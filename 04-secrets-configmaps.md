@@ -34,7 +34,7 @@ ENTRYPOINT node secretapp.js
 
 This image is available as `praqma/secrets-demo`. We can run that in our Kubernetes cluster by using the [the deployment file](./secrets/deployment.yml). Notice the env values added in the bottom.
 
-Set your namespace in the file and run the deployment by writing:
+Run the deployment by writing:
 
 ```shell
 $ kubectl apply -f secrets/deployment.yml
