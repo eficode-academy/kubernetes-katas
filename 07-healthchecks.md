@@ -21,6 +21,8 @@ For the first 30 seconds of the pod's lifespan, it will be healthy. After this, 
 
 The magic in Kubernetes, is that it will recreate an unhealthy container. 
 
+First, apply the deployment file with the ´kubectl apply -f´ command. Remember to specify the path.
+
 Look at the logs: 
 ```
 kubectl describe pod liveness-exec
