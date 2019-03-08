@@ -295,6 +295,18 @@ bash-4.4#
 ```
 
 
+## Logs:
+Logs can be very helpful in troubleshooting why a certain pod/container is not behaving the way you expect it to. You can check logs of the pods by using `kubectl logs [-f] <pod-name>`. E.g. to watch the logs of the nginx pod, you can do the following:
+
+```
+$ kubectl logs standalone-nginx-pod
+10.200.2.4 - - [08/Mar/2019:13:15:18 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.61.1" "-"
+$
+```
+The above example shows, that the nginx web service in this pod was accessed by a client with an IP `10.200.2.4` . 
+
+
+
 ## Accessing the pods:
 Now the question comes, How can we access nginx webserver at port 80 in this pod? For now we can do it from within the cluster. First, we need to know the IP address of the nginx pod. We use the `-o wide` parameters with the `get pods` command:
 
