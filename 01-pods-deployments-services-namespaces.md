@@ -162,6 +162,139 @@ multitool-3148954972-k8q06   1/1       Running   0          1h
 nginx-431080787-tx5m7        1/1       Running   0          12s
 ```
 
+## Creating a standalone pod:
+Often times you will need to create a pod, without making it a member of a deployment or daemon-set, or anything else. For those instances, here is how you would create a standalone pod.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: standalone-nginx-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+```
+
+Save the above few lines of code as a yaml file, and use `kubectl create -f <filename>` to create this pod.
+
+```
+$ kubectl create -f support-files/standalone-nginx-pod.yaml 
+pod "standalone-nginx-pod" created
+
+$ kubectl get pods
+NAME                   READY     STATUS    RESTARTS   AGE
+standalone-nginx-pod   1/1       Running   0          4s
+$
+```
+
+The example above will work with container images, which have some sort of daemon/service process running as their entrypoint. If you want to run something which does not have a **service process** in the container image, you can pass it a custom command, such as shown below: 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: standalone-busybox-pod
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+
+```
+The above code will create a pod, which will go into a sleep for 3600 seconds ( one hour), and will exit (die) dilently. Good to run certain diagnostics.
+
+```
+$ kubectl create -f support-files/standalone-busybox-pod.yaml 
+pod "standalone-busybox-pod" created
+$
+
+$ kubectl get pods
+NAME                     READY     STATUS    RESTARTS   AGE
+standalone-busybox-pod   1/1       Running   0          30s
+$
+```
+
+PS. Praqma has an excellent multitool for network (and container) troubleshooting. It is called praqma/network-multitool, and it runs nginx web server, eliminating a need to pass any custom commands. You can run it like this:
+
+```
+$ kubectl run multitool --image praqma/network-multitool
+```
+
+
+## Exec into the pod/container:
+Just like `docker exec`, you can `exec` into a kubernetes pod/container by using `kubectl exec`. This is a good way to troubleshoot any problems. All you need is the name of the pod (and container name - in case it is a multi-container pod). 
+
+You can `exec` into the pod like so:
+
+```
+[kamran@kworkhorse kubernetes-katas]$ kubectl exec -it standalone-busybox-pod /bin/sh
+
+/ # 
+```
+
+You can do a lot of troubleshooting after you exec (log) into the pod:
+```
+[kamran@kworkhorse kubernetes-katas]$ kubectl exec -it standalone-busybox-pod /bin/sh
+
+/ # ls -l
+total 16
+drwxr-xr-x    2 root     root         12288 Feb 14 18:58 bin
+drwxr-xr-x    5 root     root           360 Mar  8 12:51 dev
+drwxr-xr-x    1 root     root            66 Mar  8 12:51 etc
+drwxr-xr-x    2 nobody   nogroup          6 Feb 14 18:58 home
+dr-xr-xr-x  127 root     root             0 Mar  8 12:51 proc
+drwx------    1 root     root            26 Mar  8 12:55 root
+dr-xr-xr-x   13 root     root             0 Mar  7 10:49 sys
+drwxrwxrwt    2 root     root             6 Feb 14 18:58 tmp
+drwxr-xr-x    3 root     root            18 Feb 14 18:58 usr
+drwxr-xr-x    1 root     root            17 Mar  8 12:51 var
+
+/ # nslookup yahoo.com
+Server:		10.32.0.10
+Address:	10.32.0.10:53
+
+Non-authoritative answer:
+Name:	yahoo.com
+Address: 2001:4998:c:1023::4
+Name:	yahoo.com
+Address: 2001:4998:44:41d::4
+/ # exit
+$
+```
+
+An example of network-multitool: 
+```
+$ kubectl run multitool --image=praqma/network-multitool 
+deployment.apps "multitool" created
+
+$ kubectl get pods
+NAME                         READY     STATUS    RESTARTS   AGE
+multitool-5558fd48d4-lggqg   1/1       Running   0          12s
+standalone-busybox-pod       1/1       Running   0          13m
+standalone-nginx-pod         1/1       Running   0          22m
+$
+```
+
+```
+$ kubectl exec -it multitool-5558fd48d4-lggqg /bin/bash
+bash-4.4# dig +short yahoo.com
+98.137.246.8
+98.137.246.7
+72.30.35.10
+98.138.219.231
+72.30.35.9
+98.138.219.232
+bash-4.4# 
+
+
+bash-4.4# dig +short kubernetes.default.svc.cluster.local
+10.32.0.1
+
+bash-4.4# 
+```
+
+
 ## Accessing the pods:
 Now the question comes, How can we access nginx webserver at port 80 in this pod? For now we can do it from within the cluster. First, we need to know the IP address of the nginx pod. We use the `-o wide` parameters with the `get pods` command:
 
