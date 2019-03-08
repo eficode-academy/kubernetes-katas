@@ -1,154 +1,128 @@
-# Secrets and ConfigMaps
+# Kubernetes secrets and Config maps
 
-Secrets are a way to store things that you do not want floating around in your code.
+In this example, we want to run nginx which listens on port 443, by using some self-signed SSL certificates. This involves:
+* providing SSL certificates to nginx pods, and,
+* providing a custom nginx configuration, so the pods know how to use these certificates and what port to listen on.
 
-It's things like passwords for databases, API keys and certificates.
+To achieve these objectives, we will create SSL certs as secrets, and a custom nginx configuration as configmap, and use them in our deployment.
 
-Similarly configmaps are for configuration, that doesn't really belong in code but needs to change. Examples include loadbalancer configurations, jenkins configuration and so forth.
 
-We will look at both these in this coming exercise.
 
-## Secrets as environment variables
+Generate self signed certs: (check support-files/  directory)
+```
+./generate-self-signed-certs.sh
+```
+This will create `tls.*` files.
 
-Our [maginificent app](./secrets/secretapp.js) requries it's API key and language.  Rather than hardcode this sensitive information and commit it to git for all the world to see, we source these values from environment variables.
 
-The first step to fixing it, would be to make our variables as environmental variables.
+Create  (tls type) secret for nginx:
 
-We have sourced the values in the code like this:
-
-```shell
-  const language = process.env.LANGUAGE;
-  const API_KEY = process.env.API_KEY;
+```
+kubectl create secret tls nginx-certs --cert=tls.crt --key=tls.key
 ```
 
-Because we are reading from the env variables we can specify some default in the Dockerfile.  We have used this:
-
-```shell
-FROM node:9.1.0-alpine
-EXPOSE 3000
-ENV LANGUAGE English
-ENV API_KEY 123-456-789
-COPY secretapp.js .
-ENTRYPOINT node secretapp.js
+Examine the secret you just created:
+```
+kubectl describe secret nginx-certs
 ```
 
-This image is available as `praqma/secrets-demo`. We can run that in our Kubernetes cluster by using the [the deployment file](./secrets/deployment.yml). Notice the env values added in the bottom.
-
-Run the deployment by writing:
-
-```shell
-$ kubectl apply -f secrets/deployment.yml
-deployment.extensions/envtest created
+```
+kubectl get secret nginx-certs -o yaml
 ```
 
-Expose the deployment on a nodeport, so you can see the running container.
 
-> You learned about exposing nodeports in the [service discovery](02-service-discovery-and-loadbalancing.md) exercise. And remember that the application is running on port ´3000´
+Create a custom configuration nginx: (check support-files/  directory)
 
-Despite the default value in the Dockerfile, it should now be overwritten by the deployment env values!
+```
+$ cat support-files/nginx-connectors.conf
+server {
+    listen       80;
+    server_name  localhost;
 
-However we just moved it from being hardcoded in our app to being hardcoded in our Dockerfile.
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+}
 
-## Secrets using the kubernetes secret resource
+server {
+    listen       443;
+    server_name  localhost;
 
-Let's move the API key to a (generic) secret:
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
 
-```shell
-$ kubectl create secret generic apikey --from-literal=API_KEY=oneringtorulethemall
-secret/apikey created
+    ssl on;
+    ssl_certificate /certs/tls.crt;
+    ssl_certificate_key /certs/tls.key;
+}
 ```
 
-Kubernetes supports different kinds of preconfigured secrets, but for now we'll deal with a generic one.
 
-Similarly for the language into a configmap:
-
-```shell
-$ kubectl create configmap language --from-literal=LANGUAGE=Orcish
-configmap/language created
+```
+kubectl create configmap nginx-config --from-file=support-files/nginx-connectors.conf
 ```
 
-Similarly to all other objects, you can run "get" on them.
+Examine the configmap you just created:
 
-```shell
-$ kubectl get secrets
-NAME                  TYPE                                  DATA      AGE
-apikey                Opaque                                1         4m
-default-token-td78d   kubernetes.io/service-account-token   3         3h
+```
+kubectl describe configmap nginx-config
 ```
 
-```shell
-$ kubectl get configmaps
-NAME       DATA      AGE
-language   1         2m
+```
+kubectl get configmap nginx-config -o yaml
 ```
 
-> Try to investigate the secret by using the kubectl describe command:
-> ```shell
-> $ kubectl describe secret apikey
-> ```
-> Note that the actual value of API_KEY is not shown. To see the encoded value use:
-> ```shell
-> $ kubectl get secret apikey -o yaml
-> ```
 
-Last step is to change the Kubernetes deployment file to use the secrets.
+Create a nginx deployment with SSL support using the secret and config map you created in the previous steps (above): (check support-files/  directory)
 
-Change:
-
-```shell
-        env:
-        - name: LANGUAGE
-          value: Polish
-        - name: API_KEY
-          value: 333-444-555
+```
+$ cat support-files/nginx-ssl.yaml 
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      volumes:
+      - name: certs-volume
+        secret:
+          secretName: nginx-certs
+      - name: config-volume
+        configMap:
+          name: nginx-config
+      containers:
+      - name: nginx
+        image: nginx:1.15.1
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /certs
+          name: certs-volume
+        - mountPath: /etc/nginx/conf.d
+          name: config-volume
 ```
 
-To:
 
-```shell
-        env:
-        - name: LANGUAGE
-          valueFrom:
-            configMapKeyRef:
-              name: language
-              key: LANGUAGE
-        - name: API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: apikey
-              key: API_KEY
+```
+kubectl create -f nginx-ssl.yaml
 ```
 
-After you have edited the `deployment.yml` file (or you can use the prepared one
-`secrets/final.deployment.yml`), you need to apply the new edition of the file
-by issuing: `kubectl apply -f deployment.yml` .
+You should be able to see nginx running. Expose it as a service and curl it from your computer. You can also curl it through the multitool pod from within the cluster.
 
-You should now see the variables being loaded from configmap and secret respectively.
 
-Pods are not recreated automatically when serets or configmaps change, i.e. to
-hot swapping the values becomes a two step process:
 
-```shell
-$ kubectl create configmap language --from-literal=LANGUAGE=Elvish -o yaml --dry-run | kubectl replace -f -
-configmap/language replaced
-$ kubectl create secret generic apikey --from-literal=API_KEY=andinthedarknessbindthem -o yaml --dry-run | kubectl replace -f -
-secret/apikey replaced
-```
 
-Then delete the pod (so it's recreated with the replaced configmap and secret) :
-
-```shell
-$ kubectl delete pod envtest-3380598928-kgj9d
-pod "envtest-3380598928-kgj9d" deleted
-```
-
-Access it in a webbrowser again, to see the updated values.
-
-## Clean up
-
-```shell
-$ kubectl delete deployment envtest
-$ kubectl delete service envtest
-$ kubectl delete configmap language
-$ kubectl delete secret apikey
-```
