@@ -19,7 +19,7 @@ You can find a summary of many of the commands used in the exercises in the [che
 ## Exercises
 
 * [01-pods-deployments-services-namespaces.md](01-pods-deployments-services-namespaces.md)
-* [02-init-containers.md](02-init-containers.md)
+* [02-init-and-multi-container-pods.md](02-init-and-multi-container-pods.md)
 * [03-rolling-updates.md](03-rolling-updates.md)
 * [04-secrets-configmaps.md](04-secrets-configmaps.md)
 * [05-storage.md](05-storage.md)
