@@ -7,12 +7,11 @@ It is assumed that you are provided with a kubernetes cluster by the instructor.
 $ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
 ```
 
-Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP.
+Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. In any case, the person who sets up the kubernetes cluster will provide you with the credentials to access the cluster. Normally it the credentials are in a form of a file called `.kube/config`, which is generated automatically when you provision a kubernetes cluster using `minikube` , `kubeadm` or `kube-up.sh` or any other methods.
 
-**Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as node.
+For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to various types of Kubernetes clusters, check [this article](https://kubernetes.io/docs/tasks/tools/install-kubectl/#configure-kubectl)
 
-For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to various types of Kubernetes cluster, check [this article](https://kubernetes.io/docs/tasks/tools/install-kubectl/#configure-kubectl)
-
+**Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as a master+worker node. So, if you want to use minikube, you will have to set it up on a physical PC, such as your personal/work computer.
 
 ## Authenticate to your Google k8s cluster:
 To authenticate against your cluster, you will need a gmail account. Then, run:
@@ -72,8 +71,18 @@ users:
     username: admin
 ```
 
+There is also a `kubectl cluster-info` command, which gives you the address of the master node:
+```
+$ kubectl cluster-info
+Kubernetes master is running at https://1.2.3.4
+KubeDNS is running at https://1.2.3.4:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 
-Furthermore you should now have access to the google cloud cluster! Verify by looking at the nodes for the cluster:
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+$ 
+```
+
+
+At this point, you should now have access to the google cloud cluster! Verify by looking at the nodes for the cluster:
 
 ```
 kubectl get nodes
@@ -106,7 +115,5 @@ ip-172-20-40-108.eu-central-1.compute.internal   Ready     master    1d      v1.
 ip-172-20-49-54.eu-central-1.compute.internal    Ready     node      1d      v1.8.0    2.3.4.5         Debian GNU/Linux 8 (jessie)   4.4.78-k8s       docker://1.12.6
 ip-172-20-60-255.eu-central-1.compute.internal   Ready     node      1d      v1.8.0    5.6.7.8         Debian GNU/Linux 8 (jessie)   4.4.78-k8s       docker://1.12.6
 ```
-
-
 
 **Note:** Depending on the setup for this workshop, you may not be the only tenant on the cluster; you may be sharing it with the rest of the people around you in the course! So be careful!
