@@ -611,10 +611,17 @@ This concludes the exercise, happy coding!
 
 ## Useful commands
 
-    kubectl config current-context
-    kubectl config use-context docker-for-desktop
+    kubectl config get-contexts
+    kubectl config use-context minikube
     kubectl version
     kubectl cluster-info
     kubectl get nodes
+    kubectl get pods
     kubectl get all
-    kubectl describe
+    kubectl describe pod
+    kubectl get events --sort-by=.metadata.creationTimestamp
+    kubectl api-resources # kubectl 1.11+
+    kubectl api-versions
+
+
+Cheatsheat: [https://kubernetes.io/docs/reference/kubectl/cheatsheet/](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
