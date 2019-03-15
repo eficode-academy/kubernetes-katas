@@ -6,5 +6,5 @@ spec:
   containers:
   - name: busybox
     image: busybox
-    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 30']
 
