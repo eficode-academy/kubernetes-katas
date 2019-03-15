@@ -1,6 +1,13 @@
+This exercise/kata covers:
+* Pod creation / deletion
+* Deployments
+* Logging into the pods/containers
+* Viewing logs of the pods/containers
+* Namespaces
+
 # Pods and Deployments:
 
-A **Pod** (*not container*) is the basic building-block/worker-unit in Kubernetes. Normally a pod is a part of a **Deployment**. 
+A **Pod** (*not container*) is the basic building-block/worker-unit in Kubernetes. *Normally* a pod is a part of a **Deployment**. 
 
 
 ## Creating pods using 'run' command:
@@ -332,216 +339,11 @@ $ kubectl exec -it multitool-3148954972-k8q06 bash
 [root@multitool-3148954972-k8q06 /]# 
 ```
 
-We accessed the nginx service in the nginx pod using another pod in the same setup, because at this point in time the nginx web-service (running as pod) is not accessible using any **access methods**. These are explained next.
-
-## Accessing a service:
-
-To access any service inside any given pod (e.g. nginx web service), we need to *expose* the related deployment as a *service*. We have three main ways of exposing the deployment , or in other words, we have three ways to define a *service* , which we can access in three different ways. A service is (normally) created on top of an existing deployment.
-
-### Service type: ClusterIP
-Expose the deployment as a service - type=ClusterIP:
-```
-$ kubectl expose deployment nginx --port 80 --type ClusterIP
-service "nginx" exposed
-```
-
-Check the list of services:
-```
-$ kubectl get services
-NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   100.64.0.1       <none>        443/TCP   2d
-nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
-```
-
-Notice, there are two services listed here. The first one is named **kubernetes**, which is the default service created (automatically) when a kubernetes cluster is created for the first time. It does not have any EXTERNAL-IP. This service is not our focus right now.
-
-The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster , using the service IP, not the pod IP. Lets see if we can access this service from our multitool.
-
-```
-[root@multitool-3148954972-k8q06 /]# curl -s 100.70.204.237 | grep h1
-<h1>Welcome to nginx!</h1>
-[root@multitool-3148954972-k8q06 /]# 
-```
-
-It worked! 
-
-You can also use the `describe` command to describe any Kubernetes object in more detail. e.g. we use `describe` to see more details about our nginx service:
-
-```
-$ kubectl describe service nginx
-Name:              nginx
-Namespace:         default
-Labels:            app=nginx
-Annotations:       <none>
-Selector:          app=nginx
-Type:              ClusterIP
-IP:                100.70.204.237
-Port:              <unset>  80/TCP
-TargetPort:        80/TCP
-Endpoints:         100.96.1.148:80
-Session Affinity:  None
-Events:            <none>
-```
-
-You can of-course use `... describe pod ...` , ` ... describe deployment ...` , etc.
-
-
-**Additional notes about the Cluster-IP:**
-* The IPs assigned to services as Cluster-IP are from a different Kubernetes network called *Service Network*, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labelling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
-* No matter what type of service you choose while *exposing* your deployment, Cluster-IP is always assigned to that particular service.
-* Every service has end-points, which point to the actual pods service as a backend of a particular service.
-* As soon as a service is created, and is assigned a Cluster-IP, an entry is made in Kubernetes' internal DNS against that service, with this service name and the Cluster-IP. e.g. `nginx.default.svc.cluster.local` would point to `100.70.204.237` . 
-
-
-### Service type: NodePort
-
-Our nginx service is still not reachable from outside, so now we re-create this service as NodePort.
-
-```
-$ kubectl get svc
-NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   100.64.0.1       <none>        443/TCP   17h
-nginx        ClusterIP   100.70.204.237   <none>        80/TCP    15m
-```
-
-```
-$ kubectl delete svc nginx
-service "nginx" deleted
-```
-
-```
-$ kubectl expose deployment nginx --port 80 --type NodePort
-service "nginx" exposed
-```
-
-```
-$ kubectl get svc
-NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP   100.64.0.1     <none>        443/TCP        17h
-nginx        NodePort    100.65.29.172  <none>        80:32593/TCP   8s
-```
-
-Notice that we still don't have an external IP, but we now have an extra port `32593` for this pod. This port is a **NodePort** exposed on the worker nodes. So now, if we know the IP of our nodes, we can access this nginx service from the internet. First, we find the public IP of the nodes:
-```
-$ kubectl get nodes -o wide
-NAME                                            STATUS    ROLES     AGE       VERSION        EXTERNAL-IP     OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME
-gke-dcn-cluster-35-default-pool-dacbcf6d-3918   Ready     <none>    17h       v1.8.8-gke.0   35.205.22.139   Container-Optimized OS from Google   4.4.111+         docker://17.3.2
-gke-dcn-cluster-35-default-pool-dacbcf6d-c87z   Ready     <none>    17h       v1.8.8-gke.0   35.187.90.36    Container-Optimized OS from Google   4.4.111+         docker://17.3.2
-```
-
-Even though we have only one pod (and two worker nodes), we can access any of the node with this port, and it will eventually be routed to our pod. So, lets try to access it from our local work computer:
-
-```
-$ curl -s 35.205.22.139:32593 | grep h1
-<h1>Welcome to nginx!</h1>
-```
-
-It works!
-
-### Service type: LoadBalancer
-So far so good; but, we do not expect the users to know the IP addresses of our worker nodes. It is not a flexible way of doing things. So we re-create the service as `type=LoadBalancer`. The type LoadBalancer is only available for use, if your k8s cluster is setup in any of the public cloud providers, GCE, AWS, etc.
-
-```
-[demo@kworkhorse exercises]$ kubectl delete svc nginx
-service "nginx" deleted
-```
-
-```
-$ kubectl expose deployment nginx --port 80 --type LoadBalancer
-service "nginx" exposed
-```
-
-```
-$ kubectl get svc
-NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP      100.64.0.1     <none>        443/TCP        17h
-nginx        LoadBalancer   100.69.15.89   <pending>     80:31354/TCP   5s
-```
-
-In few minutes of time the external IP will have some value instead of the word 'pending' . 
-```
-$ kubectl get svc
-NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP      100.64.0.1     <none>        443/TCP        17h
-nginx        LoadBalancer   100.69.15.89   35.205.60.29  80:31354/TCP   5s
-
-```
-
-Now, we can access this service without using any special port numbers:
-```
-[demo@kworkhorse exercises]$ curl -s 35.205.60.29 | grep h1
-<h1>Welcome to nginx!</h1>
-[demo@kworkhorse exercises]$
-```
-
-**Additional notes about LoadBalancer:**
-* A service defined as LoadBalancer will still have some high-range port number assigned to it's main service port, just like NodePort. This has a clever purpose, but is an advance topic and is not our focus at this point.
-
-
-# High Availability:
-
-So far we have seen pods, deployments and services. We have also seen Kubernetes keeping up it's promise of resilience. Now we see how we can have **high availability** on Kubernetes. The easiest and preffered way to do this is by having multiple replicas for a deployment.
-
-
-Lets increase the number of replicas of our nginx deployment to four(4):
-```
-$ kubectl scale deployment nginx --replicas=4
-deployment "nginx" scaled
-```
-
-Check the deployment and pods:
-```
-$ kubectl get deployments
-NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-multitool   1         1         1            1           24m
-nginx       4         4         4            4           34m
-```
-
-```
-$ kubectl get pods
-NAME                         READY     STATUS    RESTARTS   AGE
-multitool-3148954972-k8q06   1/1       Running   0          24m
-nginx-569477d6d8-4msf8       1/1       Running   0          20m
-nginx-569477d6d8-bv77k       1/1       Running   0          34s
-nginx-569477d6d8-s6lsn       1/1       Running   0          34s
-nginx-569477d6d8-v8srx       1/1       Running   0          35s
-```
-
-**Notice:** The nginx deployment says Desired=4, Current=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was aready running (being older), and the other three are started just now.
-
-
-You can also scale down! - e.g. to 2:
-
-```
-$ kubectl scale deployment nginx --replicas=2
-deployment "nginx" scaled
-```
-
-```
-$ kubectl get pods
-NAME                         READY     STATUS        RESTARTS   AGE
-multitool-3148954972-k8q06   1/1       Running       0          25m
-nginx-569477d6d8-4msf8       1/1       Running       0          21m
-nginx-569477d6d8-bv77k       0/1       Terminating   0          1m
-nginx-569477d6d8-s6lsn       0/1       Terminating   0          1m
-nginx-569477d6d8-v8srx       1/1       Running       0          2m
-```
-
-Notice that un-necessary pods are killed immediately.
-
-```
-$ kubectl get pods
-NAME                         READY     STATUS    RESTARTS   AGE
-multitool-3148954972-k8q06   1/1       Running   0          26m
-nginx-569477d6d8-4msf8       1/1       Running   0          22m
-nginx-569477d6d8-v8srx       1/1       Running   0          2m
-```
-
------- 
+We accessed the nginx webserver in the nginx pod using another (multitool) pod in the cluster, because at this point in time the nginx web-service (running as pod) is not accessible through a *service*. Services are explained separately.
 
 
 
-# Namespaces:
+## Namespaces:
 Namespaces are the default way for kubernetes to separate resources. Namespaces do not share anything between them, which is important to know. This is quite powerful concept, but not unusual, as in computing - we are used to having isolated environments such as home directories, jailed environments, etc. Kubernetes clusters come with a namespace called **default**.
 
 When you execute a kubectl command without specifying a namespace, it is run in/against the namespace named **default** !. So far all the commands you have executed above, have been executed in the *default* namespace. You can optionally use the namespace flag (-n mynamespace) to execute the command a specific namespace. When you are creating Kubernetes objects though *yaml* files, you can specify a namespace for a particular resource. 
