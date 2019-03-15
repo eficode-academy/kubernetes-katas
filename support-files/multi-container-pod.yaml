@@ -13,7 +13,7 @@ spec:
       mountPath: /usr/share/nginx/html
   - name: content-generator
     image: busybox
-    command: ['sh', '-c', 'while true; do echo Date and Time is $(date) >> /web-content/index.html && sleep 5; done']
+    command: ['sh', '-c', 'while true; do echo Date and Time is $(date) >> /web-content/index.html && sleep 20; done']
     volumeMounts:
     - name: web-content-dir
       mountPath: "/web-content"
