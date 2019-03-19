@@ -1,20 +1,15 @@
 # Setup kubectl
 
-It is assumed that you are provided with a kubernetes cluster by the instructor. Before you are able to do anything on the cluster, you need to be able to *talk* to this cluster from/using your computer. **kubectl** - short for Kubernetes Controller (or Kube Control) - is *the* command line tool to talk to a Kubernetes cluster. To get that on your computer, you have to follow [these instructions](https://kubernetes.io/docs/tasks/tools/install-kubectl/):
+It is assumed that you are provided with a kubernetes cluster by the instructor. Before you are able to do anything on the cluster, you need to be able to *talk* to this cluster from/using your computer. **kubectl** - short for Kubernetes Controller (or Kube Control) - is *the* command line tool to talk to a Kubernetes cluster. 
 
-Or, you can use the following commands on your OS to download the latest version of `kubectl` for your computer's OS.
+## What is kubectl?
+Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. In any case, the person who sets up the kubernetes cluster will provide you with the credentials to access the cluster. Normally it the credentials are in a form of a file called `.kube/config`, which is generated automatically when you provision a kubernetes cluster using `minikube` , `kubeadm` or `kube-up.sh` or any other methods.
+
+For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to minikube and kubeadm based clusters, the information is available [here](https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube), and [here](https://github.com/KamranAzeem/learn-kubernetes/blob/master/kubeadm/README.md). 
 
 **Note:** It is useful to know that `kubectl` binary is also part of **Google Cloud SDK** . If you install google-cloud-sdk, then you can use gcloud to install the `kubectl` component/binary. If you are already provided with a kubernetes cluster *config* file by your instructor, then you probably don't need to install google-cloud-sdk. In that case you will need to follow these instructions to install `kubectl` on your computer.
 
-## MAC:
-Run the following commands:
-```
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
-
-chmod +x ./kubectl
-
-sudo mv ./kubectl /usr/local/bin/kubectl
-```
+To get `kubectl` on your computer, you have to use the following commands:
 
 ## Linux:
 Run the following commands:
@@ -26,6 +21,17 @@ chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 ```
 
+## macOS:
+Run the following commands:
+```
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+```
+
+
 ## Windows:
 First, check the latest version of kubectl from [https://storage.googleapis.com/kubernetes-release/release/stable.txt](https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
@@ -33,11 +39,6 @@ Then, using the version information you got from the above link, run the followi
 ```
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/windows/amd64/kubectl.exe
 ```
-
-# What is kubectl?
-Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. In any case, the person who sets up the kubernetes cluster will provide you with the credentials to access the cluster. Normally it the credentials are in a form of a file called `.kube/config`, which is generated automatically when you provision a kubernetes cluster using `minikube` , `kubeadm` or `kube-up.sh` or any other methods.
-
-For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to minikube and kubeadm based clusters, the information is available [here](https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube), and [here](https://github.com/KamranAzeem/learn-kubernetes/blob/master/kubeadm/README.md). 
 
 
 # Configure kubectl to access your cluster:
