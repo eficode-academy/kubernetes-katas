@@ -3,7 +3,7 @@
 It is assumed that you are provided with a kubernetes cluster by the instructor. Before you are able to do anything on the cluster, you need to be able to *talk* to this cluster from/using your computer. **kubectl** - short for Kubernetes Controller (or Kube Control) - is *the* command line tool to talk to a Kubernetes cluster. 
 
 ## What is kubectl?
-Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. In any case, the person who sets up the kubernetes cluster will provide you with the credentials to access the cluster. Normally it the credentials are in a form of a file called `.kube/config`, which is generated automatically when you provision a kubernetes cluster using `minikube` , `kubeadm` or `kube-up.sh` or any other methods.
+`kubectl` is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP. In any case, the person who sets up the kubernetes cluster will provide you with the credentials to access the cluster. Normally it the credentials are in a form of a file called `.kube/config`, which is generated automatically when you provision a kubernetes cluster using `minikube` , `kubeadm` or `kube-up.sh` or any other methods.
 
 For the remainder of this workshop, we assume you have a Kubernetes cluster on google cloud. For instructions on connecting to minikube and kubeadm based clusters, the information is available [here](https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube), and [here](https://github.com/KamranAzeem/learn-kubernetes/blob/master/kubeadm/README.md). 
 
@@ -31,7 +31,6 @@ chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 ```
 
-
 ## Windows:
 First, check the latest version of kubectl from [https://storage.googleapis.com/kubernetes-release/release/stable.txt](https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
@@ -43,12 +42,14 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/w
 
 # Configure kubectl to access your cluster:
 
-This will be a straight-forward procedure for most of the students, who are new to Kubernetes, and this is their first interaction with a kubernetes cluster. 
+There are several ways to configure kubectl to be able to talk to your kubernetes cluster. Some/most-useful are described in the sections below.
 
-However, there will be some students, who may already have access to some clusters, and they will have their `kubectl` configured to talk to those clusters. They may be concerned that the procedure below may over-write their configurations, or they may lose access to their existing clusters. This is to assure you that nothing bad will happen to your existing `kubectl` configurations. Whenever you configure `kubectl` to talk to a cluster, it adds a new set of entries on your existing `~/.kube/config` file. However, to be safe, and for peace of mind, you should backup your `~/.kube/config` before proceeding with the instructions below.
+**Note:** This will be a straight-forward procedure for most of the students, who are new to Kubernetes, and this is their first interaction with a kubernetes cluster. However, there will be some students, who may already have access to some clusters, and they will have their `kubectl` configured to talk to those clusters. They may be concerned that the procedure below may over-write their configurations, or they may lose access to their existing clusters. This is to assure you that nothing bad will happen to your existing `kubectl` configurations. Whenever you configure `kubectl` to talk to a cluster, it adds a new set of entries on your existing `~/.kube/config` file. However, to be safe, and for peace of mind, you should backup your `~/.kube/config` before proceeding with the instructions below.
 
-## Configure kubectl to connect to your Google k8s cluster - using `config` file provided by instructor:
-In case you are provided by the `config` file, simply place it inside `.kube` directory under your home directory. i.e. `/home/<username>/.kube/`. This file already contains all information to correctly authenticate and connect to the cluster assigned to you.  Make sure to backup any existing `.kube/config` before you do this. 
+## Configure kubectl to connect to your cluster - using `config` file provided by instructor:
+In case you are provided by the `config` file, simply create a `.kube` directory under your home directory, place it inside it. i.e. `/home/<username>/.kube/`. This file already contains all information to correctly authenticate and connect to the cluster assigned to you.  Make sure to backup any existing `.kube/config` before you do this. 
+
+**Note:** Windows users need to adjust the path to the home directory in the instructions above. 
 
 ## Authenticate to your Google k8s cluster - using gcloud utility:
 (Of-course, this does not apply to minikube and kubeadm based clusters). 
@@ -57,7 +58,7 @@ This step is needed if you are **not** provided with a `config` file by your ins
 
 To authenticate against your cluster, you will need a gmail account. You also need `gcloud` utility from Google Cloud SDK installed on your computer. The Cloud SDK is a set of tools for Cloud Platform. It contains gcloud, gsutil, and bq command-line tools, which you can use to access Google Compute Engine, Google Cloud Storage, Google BigQuery, and other products and services from the command-line.
 
-To do it yourself, use the instructions from: [https://cloud.google.com/sdk/docs/quickstart-linux](https://cloud.google.com/sdk/docs/quickstart-linux). Or, you can run the following commands, which will install Google Cloud SDK, and also run the authentication process to connect to your cluster - using gcloud. 
+The following commands will install Google Cloud SDK on your computer, and also run the authentication process to connect to your cluster - using `gcloud` command. 
 
 ### Debian / Ubuntu:
 
