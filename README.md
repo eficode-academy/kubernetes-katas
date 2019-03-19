@@ -1,22 +1,37 @@
 # kubernetes-katas
 
-This is a selection of exercises learn how to use Kubernetes (K8s). The exercises are ordered in the way we think it makes sense to introduce Kubernetes concepts.
+This is a selection of exercises to learn to use Kubernetes (K8s). The exercises are ordered in the way we think it makes sense to introduce Kubernetes concepts.
 
 
 You can find a summary of many of the commands used in the exercises in the [cheatsheet.md](cheatsheet.md).
 
-## Important note about worker node resources:
-In a group excercise, normally each student gets a single node cluster setup on a cloud platform (GCP). It is possible that the worker node is a small spec node (1 CPU and 1.7 GB RAM). In that case, please note that certain *system pods* running in **kube-system** namespace take away as much as 60% of the CPU, and you are left with 40% of CPU to run your pods to do these excercises. It is also important to note that by default each `nginx` and `nginx:alpine` instance will take away 10% CPU. This means, that at any given time, you will note be able to run more than four (light weight) pods in total. So when you do the **scaling** and **rolling updates** exercises, you need to keep that in mind.
+## Important note about cluster setup:
+Normally, in a classroom setup, each student is provided with a small individual kubernetes cluster - normally on Google Cloud Platform (GCP). The student is provided with a `.kube/config` file, which the student simply places in his/her home directory, and no further setup is required except downloading the correct `kubectl` binary for your personal computer's operating system. This will be the case for most of the students.
+
+There are students who want to setup their own cluster, on their computer. For them the options are [minikube](https://kubernetes.io/docs/setup/minikube/), [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/), [microk8s](https://microk8s.io/), etc. 
+
+### Minikube:
+Minikube is a simple installer, which runs on your host/physical computer, and sets up a one node VM **itself**. This VM is configured as a single node Kubernetes cluster. The possible problems with this setup is that the minikube installer may or may not work well with the virtualization software you are using on your computer. For example, it is found that it works well with VirtualBox , but is a challenge to setup on Libvirt/KVM due to various kernel modules mismatch, etc.
+
+Instructions on setting up minikube are [here](minikube-setup.md)
+
+**Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as a master+worker node. So, if you want to use minikube, you will have to set it up on a physical PC, such as your personal/work computer.
+
+### Kubeadm:
+Kubeadm is another type of installer, which runs **inside** the VM. This is a sure-shot way to setup a one node or multi node kubernetes cluster on your personal computer. The idea is that you simply install a VM inside the virtualization sofware / hypervisor of your choice on your personal computer, with any supported Linux OS (CentOS, Fedora, Ubuntu, etc). Then you download the kubeadm installer *inside* this VM and run it. This sets up a master kubernetes node, which you can *also use* as a worker node. The master node has `kubectl`, and you simply login to the master node and use the cluster as usual.
+
+Instructions on setting up a kubeadm cluster are [here](https://github.com/KamranAzeem/learn-kubernetes/tree/master/kubeadm)
+
+## Important note about CPU and memory resources on worker node:
+It is possible that the worker node in the kubernetes cluster you received from your instructor, is a small spec node (1 CPU and 1.7 GB RAM). In that case, please note that certain *system pods* running in **kube-system** namespace take away as much as 60% (or 600m) of the CPU, and you are left with 40% of CPU to run your pods to do these excercises. It is also important to note that by default each `nginx` and `nginx:alpine` instance will take away 10% (or 100m) CPU. This means, that at any given time, you will not be able to run more than four (light weight) pods in total. So when you do the **scaling** and **rolling updates** exercises, you need to keep that in mind. You can also limit the use of CPU and Memory resources in your pods and assign them very little CPU. e.g. Allocating `5m` CPU to nginx pods does not have any negative effect, and they just run fine.
 
 If you are running a cluster of your own such as minikube or kubeadm based cluster, and if you setup the VMs to have multiple CPUs during the VM setup, you will not likely encounter this limitation. But you should still make a note of it. 
 
 
 ## Setup
 
-* [00-setup-kubectl-linux](00-setup-kubectl-linux.md) -
-    Skip if you've already installed `kubectl` and have access to a cluster.
-* [00-setup-namespace](00-setup-namespace.md) -
-    Skip if you've already created a personal namespace and set it as your default.
+* [00-setup-kubectl-linux](00-setup-kubectl-linux.md) - Skip if you've already installed `kubectl` and have access to a cluster.
+* [00-setup-namespace](00-setup-namespace.md) - Skip if you've already created a personal namespace and set it as your default.
 
 ## Exercises
 
