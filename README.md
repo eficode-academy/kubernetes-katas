@@ -6,14 +6,14 @@ This is a selection of exercises to learn to use Kubernetes (K8s). The exercises
 You can find a summary of many of the commands used in the exercises in the [cheatsheet.md](cheatsheet.md).
 
 ## Important note about cluster setup:
-Normally, in a classroom setup, each student is provided with a small individual kubernetes cluster - normally on Google Cloud Platform (GCP). The student is provided with a `.kube/config` file, which the student simply places in his/her home directory, and no further setup is required except downloading the correct `kubectl` binary for your personal computer's operating system. This will be the case for most of the students.
+Normally, in a classroom setup, each student is provided with a small individual kubernetes cluster - normally on Google Cloud Platform (GCP). The student is provided with a `config` file, which the student simply places in his/her home directory (under `~/.kube/`), and no further setup is required except downloading the correct `kubectl` binary for your personal computer's operating system. This will be the case for most of the students.
 
 There are students who want to setup their own cluster, on their computer. For them the options are [minikube](https://kubernetes.io/docs/setup/minikube/), [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/), [microk8s](https://microk8s.io/), etc. 
 
 ### Minikube:
 Minikube is a simple installer, which runs on your host/physical computer, and sets up a one node VM **itself**. This VM is configured as a single node Kubernetes cluster. The possible problems with this setup is that the minikube installer may or may not work well with the virtualization software you are using on your computer. For example, it is found that it works well with VirtualBox , but is a challenge to setup on Libvirt/KVM due to various kernel modules mismatch, etc.
 
-Instructions on setting up minikube are [here](minikube-setup.md)
+Instructions on setting up minikube are here: [https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube](https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube) 
 
 **Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as a master+worker node. So, if you want to use minikube, you will have to set it up on a physical PC, such as your personal/work computer.
 

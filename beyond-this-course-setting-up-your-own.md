@@ -1,73 +1,7 @@
-# Setting up multiple nodes in a cluster
-We will be using a tool called [KubeAdm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/) to set up a multi node cluster. 
+# Beyond this course - Setting up a multi-node k8s cluster
 
-KubeAdm is built for setting up and provisioning a cluster on bare metal, especially when having to interact with existing environments set up by puppet, ansible and etc. 
+We know that for personal experimentation and development, we have some options, such as minikube, microk8s, and kubeadm. Out of these three, kubeadm is the only one which lets you create a multi-node k8s cluster, without any hassle. So it is highly recommended that after this course you setup a kubeadm based k8s cluster of your own. All it needs is just one or two VMs, which you install with the version of Linux OS of your choice, and run few commands to bring it/them up.
 
-For Microsoft Azure the [Azure Container Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) does this for you. 
+To setup a kubeadm based k8s cluster, we recommend using the guide from one of our colleagues:[https://github.com/KamranAzeem/learn-kubernetes/tree/master/kubeadm](https://github.com/KamranAzeem/learn-kubernetes/tree/master/kubeadm) . In this repository you will find guides for **RedHat/CentOS/Fedora** and also **Ubuntu**.
 
-Similarly on Google Cloud Platform there is the [Google Container Engine (GCE)](https://cloud.google.com/container-engine/). 
 
-Amazon Web Services is currently lacking their own service for this (most likely due to Lambda), but [Kubernetes Operations (KOPS)](https://github.com/kubernetes/kops) gets around this.
-
-Going back to kubeadm, you will have to select a master and a given amount of nodes.
-
-Run ssh to get onto the master, and verify that kubeadm is there: 
-```
-kubeadm --help
-```
-
-On the machine you have chosen as master, run: 
-```
-sudo kubeadm init
-```
-
-This process takes about a minute or so, while the master sets up. 
-
-Copy the kubeadm join command output in the terminal (similar to the one below) before continuing, as you will need it for the nodes to join.
-
-```
-kubeadm join --token 2731ee.bb0be06012dbac00 172.31.18.205:6443 --discovery-token-ca-cert-hash sha256:fe634423c08ba596351dffd610503b4311f7160efcd49e343de83949ff4df610
-```
-
-KubeAdm will tell you to copy some files for configurations, but in case you missed it run: 
-
-```
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-```
-
-This will set up the configurations needed to allow the other machines to join the cluster. 
-
-To allow the pods on each node to talk, we will need to apply a pod network. For this exercise the choice is on Weave Net, but other options are Calico, Canal, Flannel, Kube-Router and Romana. 
-
-```
-export kubever=$(kubectl version | base64 | tr -d '\n')
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
-```
-
-We can verify that the pod network is correctly installed by running : 
-```
-kubectl get pods --all-namespaces
-```
-The relevant pod is kube-dns, which needs to have 3/3 running before continuing to join nodes to the cluster.
-
-Ssh to all nodes and run the kubeadm join command as root/sudo that you copied previously. 
-
-```
-sudo kubeadm join --token 2731ee.bb0be06012dbac00 172.31.18.205:6443 --discovery-token-ca-cert-hash sha256:fe634423c08ba596351dffd610503b4311f7160efcd49e343de83949ff4df610
-```
-
-This should allow the node to join the cluster ! Be mindful that for this to work port 6443 has to be open on master.
-
-Now you can run commands on master by using kubectl!
-
-## Optionally, execute commands on cluster from another machine than master
-Optionally, having to ssh to master is not the best of things. This can be changed by handing over the config to another machine: 
-
-```
-scp root@<master ip>:/etc/kubernetes/admin.conf .
-kubectl --kubeconfig ./admin.conf get nodes
-```
-
-## Kubernetes yml
