@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx          # arbitrary label(s) assigned to this deployment. This can be used by an upstream object, such as - a service.
+spec:
+  replicas: 1
+  selector:
+    matchLabels:        # labels 'used' by the deployment and replica-set selector, to find related pods.
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx      # label assigned to the pods of this deployment
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.9.1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "1m"
+            memory: "5Mi"
+          limits:
+            cpu: "5m"
+            memory: "10Mi"
+
