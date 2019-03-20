@@ -7,6 +7,7 @@ metadata:
 spec:
   # If you are using dynamic provisioning, it is important to specify a storageClassName.
   storageClassName: "standard"
+  # If you are not using storage classes, then it is imporant to use a selector, which will select the PV to bind to.
   #selector:
    # matchLabels:
     #  name: pv-nginx

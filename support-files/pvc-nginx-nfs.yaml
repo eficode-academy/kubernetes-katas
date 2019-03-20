@@ -5,16 +5,13 @@ metadata:
   labels:
     name: pvc-nginx
 spec:
-  # Don't use any storage-class
   storageClassName: ""
-  # Use a pre-existing PV 
   selector:
     matchLabels:
-      name: "pv-hostpath"
+      name: "pv-nfs"
   accessModes:
     # Though accessmode is already defined in pv definition. It is still needed here.
     - ReadWriteOnce
   resources:
     requests:
       storage: 10Mi
-
