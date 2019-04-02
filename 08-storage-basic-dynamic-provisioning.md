@@ -147,6 +147,11 @@ After the deployment is created and the pod starts, you should examine it by usi
 
 Optionally, create a service (of type ClusterIP) out of this deployment.
 
+Run a multitool deployment if you don't have it running - to help you access nginx container:
+```
+$ kubectl run multitool --image=praqma/network-multitool 
+```
+
 Now you access the Nginx pod/service using curl from the multitool pod. You should get a "403 Forbidden". This is because PVC volume you mounted, is empty!
 
 ```shell
@@ -164,7 +169,7 @@ bash-4.4# curl 10.0.96.7
 
 Exit the multitool pod and *exec* into the nginx pod.
 
-Create a file in the html dirrectory, and add some text in it:
+Create an `index.html` file in the `/usr/share/nginx/html/` dirrectory, and add some text in it:
 
 ```shell
 $ kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 -- bash
