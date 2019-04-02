@@ -85,6 +85,22 @@ deployment.extensions/envtest created
 
 Expose the deployment on a nodeport. Remember that this application runs on port `3000`.
 
+```
+$ kubectl get deployments
+NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+envtest     1         1         1            0           14s
+multitool   1         1         1            1           2h
+nginx       4         4         4            4           2h
+
+$ kubectl expose deployment envtest --type=NodePort
+service/envtest exposed
+
+$ kubectl get services
+NAME      TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
+envtest   NodePort       10.59.252.33    <none>          3000:30771/TCP   9s
+nginx     LoadBalancer   10.59.240.197   146.148.21.83   80:32423/TCP     1h
+```
+
 Now, notice that despite the default value in the Dockerfile, it should now be overwritten by the values of environment variables in deployment  file! Though the problem still is, that we moved the hard coded values from our application code to the deployment file. The deployment file will of-course be part of the related git repository, and these variables and their values will be visible to anyone. We need to find a better way of passing the variables to the application/pod.
 
 ### Secrets using the kubernetes secret resource
@@ -180,8 +196,15 @@ $ kubectl delete pod envtest-3380598928-kgj9d
 pod "envtest-3380598928-kgj9d" deleted
 ```
 
-Access it in a webbrowser again, to see the updated values.
+Access it in a web browser again, to see the updated values. You need the (external) IP of any of the worker nodes to reach this service over NodePort.
 
+```
+$ kubectl get nodes -o wide
+NAME                                                  STATUS   ROLES    AGE   VERSION          INTERNAL-IP   EXTERNAL-IP     OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME
+gke-ndc-oslo-training-cl-default-pool-654cdad8-5gpf   Ready    <none>   4h    v1.11.7-gke.12   10.123.0.8    104.155.27.73   Container-Optimized OS from Google   4.14.91+         docker://17.3.2
+gke-ndc-oslo-training-cl-default-pool-654cdad8-g1qf   Ready    <none>   4h    v1.11.7-gke.12   10.123.0.7    35.233.51.246   Container-Optimized OS from Google   4.14.91+         docker://17.3.2
+gke-ndc-oslo-training-cl-default-pool-654cdad8-r09t   Ready    <none>   4h    v1.11.7-gke.12   10.123.0.6    35.240.117.25   Container-Optimized OS from Google   4.14.91+         docker://17.3.2 
+```
 
 
 ----------
