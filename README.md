@@ -81,3 +81,9 @@ $ kubectl get pods [-n abc|--all-namespaces] [-o wide|yaml|json]
 
 See: [kubectl - Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
 for a more extended overview of the `kubectl` command.
+
+## Auto-completion
+
+See: [kubectl - Autocomplete][kctl-ac]
+
+[kctl-ac]: https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-autocomplete
