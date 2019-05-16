@@ -37,7 +37,7 @@ Just so you know what we're talking about,
   either one at a time, or all-together like below:
 
 ```shell
-$ kubectl get deployment,replicaset,pod       # Note that there's no whitespace in the comma-separated list of objects
+$ kubectl get deployment,replicaset,pod    # NB: no whitespace in the comma-separated list
 NAME                              DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 deployment.extensions/multitool   1         1         1            1           1m
 
