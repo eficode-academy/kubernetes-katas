@@ -82,7 +82,7 @@ It will be covered in later exercise, but it's mentioned and shown above just fo
 > ```
 >
 > Since your `service` is of type `NodePort` it will be exposed on _any_ of the nodes,
-> on the port from before, so choose once of the `EXTERNAL-IP`'s,
+> on the port from before, so choose one of the `EXTERNAL-IP`'s,
 > and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`. Alternatively, if you
 > use e.g. curl from within the training infrastructure, you should use the <INTERNAL-IP>
 > address.
