@@ -311,8 +311,8 @@ kubernetes    ClusterIP      100.64.0.1    <none>             443/TCP        17h
 Query the service, so we know it works as expected:
 
 ```shell
-$ curl -s 35.205.60.41 | grep IP
-Container IP: 100.96.1.150 <BR></p>
+$ curl -s 35.205.60.41
+Praqma Network MultiTool (with NGINX) - customnginx-7cf9899b84-rjgrb - 10.8.2.47/24
 ```
 
 Next, setup a small bash loop on your local computer to curl this IP address, and get it's IP address.
