@@ -78,13 +78,10 @@ After it starts, you may want to examine it by using `kubectl describe pod nginx
 
 Now, you access the Nginx instance using curl. You should get a "403 Forbidden", because now the volume you mounted is empty.
 
-> Hint. You learned about exposing deployments on the network in the [service
+> Hint. You learned about exposing deployments on a NodePort in the [service
 > discovery](02-service-discovery-and-loadbalancing.md) exercise.
-
-Try to reach the nginx pod by executing a bash shell inside a multitool pod.
-
-> Hint. You learned about the multitool and running command inside a container pod in the [service
-> discovery](02-service-discovery-and-loadbalancing.md) exercise.
+> 
+> Hint 2. You can curl the nodeport from any device you have access to from the internet; Your machine, your cloud instance, or the multitool container in the cluster. You learned about the multitool and running command inside a container pod in the [service discovery](02-service-discovery-and-loadbalancing.md) exercise.
 
 ```shell
 $ kubectl exec -it multitool-<ID> bash
@@ -99,7 +96,7 @@ bash-4.4# curl 10.0.96.7
 bash-4.4# 
 ```
 
-Exit the multitool pod again.
+Exit the multitool pod again if you are using that.
 
 Create a file in the htmldir inside the nginx pod and add some text in it:
 
