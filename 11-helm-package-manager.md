@@ -10,26 +10,25 @@ Creating all of them by hand is possible but tedious. You could combine all of t
 
 Fear not! This can be completely avoided, by using a package manager - **Helm** in our case.
 
-Helm allows you to package your application with a template system, and you can then deploy that package by passing values of your desire to the package at the time of deployment. Helm maintains **releases** of the packages it deploys, so you have full control over your applications, where they are being deployed, which values they use for various parameters, etc. 
+Helm allows you to package your application using a template system. The package is called a **chart** and created/stored as a single (`.tgz`) tarball. Then, you can deploy that package by (optionally) passing custom values to the package at the time of deployment. Helm maintains **releases** of the packages it deploys. This allows you to have full control over your applications, where they are being deployed, which values they use for various parameters, etc. 
 
-Helm being a package manager and packages applications in something called a **chart**. For the sake of clarity, a chart can be considered a **package**. This is similar to a operation system package, maintained by an operating system package manager, such as `rpm/yum`, `apt`, `brew`,  etc. 
+The word "chart" brings up image of a treasure map in our minds, which is quite contrary to what the helm "package" really is! This confusion is caused by the community's obsession to name everything related to docker/kubernetes using some marine terminology - may it be a word from English, or Greek, or Spanish, etc. In this case they came up with the word *chart* - I don't know why! Anyhow, for the sake of clarity, a **chart** should be considered a **package**. This is similar to a software package in operating system, maintained by an operating system package manager, such as `rpm/yum`, `apt`, `brew`,  etc. 
 
 ## What is Helm?
 (From: [https://helm.sh/docs/architecture/](https://helm.sh/docs/architecture/) )
 
 Helm is a tool for managing Kubernetes packages called charts. Helm can do the following:
-
 * Create new charts from scratch
 * Package charts into chart archive (tgz) files
 * Interact with chart repositories where charts are stored
 * Install and uninstall charts into an existing Kubernetes cluster
 * Manage the release cycle of charts that have been installed with Helm
-* For Helm, there are three important concepts:
 
-* The chart is a bundle of information necessary to create an instance of a Kubernetes application.
-* The config contains configuration information that can be merged into a packaged chart to create a releasable object.
+Following are some important concepts:
+* A chart is a bundle of information necessary to create an instance of a Kubernetes application.
+* A config contains configuration information that can be merged into a packaged chart to create a releasable object.
 * A release is a running instance of a chart, combined with a specific config.
-
+* A helm chart is stored in a chart repository which can be any web server that can serve YAML and tar files and can answer HTTP GET requests. This means you can use a Google Cloud Storage (GCS) bucket, Amazon S3 bucket, Github Pages, nginx, apache, or even create your own web server!
 
 ## Client side installation:
 So, you have a fresh kubernetes cluster and now you are ready to experiment with helm. The first thing you need is a **helm** client binary/program installed on your local/work computer.
@@ -148,13 +147,11 @@ clusterrolebinding.rbac.authorization.k8s.io/tiller created
 
 * You should also make sure that the user id (the google id) you used to authenticate to the cluster has correct permissions in the IAM section of the google project this cluster is part of.
 * A colleague of mine generously shared: In GCP we'd ideally create a new **Role** ... something like `docker-kubernetes-student` which is a copy of the "Kubernets Engine Developer" `roles/container.developer`, and then add (some or all of?) the permissions `container.clusterRoleBindings.*`, `container.clusterRoles.*`, `container.serviceAccounts.*`, `container.roleBindings.*`, `container.roles.*` to this Role, and create the GServiceAccount with this new Role. Also note that  `roles/container.developer` has all the `container.serviceAccounts.*` permissions. But is lacking the "create/update/delete" permissions on all the `*role*` permissions. 
-
-So I conclude that it is much better to use "Kubernets Engine Admin" role during training.
-
-Below are screeshots of IAM permissions which seems to work:
-
+* Based on above, I conclude that it is much better to use "Kubernets Engine Admin" role during training.
+* Below are screeshots of IAM permissions which seems to work:
 ![images/gcloud-iam-users-permissions.png](images/gcloud-iam-users-permissions.png)
 ![images/gcloud-iam-roles-permissions.png](images/gcloud-iam-roles-permissions.png)
+
 
 
 Ok, back to where we were. If the above (service account and role creation/binding) executed correctly ( as shown above 'Notes'), then it's time to `helm init` , which installs the **tiller** (in `kube-system` namespace), like so:
@@ -389,3 +386,7 @@ As mentioned in the begnning of this page, the **charts** describe which values 
 
 Praqma has created [Helmsman](https://github.com/Praqma/Helmsman), which is another layer of abstraction on top of Helm. Helmsman allows you to deploy helm charts through CI/CD pipelines.
 
+# Further reading:
+* [Helm quick start guide](https://helm.sh/docs/using_helm/#quickstart)
+* [Securing your helm installation](https://helm.sh/docs/using_helm/#securing-your-helm-installation)
+* [How to create your own charts?](https://helm.sh/docs/developing_charts/)
