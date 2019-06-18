@@ -38,10 +38,28 @@ $ kubectl config set-context $(kubectl config current-context) --namespace=my-na
 Context "<your current context>" modified.
 ```
 
+Or perform the same step with two individual commands:
+```
+[student-1@kamran-jumpbox ~]$ kubectl config current-context
+gke_praqma-education_europe-north1-a_kamran-test-cluster-0617
+
+[student-1@kamran-jumpbox ~]$ kubectl  config set-context gke_praqma-education_europe-north1-a_kamran-test-cluster-0617 --namespace=student-1
+Context "gke_praqma-education_europe-north1-a_kamran-test-cluster-0617" modified.
+[student-1@kamran-jumpbox ~]$
+```
+
+
 You can verify that you've updated your current `context` by running:
 
 ```shell
 kubectl config get-contexts
+```
+
+```
+[student-1@kamran-jumpbox ~]$ kubectl config get-contexts
+CURRENT   NAME                                                            CLUSTER                                                         AUTHINFO                                                        NAMESPACE
+*         gke_praqma-education_europe-north1-a_kamran-test-cluster-0617   gke_praqma-education_europe-north1-a_kamran-test-cluster-0617   gke_praqma-education_europe-north1-a_kamran-test-cluster-0617   student-1
+[student-1@kamran-jumpbox ~]$ 
 ```
 
 Notice that the namespace column has the value of `<my-namespace>`.
