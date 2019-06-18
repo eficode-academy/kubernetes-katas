@@ -18,6 +18,12 @@ for i in $(seq -w 1 ${STUDENT_COUNT}); do
   useradd -m ${STUDENT_NAME}
   echo "${PASSWORD}" | passwd --stdin ${STUDENT_NAME}
   cp -r /home/${SOURCE_USER}/.kube /home/${STUDENT_NAME}/
+
+  # Optional: Copy `.config/gcloud` directory to student's home directory. 
+  #  I have checked that it is not necessary. 
+  #  It contains your gcloud auth token and can be a security/privacy risk.
+  # cp -r /home/${SOURCE_USER}/.config /home/${STUDENT_NAME}/
+
   chown -R  ${STUDENT_NAME}:${STUDENT_NAME} /home/${STUDENT_NAME}
 done
 
