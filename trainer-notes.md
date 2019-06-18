@@ -151,3 +151,63 @@ gke-kamran-test-cluster--default-pool-6d441d21-3r0l   Ready    <none>   127m   v
 ```
 
 Congratulations! your jumpbox is ready! All you need to do is to provide SSH credentials of `student-X` accounts to your students, and ask them to login to the jumpbox to start using the kubernetes cluster.
+
+
+------------------------
+
+# Other notes - please ignore - for now:
+
+Logged in to student user and tried a kubernetes command, which failed. Apparently some sort of auth token has expired.
+```
+[root@kamran-jumpbox ~]# su - student-1
+Last login: Mon Jun 17 22:38:11 UTC 2019 on pts/0
+
+[student-1@kamran-jumpbox ~]$ kubectl get services
+error: You must be logged in to the server (Unauthorized)
+```
+
+
+It seems to work with the main user-account!
+```
+[student-1@kamran-jumpbox ~]$ logout
+
+[root@kamran-jumpbox ~]# su - kamran
+Last login: Mon Jun 17 21:52:07 UTC 2019 on pts/0
+
+[kamran@kamran-jumpbox ~]$ kubectl get services
+NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.47.240.1   <none>        443/TCP   11h
+
+[kamran@kamran-jumpbox ~]$ kubectl get nodes
+NAME                                                  STATUS   ROLES    AGE   VERSION
+gke-kamran-test-cluster--default-pool-6d441d21-3r0l   Ready    <none>   11h   v1.12.8-gke.6
+
+[kamran@kamran-jumpbox ~]$ kubectl get services
+NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.47.240.1   <none>        443/TCP   11h
+```
+
+Shortest way is to delete the student user-account and re-create it.
+```
+[kamran@kamran-jumpbox ~]$ logout
+
+[root@kamran-jumpbox ~]# userdel -r student-1
+
+[root@kamran-jumpbox ~]# ./setup-student-accounts.sh 1 kamran
+
+Creating user: student-1 with password: student-06-18-19
+Changing password for user student-1.
+passwd: all authentication tokens updated successfully.
+
+[root@kamran-jumpbox ~]# su - student-1
+
+[student-1@kamran-jumpbox ~]$ kubectl get nodes
+NAME                                                  STATUS   ROLES    AGE   VERSION
+gke-kamran-test-cluster--default-pool-6d441d21-3r0l   Ready    <none>   11h   v1.12.8-gke.6
+
+[student-1@kamran-jumpbox ~]$ kubectl get services
+NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.47.240.1   <none>        443/TCP   11h
+[student-1@kamran-jumpbox ~]$ 
+```
+
