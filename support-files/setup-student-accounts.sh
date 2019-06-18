@@ -20,9 +20,10 @@ for i in $(seq -w 1 ${STUDENT_COUNT}); do
   cp -r /home/${SOURCE_USER}/.kube /home/${STUDENT_NAME}/
 
   # Optional: Copy `.config/gcloud` directory to student's home directory. 
-  #  I have checked that it is not necessary. 
-  #  It contains your gcloud auth token and can be a security/privacy risk.
-  # cp -r /home/${SOURCE_USER}/.config /home/${STUDENT_NAME}/
+  #  Without .config/gcloud  directory the student session frequently logs out,
+  #   and disallows any connection to cluster through kubectl commands -citing 'unautorized'. 
+  #  Note: It contains your gcloud auth token and can be a security/privacy risk.
+  cp -r /home/${SOURCE_USER}/.config /home/${STUDENT_NAME}/
 
   chown -R  ${STUDENT_NAME}:${STUDENT_NAME} /home/${STUDENT_NAME}
 done
