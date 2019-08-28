@@ -15,7 +15,7 @@ It will:
 - Serve a 404 page at /
 - Serve 200 on /healthz
 
-The [example deployment file for nginx-ingress-controller](ingress-nginx/nginx-backend.yml) is taken from [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx), as is the [service exposing the backend](ingress-nginx/nginx-service.yml).
+The [example deployment file for nginx-ingress-controller](ingress-nginx/nginx-backend/nginx-backend.yml) is taken from [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx), as is the [service exposing the backend](ingress-nginx/nginx-backend/nginx-service.yml).
 
 Deploy by running: 
 ```
