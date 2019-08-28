@@ -44,7 +44,7 @@ Run an interactive shell inside the `network-multitool`-container in the pod wit
 
 ```shell
 $ kubectl exec -it multitool-5c8676565d-rc982 -c network-multitool -- bash
-bash-4.4#
+bash-5.0#
 ```
 
 > `kubectl exec` can be used to execute a command inside a container inside a pod.
@@ -123,7 +123,6 @@ Our nginx service is still not reachable from outside, so now we re-create this 
 ```shell
 $ kubectl get svc
 NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   100.64.0.1       <none>        443/TCP   17h
 nginx        ClusterIP   100.70.204.237   <none>        80/TCP    15m
 ```
 
@@ -140,7 +139,6 @@ service/nginx exposed
 ```shell
 $ kubectl get svc
 NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP   100.64.0.1     <none>        443/TCP        17h
 nginx        NodePort    100.65.29.172  <none>        80:32593/TCP   8s
 ```
 
@@ -179,7 +177,6 @@ service/nginx exposed
 ```shell
 $ kubectl get svc
 NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP      100.64.0.1     <none>        443/TCP        17h
 nginx        LoadBalancer   100.69.15.89   <pending>     80:31354/TCP   5s
 ```
 
@@ -188,7 +185,6 @@ In few minutes of time the external IP will have some value instead of the word 
 ```shell
 $ kubectl get svc
 NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP      100.64.0.1     <none>        443/TCP        17h
 nginx        LoadBalancer   100.69.15.89   35.205.60.29  80:31354/TCP   5s
 ```
 
@@ -207,7 +203,7 @@ $ curl -s 35.205.60.29 | grep h1
 
 So far we have seen pods, deployments and services. We have also seen Kubernetes keeping up it's promise of resilience. Now we see how we can have **high availability** on Kubernetes. The easiest and preferred way to do this is by having multiple replicas for a deployment.
 
-Lets increase the number of replicas of our nginx deployment to four(4):
+Let's increase the number of replicas of our nginx deployment to four(4):
 
 ```shell
 $ kubectl scale deployment nginx --replicas=4
@@ -305,7 +301,6 @@ Verify the service and note the public IP address:
 $ kubectl get services
 NAME          TYPE           CLUSTER-IP    EXTERNAL-IP        PORT(S)        AGE
 customnginx   LoadBalancer   100.67.40.4   35.205.60.41       80:30087/TCP   1m
-kubernetes    ClusterIP      100.64.0.1    <none>             443/TCP        17h
 ```
 
 Query the service, so we know it works as expected:
