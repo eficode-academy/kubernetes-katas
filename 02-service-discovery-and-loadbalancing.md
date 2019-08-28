@@ -30,7 +30,7 @@ nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
 ```
 
 
-The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using its `CLUSTER-IP`. Lets see if we can access this service from our within multitool, from the Pods and Deployments exercise.
+The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using its `CLUSTER-IP`. Lets see if we can access this service from within our multitool, the one from the Pods and Deployments exercise.
 
 Get the name of the `multitool` pod with:
 
