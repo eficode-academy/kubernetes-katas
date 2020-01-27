@@ -160,6 +160,13 @@ $ curl -s 35.205.22.139:32593 | grep h1
 
 It works!
 
+> NB: If you are using a local deployment through minikube, you can find the IP of your cluster by running `minikube ip`:
+> ```shell
+> $ minikube ip
+> 192.168.64.2
+> ```
+
+
 ### Service type: LoadBalancer
 
 So far so good; but, we do not expect the users to know the IP addresses of our worker nodes. It is not a flexible way of doing things. So we re-create the service as `type=LoadBalancer`. The type LoadBalancer is only available for use, if your k8s cluster is setup in any of the public cloud providers, GCE, AWS, etc.
