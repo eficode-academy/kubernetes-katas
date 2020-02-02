@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: tomcat
+  labels:
+    app: tomcat
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: tomcat
+        image: tomcat
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: tomcat
+  labels:
+    name: tomcat
+    app: tomcat
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: tomcat
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: default
+  name: tomcat-example-com
+  labels:
+    app: tomcat
+spec:
+  rules:
+  - host: tomcat.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tomcat
+          servicePort: 8080
+
