@@ -17,6 +17,11 @@ spec:
         image: tomcat
         ports:
         - containerPort: 8080
+        resources:
+          limits:
+            cpu: "5m"
+          requests:
+            cpu: 1m
 
 ---
 
