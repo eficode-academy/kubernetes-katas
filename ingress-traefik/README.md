@@ -4,7 +4,7 @@
 The following creates a service on port 80, with ingress set to nginx.example.com
 
 ```
-$ kubectl apply -f nginx.example.com 
+$ kubectl apply -f nginx.example.com.yaml 
 deployment.extensions/nginx created
 service/nginx created
 ingress.extensions/nginx-example-com created
@@ -167,7 +167,7 @@ Use a browser to look at the web-ui. You should be able to see the `nginx.exampl
 Lets create a deployment for Tomcat, which listens on port 8080. Lets see if it can be handled correctly by Traefik , and that we can access it through `tomcat.example.com` without using port 8080.
 
 ```
-$ kubectl apply -f tomcat.example.com 
+$ kubectl apply -f tomcat.example.com.yaml
 deployment.extensions/tomcat created
 service/tomcat created
 ingress.extensions/tomcat-example-com created
