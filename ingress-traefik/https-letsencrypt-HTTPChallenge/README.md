@@ -11,7 +11,7 @@ In this example, I have used the domain-name `demo.wbitt.com` , and the DNS name
 
 All of the above names are setup as CNAME entries, and (all) pointing to `traefik.demo.wbitt.com`, which in-turn  points to the actual IP address of the LoadBalancer assigned to the Traefik Ingress Controller's kubernetes service. This IP address, is something we will know only when Traefik is actually deployed later in this guide. (The IP address you see in the diagram above - assigned to `traefik.demo.wbitt.com`, is from a previous test session.)
 
-![DNS-zone-demo.wbitt.com.png](DNS-zone-demo.wbitt.com.png)
+|![DNS-zone-demo.wbitt.com.png](DNS-zone-demo.wbitt.com.png)|
 
 
 **Note:** In this example, we will be setting up individual SSL certificates for our services, using HTTP challenge, which does not require LetsEncrypt client (Traefik in this case) to make modifications in the DNS zone file. 
