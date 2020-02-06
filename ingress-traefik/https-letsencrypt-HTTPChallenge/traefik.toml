@@ -34,7 +34,7 @@ logLevel = "INFO"
 
 [acme]
 OnHostRule = true
-email = "kamran@wbitt.com"
+email = "someone@somewhere.tld"
 storage = "/acme/acme.json"
 entryPoint = "https"
 
