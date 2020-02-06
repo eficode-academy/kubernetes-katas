@@ -374,7 +374,9 @@ traefik-ingress-service   LoadBalancer   10.64.5.191   35.228.148.90   80:30497/
 We can see that the `traefik-ingress-service` has an external IP of `35.228.148.90` . We will use this in our DNS setup.
 
 ## Setup DNS records in our domain's zone:
-![DNS-zone-demo.wbitt.com.png](DNS-zone-demo.wbitt.com.png)
+| ![DNS-zone-demo.wbitt.com.png](DNS-zone-demo.wbitt.com.png) |
+| ----------------------------------------------------------- |
+| DNS zone file |
 
 Ensure that DNS is setup correctly, by querying your service's FQDN. 
 
@@ -566,11 +568,17 @@ $ curl -k https://nginx.demo.wbitt.com
 ```
 
 ## Using a browser:
-![nginx-with-fake-le-certificate-1.png](nginx-with-fake-le-certificate-1.png)
+| ![nginx-with-fake-le-certificate-1.png](nginx-with-fake-le-certificate-1.png) |
+| ----------------------------------------------------------------------------- |
 
-![nginx-with-fake-le-certificate-2.png](nginx-with-fake-le-certificate-2.png)
 
-![nginx-with-fake-le-certificate-3.png](nginx-with-fake-le-certificate-3.png)
+| ![nginx-with-fake-le-certificate-2.png](nginx-with-fake-le-certificate-2.png) |
+| ----------------------------------------------------------------------------- |
+
+
+| ![nginx-with-fake-le-certificate-3.png](nginx-with-fake-le-certificate-3.png) |
+| ----------------------------------------------------------------------------- |
+
 
 
 Notice the "Fake LE" certificate. This is expected, as we are using LetsEncrypt's staging server for obtaining our SSL certificates.
@@ -581,7 +589,8 @@ I tested `apache.demo.wbitt.com` and `tomcat.demo.wbitt.com`, and found them wor
 
 ## Verify that we can login to the Traefik Web UI / Dashboard:
 
-![traefik-web-ui.png](traefik-web-ui.png)
+| ![traefik-web-ui.png](traefik-web-ui.png) |
+| ----------------------------------------- |
 
 
 
@@ -710,10 +719,15 @@ $ curl https://nginx.demo.wbitt.com
 ```
 
 ## Using Browser:
-![nginx-valid-cert-1.png](nginx-valid-cert-1.png)
-![nginx-valid-cert-2.png](nginx-valid-cert-2.png)
+| ![nginx-valid-cert-1.png](nginx-valid-cert-1.png) |
+| ------------------------------------------------- |
 
-![traefik-web-ui-secure.png](traefik-web-ui-secure.png)
+| ![nginx-valid-cert-2.png](nginx-valid-cert-2.png) |
+| ------------------------------------------------- |
+
+
+| ![traefik-web-ui-secure.png](traefik-web-ui-secure.png) |
+| ------------------------------------------------------- |
 
 
 As you can see, this time our services are being served through Valid SSL certificates, issued by LetsEncrypt's "production" certificate server.
