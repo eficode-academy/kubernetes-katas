@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: apache
+  labels:
+    app: apache
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      containers:
+      - name: apache
+        image: httpd:2.4
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "5m"
+          requests:
+            cpu: 1m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: apache
+  labels:
+    name: apache
+    app: apache
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: apache
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: default
+  name: apache-yourdomain
+  labels:
+    app: apache
+spec:
+  rules:
+  - host: apache.demo.wbitt.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: apache
+          servicePort: 80
+

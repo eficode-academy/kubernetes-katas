@@ -1,0 +1,95 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: httpd
+  labels:
+    app: httpd
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: httpd
+    spec:
+      volumes:
+      - name: vol-traefik-toml-file
+        configMap:
+          # Configmap needs to be created manually from the traefik.toml file.
+          name: configmap-traefik-toml
+      - name: vol-acme-json-file
+        persistentVolumeClaim:
+          # The definition of this pvc should be in this (same) deployment file, at the top.
+          claimName: pvc-traefik-acme-json
+      - name: vol-dashboard-users-file
+        secret:
+          # secret should be created manually from the dashboard-users.htpasswd file
+          secretName: secret-traefik-dashboard-users
+      containers:
+      - name: httpd
+        image: httpd:2.4
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "5m"
+          requests:
+            cpu: 1m
+        volumeMounts:
+        - mountPath: "/etc/traefik/"
+          name: vol-traefik-toml-file
+        - mountPath: "/acme/"
+          name: vol-acme-json-file
+        - mountPath: "/secrets/"
+          name: vol-dashboard-users-file
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: httpd
+  labels:
+    name: httpd
+    app: httpd
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: httpd
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: default
+  name: httpd-yourdomain
+  labels:
+    app: httpd
+spec:
+  rules:
+  - host: httpd.demo.wbitt.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: httpd
+          servicePort: 80
+
+# ----------
+# [kamran@kworkhorse https-letsencrypt]$ kubectl exec -it httpd-7974cf7ff8-j97g6 bash
+# root@httpd-7974cf7ff8-j97g6:/usr/local/apache2# ls -l /etc/traefik/
+# total 0
+# lrwxrwxrwx 1 root root 19 Feb  2 22:08 traefik.toml -> ..data/traefik.toml
+
+# root@httpd-7974cf7ff8-j97g6:/usr/local/apache2# ls -l /secrets/    
+# total 0
+# lrwxrwxrwx 1 root root 31 Feb  2 22:08 dashboard-users.htpasswd -> ..data/dashboard-users.htpasswd
+
+# root@httpd-7974cf7ff8-j97g6:/usr/local/apache2# ls -l /acme/   
+# total 16
+# drwx------ 2 root root 16384 Feb  2 21:58 lost+found
+# root@httpd-7974cf7ff8-j97g6:/usr/local/apache2# 
+
