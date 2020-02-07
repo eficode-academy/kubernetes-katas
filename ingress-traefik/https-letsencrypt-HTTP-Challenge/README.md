@@ -36,8 +36,6 @@ When using HTTP Challenge, the following sequence of events happen:
 6. If the verification succeeds, LetsEncrypt issues the SSL certificate against that DNS name `nginx.demo.wbitt.com` , which Traefik stores it in it's certificate store file `acme.json`.
 7. Traefik deletes the temporary text/html file it created earlier for challenge verification, and deletes any URL routing it had set up for this.
 
-**Note:** If it was the LetsEncrypt Staging server being asked for certificate, you get a **"Fake LE Root X1"** certificate. If it was the Production certificate server, you will get a proper/valid SSL certificate issued by **"Let's Encrypt Authority X3"**. Both type of certificates are valid only for 90 days.
-
 As you can see from the steps above, for HTTP challenge to succeed, your web server - or, reverse proxy in this case - should be accessible over the internet. The DNS zone file for your domain should have a host entry (`nginx.demo.wbitt.com`), which should point to the public IP of this web-server/reverse-proxy. It is not necessary for the DNS entry to be an `A` record. It could be a CNAME, eventually pointing to an IP. For example your DNS zone file can look like this:
 
 ```
@@ -47,7 +45,9 @@ tomcat.demo.wbitt.com   IN  CNAME   traefik.demo.wbitt.com
 traefik.demo.wbitt.com  IN  A       1.2.3.4
 ```
 
-**Note:** You will not know the IP of Traefik loadbalancer, until you create Traefik's deployment and service. You will have to wait to make this last `A` record entry in the DNS. 
+**Notes:**
+* You will not know the IP of Traefik loadbalancer, until you create Traefik's deployment and service. You will have to wait to make this last `A` record entry in the DNS. 
+* When using **HTTP-01** challenge, LetsEncrypt uses port `80` on your web-server/reverse-proxy to verify the challenge. This means you should have port `80` (and port `443` - of-course) open in any firewalls involved in the setup.
 
 
 ### DNS Challenge:
@@ -63,8 +63,6 @@ When using the DNS challenge, the following sequence of events happen:
 
 Now, if you start a service/ingress in the cluster, and it's host definition (`nginx.demo.wbitt.com`)  matches the domain `demo.wbitt.com`, then Traefik uses this wild-card certificate for it's HTTPS endpoint. If the host definition (`www.somedomain.tld`) does not match the certificate, and there is no individually fetched certificate available for this service, then traefik serves a **"Default Traefik Certificate"** for it's HTTPS endpoint.
 
-**Note:** If it was the LetsEncrypt Staging server being asked for certificate, you get a **"Fake LE Root X1"** certificate. If it was the Production certificate server, you will get a proper/valid SSL certificate issued by **"Let's Encrypt Authority X3"**. Both type of certificates are valid only for 90 days.
-
 As you can see from the steps above, for DNS challenge to succeed, your web server , or reverse proxy in this case, **does not necessarily** need to be accessible over the internet. It is the DNS server that needs to be on the public internet. The DNS zone file does not necessarily need to have any host entries in it as well. There could be just one wild-card entry, which **may** point to your Traefik Load Balancer's IP address. Even if it points elsewhere, LetsEncrypt does not have a problem with it, as it just checks the (temporary) TXT record, just to ensure that you own/have-legitimate-access-to this domain `demo.wbitt.com`. This means, that it is possible to have a kubernetes cluster running in a test or production environment, on a private network , not accessible directly from outside, and still be able to get **valid** SSL certificates for your services running inside this private cluster. There are many possible scenarios, when using DNS challenge.
 
 For example your DNS zone file can look like this:
@@ -74,7 +72,14 @@ For example your DNS zone file can look like this:
 traefik.demo.wbitt.com  IN  A       4.3.2.1
 ```
 
-**Note:** You will not know the IP of Traefik loadbalancer, until you create Traefik's deployment and service. You will have to wait to make this last `A` record entry in the DNS. 
+**Note:** You will not know the IP of Traefik loadbalancer, until you create Traefik's deployment and service. You will have to wait to make this last `A` record entry in the DNS zone until Traefik deployment/service is up and gets an external IP for it's load balancer.
+
+
+## Note about two types of certificates, and certificate servers:
+* LetsEncrypt provides you with a **"Fake LE Root X1"** certificate if you use it's "staging" server for certificate issuance. This is a proper SSL certificate, only not **valid**, which is good for testing. If you use the LetsEncrypt's "production" server, you will get a proper/valid SSL certificate issued by **"Let's Encrypt Authority X3"**. 
+* Both type of certificates are valid only for 90 days.
+* For Staging server, there is a Failed Validation limit of 60 failures per account, per hostname, per hour.
+* For Production server, there is a Failed Validation limit of 5 failures per account, per hostname, per hour.
 
 
 More about LetsEncrypt challenge types, here: [https://letsencrypt.org/docs/challenge-types/](https://letsencrypt.org/docs/challenge-types/)
@@ -99,7 +104,6 @@ Trafik is deployed in the `kube-system` namespace. Therefore, it is important to
 
 We need to modify the `traefik-deployment.yaml` file, and add the components listed above before we set it up. These (updated) files are part of this directory. For brevity, only relevant sections are copied below.
 
-**Note:** In the `traefik.toml` file, we have enabled the LetsEncrypt's "staging" certificate server. This is intentional. During configuration, (especially while learning), things can go wrong, and we don't want to be blocked by LetsEncrypt if we have any problems in our setup. Using "staging" is safe, because failed validations limit (for staging) is 60 attempts per hour. The only downside to using staging server is that it obtains (and serves) a "Fake LE" certificate for the particular DNS name/ service. You will see "invalid certificate" errors when testing your site over HTTPS using curl, or through the browser. This is perfectly OK. When everything works, simply modify the `traefik.toml` file to use "Production" certificate server instead of "Staging", re-create the related configmap and kill Trafik pod so it restarts and reads and uses the new configmap. You may need to delete the PVC holding the `acme.json` file - though not absolutely necessary.
 
 ### Modify/update `traefik.toml` file:
 
@@ -140,6 +144,8 @@ caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 time="2020-02-06T20:48:52Z" level=info msg=Register...
 time="2020-02-06T20:48:53Z" level=error msg="Unable to obtain ACME certificate for domains \"nginx.demo.wbitt.com\" detected thanks to rule \"Host:nginx.demo.wbitt.com\" : cannot get ACME client acme: error: 400 :: POST :: https://acme-staging-v02.api.letsencrypt.org/acme/new-acct :: urn:ietf:params:acme:error:invalidEmail :: Error creating new account :: contact email \"someone@somewhere.tld\" has invalid domain : Domain name does not end with a valid public suffix (TLD), url: "
 ```
+
+**Note:** In the `traefik.toml` file above, we have enabled the LetsEncrypt's **"staging"** certificate server. This is intentional. During configuration, (especially while learning, or during first time setup), things can go wrong, and we don't want to be blocked by LetsEncrypt if we have any problems in our setup. Using "staging" is safe, (actually, highly recommended), because failed validations limit for staging is 60 attempts per hour. That means you have a lot of room for error during the SSL setup , including name resolution problems or connectivity issues. The only downside to using staging server is that it obtains (and serves) a "Fake LE" certificate for the particular DNS name/ service. You will see "invalid certificate" errors when testing your site over HTTPS using curl, or through the browser. This is perfectly OK. When everything works, we would simply modify the `traefik.toml` file to use "Production" certificate server instead of "Staging". More on this later.
 
 
 
