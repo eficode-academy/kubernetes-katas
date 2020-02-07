@@ -65,7 +65,7 @@ Now, if you start a service/ingress in the cluster, and it's host definition (`n
 
 **Note:** If it was the LetsEncrypt Staging server being asked for certificate, you get a **"Fake LE Root X1"** certificate. If it was the Production certificate server, you will get a proper/valid SSL certificate issued by **"Let's Encrypt Authority X3"**. Both type of certificates are valid only for 90 days.
 
-As you can see from the steps above, for DNS challenge to succeed, your web server , or reverse proxy in this case, **does not necessarily** need to be accessible over the internet. It is the DNS server that needs to be on the public internet. The DNS zone file does not necessarily need to have any host entries in it as well. There could be just one wild-card entry, which **may** point to your Traefik Load Balancer's IP address. Even if it points elsewhere, LetsEncrypt does not have a problem with it, as it just checks the (temporary) TXT record, just to ensure that you own/have-legitimate-access-to this domain `demo.wbitt.com`. This means, that it is possible to have a kubernetes cluster running in a test or production environment, on a private network , not accessible directly from outside, and still be able to get **valid** SSL certificates for your services running inside this private cluster. There are many possible scenarios possible with DNS challenge.
+As you can see from the steps above, for DNS challenge to succeed, your web server , or reverse proxy in this case, **does not necessarily** need to be accessible over the internet. It is the DNS server that needs to be on the public internet. The DNS zone file does not necessarily need to have any host entries in it as well. There could be just one wild-card entry, which **may** point to your Traefik Load Balancer's IP address. Even if it points elsewhere, LetsEncrypt does not have a problem with it, as it just checks the (temporary) TXT record, just to ensure that you own/have-legitimate-access-to this domain `demo.wbitt.com`. This means, that it is possible to have a kubernetes cluster running in a test or production environment, on a private network , not accessible directly from outside, and still be able to get **valid** SSL certificates for your services running inside this private cluster. There are many possible scenarios, when using DNS challenge.
 
 For example your DNS zone file can look like this:
 
@@ -240,9 +240,10 @@ Adding password for user admin
 * Password: `secretpassword`
 
 
-**Note:** Default hashing algorithm used by htpasswd for password encryption is MD5.
-**Note:** Traefik 1.7 does not support SHA-512 and SHA-256 hashes for passwords (the -5 and -2 switch on htpasswd command). If you create a password using these hashes, you will not be able to login to the dashboard. Only MD5 hash works.
-**Note:** Please use a different and stronger password for your setup.
+**Notes:** 
+* Default hashing algorithm used by htpasswd for password encryption is MD5.
+* Traefik 1.7 does not support SHA-512 and SHA-256 hashes for passwords (the -5 and -2 switch on htpasswd command). If you create a password using these hashes, you will not be able to login to the dashboard. Only MD5 hash works.
+* Please use a different and stronger password for your setup.
 
 
 Create the secret from the password file:
