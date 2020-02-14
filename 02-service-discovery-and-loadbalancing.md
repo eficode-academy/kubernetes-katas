@@ -214,9 +214,9 @@ Check the deployment and pods:
 
 ```shell
 $ kubectl get deployments
-NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-multitool   1         1         1            1           24m
-nginx       4         4         4            4           34m
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+multitool   1/1     1            1           24m
+nginx       4/4     4            4           34m
 ```
 
 ```shell
@@ -229,7 +229,7 @@ nginx-569477d6d8-s6lsn       1/1       Running   0          34s
 nginx-569477d6d8-v8srx       1/1       Running   0          35s
 ```
 
-**Notice:** The nginx deployment says Desired=4, Current=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was already running (being older), and the other three are started just now.
+**Notice:** The nginx deployment says Ready=4/4, Up-to-date=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was already running (being older), and the other three are started just now.
 
 You can also scale down! - e.g. to 2:
 
