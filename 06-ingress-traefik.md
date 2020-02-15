@@ -321,7 +321,8 @@ So the magic here is that:
 Let's try with a different container. Deploy any given image and expose a service for it. 
 
 ```
-kubectl run ingress-test --image=<your-image> --replicas=3
+kubectl create deployment ingress-test --image=<your-image>
+kubectl scale deployment ingress-test  --replicas=3
 kubectl expose deployment ingress-test --port=<your-port>
 ```
 
