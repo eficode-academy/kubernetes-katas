@@ -52,7 +52,7 @@ Enabling gave us:
 
 Nginx can be accessed this way : 
 ```
-curl $(minikube service nginx-ingress --url)
+curl $(minikube service default-http-backend --url)
 ```
 
 Which will return 404 default backend. 
