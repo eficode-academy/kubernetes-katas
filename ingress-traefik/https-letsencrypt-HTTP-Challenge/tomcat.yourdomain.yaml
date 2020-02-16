@@ -22,7 +22,26 @@ spec:
             cpu: "50m"
           requests:
             cpu: 5m
+        volumeMounts:
+        - name: web-content-dir
+          mountPath: /usr/share/tomcat/webapps/
 
+      initContainers:
+      - name: helper
+        image: busybox
+        workingDir: /web-content
+        command:
+        - curl 
+        - -LO
+        - https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+        volumeMounts:
+        - name: web-content-dir
+          mountPath: "/web-content"
+      volumes:
+      - name: web-content-dir
+        emptyDir: {}
+    
+# sample.war downloaded from: https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
 ---
 
 apiVersion: v1

@@ -1,3 +1,10 @@
+**Note:** This is part two of the three-part tutorial, where each part is completely independent of each other. For learning though, the following sequence is advised:
+
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https)
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-HTTP-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-HTTP-Challenge)
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge)
+
+
 # Setup Traefik with HTTPS through LetsEncrypt - using "HTTP Challenge"
 
 For this setup, you must own/have-access-to a public DNS domain name and it's related DNS server. The DNS names you have/will setup in that particular DNS zone will be used to access your services from the internet. This is also important for LetsEncrypt certification generation process. It is important for your Traefik proxy/load-balancer IP to be accessible from the internet, because the LetsEncrypt's HTTP Challenge will try to reach this IP to verify the HTTP Challenge. Therefore, the kubernetes cluster in this example is setup on a public infrastructure - Google Cloud. 
@@ -7,9 +14,16 @@ For this setup, you must own/have-access-to a public DNS domain name and it's re
 In this example, I have used the domain-name `demo.wbitt.com` , and the DNS names (DNS records) for various services defined in this DNS zone are: 
 * apache.demo.wbitt.com
 * nginx.demo.wbitt.com
-* tomcat.demo.wbitt.com 
+* tomcat.demo.wbitt.com
+* traefik.demo.wbitt.com 
 
-All of the above names are setup as CNAME entries, and (all) pointing to `traefik.demo.wbitt.com`, which in-turn  points to the actual IP address of the LoadBalancer assigned to the Traefik Ingress Controller's kubernetes service. This IP address, is something we will know only when Traefik is actually deployed later in this guide. (The IP address you see in the diagram above - assigned to `traefik.demo.wbitt.com`, is from a previous test session.)
+For ease of DNS configuration, (and overall ease of setup), I have actually setup a wild-card CNAME record in my DNS zone, which points to `traefik.demo.wbitt.com`, only `traefik.demo.wbitt.com` has an IP address `1.2.3.4` (fictional). So my DNS setup looks like this:
+```
+*.demo.wbitt.com        IN  CNAME   jumpbox.demo.wbitt.com
+traefik.demo.wbitt.com  IN  A       1.2.3.4
+```
+
+The IP where `traefik.demo.wbitt.com` points, will be the actual IP address of the LoadBalancer assigned to the Traefik Ingress Controller. This IP address, is something we will know only **after**  Traefik is actually deployed - later in this guide. (The IP address you see in the diagram above - assigned to `traefik.demo.wbitt.com`, is just a random IP address, for the sake of understanding. We will change it later.)
 
 | ![DNS-zone-demo.wbitt.com.png](DNS-zone-demo.wbitt.com.png) |
 | ----------------------------------------------------------- |
@@ -21,8 +35,8 @@ All of the above names are setup as CNAME entries, and (all) pointing to `traefi
 **Note:** The domain in this example is `demo.wbitt.com` and is hosted in AWS (Route53).
 
 
-## Little about LetsEncrypt HTTP and DNS Challenges:
-LetsEncrypt has two main methods of verifying that you/your-server/service is what you/your-server claims to be. One is HTTP (actually HTTP-01) Challenge, and the other is DNS (actually DNS-01) Challenge. In this article/guide, we have used HTTP Challenge.
+## Little about LetsEncrypt HTTP-01:
+LetsEncrypt has two main methods of verifying that you/your-server/service is what you/your-server claims to be. One is HTTP (actually HTTP-01) Challenge, and the other is DNS (actually DNS-01) Challenge. In this article/guide, we have used HTTP-01 Challenge.
 
 ### HTTP Challenge:
 When using HTTP Challenge, the following sequence of events happen:
@@ -34,7 +48,7 @@ When using HTTP Challenge, the following sequence of events happen:
 4. For HTTP challenge, this means setting up a small text/html file, populating it with the secret string sent by LetsEncrypt, under the DNS name in question (`nginx.demo.wbitt.com`). This means: `http://nginx.demo.wbitt.com/.well-known/acme-challenge/<SECRET/TOKEN>` . Since we have Traefik working as a reverse proxy for our services, Traefik sets up a file at a temporary location - for this DNS name `nginx.demo.wbitt.com` - sets up the necessary URL routing to this file, and informs LetsEncrypt that the challenge is ready to be verified.
 5. Letsencrypt tries to fetch the challenge-file containing the secret, by accessing it through the DNS name the certificate is being requested for, i.e. `nginx.demo.wbitt.com` .
 6. If the verification succeeds, LetsEncrypt issues the SSL certificate against that DNS name `nginx.demo.wbitt.com` , which Traefik stores it in it's certificate store file `acme.json`.
-7. Traefik deletes the temporary text/html file it created earlier for challenge verification, and deletes any URL routing it had set up for this.
+7. Traefik clears up the challenge by deleting the temporary text/html file it created earlier for challenge verification, and deletes any URL routing it had set up for this.
 
 As you can see from the steps above, for HTTP challenge to succeed, your web server - or, reverse proxy in this case - should be accessible over the internet. The DNS zone file for your domain should have a host entry (`nginx.demo.wbitt.com`), which should point to the public IP of this web-server/reverse-proxy. It is not necessary for the DNS entry to be an `A` record. It could be a CNAME, eventually pointing to an IP. For example your DNS zone file can look like this:
 
@@ -50,36 +64,11 @@ traefik.demo.wbitt.com  IN  A       1.2.3.4
 * When using **HTTP-01** challenge, LetsEncrypt uses port `80` on your web-server/reverse-proxy to verify the challenge. This means you should have port `80` (and port `443` - of-course) open in any firewalls involved in the setup.
 
 
-### DNS Challenge:
-When using the DNS challenge, the following sequence of events happen:
-
-0. Traefik is configured to request wild-card SSL certificates for the services/ingresses using a common DNS domain, e.g. `demo.wbitt.com`.
-1. Traefik starts and sends a SSL certificate request to LetsEncrypt.
-2. LetsEncrypt sends a DNS challenge back to Treafik. This means that Traefik has to setup a temporary TXT record in the domain's DNS zone file, and fill it with the challenge/secret given by LetsEncrypt. This means the TXT record will look like this: `_acme-challenge.demo.wbitt.com  IN TXT   <SECRET/TOKEN>`.
-3. Traefik talks to the DNS server, using the credentials you already provided in Traefik's configuration; sets up the DNS challenge, and informs LetsEncrypt that the challenge is ready for verification.
-4. Lets encrypt queries the DNS server belonging to the domain in question `demo.wbitt.com`, for the TXT record.
-5. If LetsEncrypt finds a match, the challenge is verified and LetsEncrypt issues a wild-card certificate for that domain, which Traefik stores in the certificate store file `acme.json` . 
-6. Traefik deletes the temporary TXT record in the domain's DNS zone file.
-
-Now, if you start a service/ingress in the cluster, and it's host definition (`nginx.demo.wbitt.com`)  matches the domain `demo.wbitt.com`, then Traefik uses this wild-card certificate for it's HTTPS endpoint. If the host definition (`www.somedomain.tld`) does not match the certificate, and there is no individually fetched certificate available for this service, then traefik serves a **"Default Traefik Certificate"** for it's HTTPS endpoint.
-
-As you can see from the steps above, for DNS challenge to succeed, your web server , or reverse proxy in this case, **does not necessarily** need to be accessible over the internet. It is the DNS server that needs to be on the public internet. The DNS zone file does not necessarily need to have any host entries in it as well. There could be just one wild-card entry, which **may** point to your Traefik Load Balancer's IP address. Even if it points elsewhere, LetsEncrypt does not have a problem with it, as it just checks the (temporary) TXT record, just to ensure that you own/have-legitimate-access-to this domain `demo.wbitt.com`. This means, that it is possible to have a kubernetes cluster running in a test or production environment, on a private network , not accessible directly from outside, and still be able to get **valid** SSL certificates for your services running inside this private cluster. There are many possible scenarios, when using DNS challenge.
-
-For example your DNS zone file can look like this:
-
-```
-*.demo.wbitt.com        IN  CNAME   traefik.demo.wbitt.com
-traefik.demo.wbitt.com  IN  A       4.3.2.1
-```
-
-**Note:** You will not know the IP of Traefik loadbalancer, until you create Traefik's deployment and service. You will have to wait to make this last `A` record entry in the DNS zone until Traefik deployment/service is up and gets an external IP for it's load balancer.
-
-
 ## Note about two types of certificates, and certificate servers:
-* LetsEncrypt provides you with a **"Fake LE Root X1"** certificate if you use it's "staging" server for certificate issuance. This is a proper SSL certificate, only not **valid**, which is good for testing. If you use the LetsEncrypt's "production" server, you will get a proper/valid SSL certificate issued by **"Let's Encrypt Authority X3"**. 
+* LetsEncrypt provides you with a **"Fake LE Root X1"** certificate if you use it's **"staging"** server for certificate issuance. This is a proper SSL certificate - just **not valid** - which is good for testing. If you use the LetsEncrypt's **"production"** server, you will get a proper/valid SSL certificate issued by **"Let's Encrypt Authority X3"**. 
 * Both type of certificates are valid only for 90 days.
-* For Staging server, there is a Failed Validation limit of 60 failures per account, per hostname, per hour.
-* For Production server, there is a Failed Validation limit of 5 failures per account, per hostname, per hour.
+* For Staging server, there is a **Failed Validation limit** of **60** failures per account, per hostname, per hour.
+* For Production server, there is a **Failed Validation limit** of **5** failures per account, per hostname, per hour.
 
 
 More about LetsEncrypt challenge types, here: [https://letsencrypt.org/docs/challenge-types/](https://letsencrypt.org/docs/challenge-types/)
@@ -89,7 +78,7 @@ More about LetsEncrypt challenge types, here: [https://letsencrypt.org/docs/chal
 
 ## Setup the pre-requisites:
 
-This setup of Traefik is a lot different from the basic setup we did previously. For Traefik to work with LetsEncrypt, and to fetch and serve the certificates, it needs few more components to be setup. Lets identify what it needs:
+This setup of Traefik is a lot different from the [basic setup we did previously](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https). For Traefik to work with LetsEncrypt, and to fetch and serve the certificates, it needs few more components to be setup. Lets identify what it needs:
 
 * A custom `traefik.toml` file, which would contain configuration section for HTTPS, entrypoints, LetsEncrypt, and Basic Auth for Web-UI.
 * A place to store `acme.json` file , which will hold the SSL certificates obtained from LetsEncrypt.
@@ -737,7 +726,7 @@ $ curl https://nginx.demo.wbitt.com
 | ------------------------------------------------------- |
 
 
-As you can see, this time our services are being served through Valid SSL certificates, issued by LetsEncrypt's "production" certificate server.
+As you can see, this time our services are being served through **Valid SSL certificates**, issued by LetsEncrypt's **"production"** certificate server.
 
 
 
