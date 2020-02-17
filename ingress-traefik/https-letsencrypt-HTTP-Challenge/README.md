@@ -34,15 +34,22 @@ The IP where `traefik.demo.wbitt.com` points, will be the actual IP address of t
 | DNS Zone file |
 
 
-**Note:** In this example, we will be setting up individual SSL certificates for our services, using HTTP challenge, which does not require LetsEncrypt client (Traefik in this case) to make modifications in the DNS zone file. 
-
-**Note:** The domain in this example is `demo.wbitt.com` and is hosted in AWS (Route53).
+**Notes:** 
+* In this example, we will be setting up individual SSL certificates for our services, using HTTP challenge, which does not require LetsEncrypt client (Traefik in this case) to make modifications in the DNS zone file. 
+* The domain in this example is `demo.wbitt.com` and is hosted in AWS (Route53).
 
 
 ## Little about LetsEncrypt HTTP-01:
+A picture is worth a thousand words, so here is a useful diagram for you!
+
+| ![traefik-letsencrypt-http-challenge-kubernetes.png](traefik-letsencrypt-http-challenge-kubernetes.png) |
+| ------------------------------------------------------------------------------------------------------- |
+
 LetsEncrypt has two main methods of verifying that you/your-server/service is what you/your-server claims to be. One is HTTP (actually HTTP-01) Challenge, and the other is DNS (actually DNS-01) Challenge. In this article/guide, we have used HTTP-01 Challenge.
 
 ### HTTP Challenge:
+**Note:** The steps listed below do not have to tally with the diagram above.
+
 When using HTTP Challenge, the following sequence of events happen:
 
 0. Traefik is configured to request individual SSL certificates for each service/ingress.
