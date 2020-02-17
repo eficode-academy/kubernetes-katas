@@ -8,6 +8,7 @@
 Also, if you are interested in learning the basics of LetsEncrypt, then the following might prove useful:
 * [https://github.com/KamranAzeem/learn-letsencrypt](https://github.com/KamranAzeem/learn-letsencrypt)
 
+The presentation about this topic is [here](https://docs.google.com/presentation/d/1QhbUBi5yGuDw3f2O_7vIvSJM028bcH67wAmUOMWtD4c/edit?usp=sharing)
 
 # Setup Traefik with HTTPS through LetsEncrypt - using "HTTP Challenge"
 
