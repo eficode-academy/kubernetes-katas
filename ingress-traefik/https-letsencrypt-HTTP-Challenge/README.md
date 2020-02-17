@@ -5,7 +5,7 @@
 * [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge)
 
 
-Also, if you are interested in learning the basics if LetsEncrypt, then the following might prove useful:
+Also, if you are interested in learning the basics of LetsEncrypt, then the following might prove useful:
 * [https://github.com/KamranAzeem/learn-letsencrypt](https://github.com/KamranAzeem/learn-letsencrypt)
 
 
