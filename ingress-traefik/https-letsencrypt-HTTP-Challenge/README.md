@@ -5,6 +5,10 @@
 * [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge)
 
 
+Also, if you are interested in learning the basics if LetsEncrypt, then the following might prove useful:
+* [https://github.com/KamranAzeem/learn-letsencrypt](https://github.com/KamranAzeem/learn-letsencrypt)
+
+
 # Setup Traefik with HTTPS through LetsEncrypt - using "HTTP Challenge"
 
 For this setup, you must own/have-access-to a public DNS domain name and it's related DNS server. The DNS names you have/will setup in that particular DNS zone will be used to access your services from the internet. This is also important for LetsEncrypt certification generation process. It is important for your Traefik proxy/load-balancer IP to be accessible from the internet, because the LetsEncrypt's HTTP Challenge will try to reach this IP to verify the HTTP Challenge. Therefore, the kubernetes cluster in this example is setup on a public infrastructure - Google Cloud. 
@@ -89,7 +93,7 @@ In Kubernetes terms this means:
 * the `acme.json` file will be stored in a `persistent storage volume` - using a PVC
 * the `dashboard-users.htpasswd` file will be setup as a `secret`
 
-Trafik is deployed in the `kube-system` namespace. Therefore, it is important to note, that **all these three items should be created in the `kube-system` namespace**, so the Traefik deployment is able to access these objects.
+Traefik is deployed in the `kube-system` namespace. Therefore, it is important to note, that **all these three items should be created in the `kube-system` namespace**, so the Traefik deployment is able to access these objects.
 
 We need to modify the `traefik-deployment.yaml` file, and add the components listed above before we set it up. These (updated) files are part of this directory. For brevity, only relevant sections are copied below.
 
@@ -443,6 +447,7 @@ deployment.extensions/tomcat created
 service/tomcat created
 ingress.extensions/tomcat-yourdomain created
 ```
+**Note:** Tomcat will take about a minute to start completely. Also, instead of `https://tomcat.demo.wbitt.com` , try reaching `https://tomcat.demo.wbitt.com/sample` .
 
 
 ### Verify:
