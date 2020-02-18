@@ -1,0 +1,18 @@
+# This PVC will be used by Traefik to hold SSL certificats obtained from LetsEncrypt
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # namespace: kube-system
+  namespace: default
+  name: pvc-traefik-acme-json
+  labels:
+    name: pvc-traefik-acme-json
+spec:
+  storageClassName: "standard"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi

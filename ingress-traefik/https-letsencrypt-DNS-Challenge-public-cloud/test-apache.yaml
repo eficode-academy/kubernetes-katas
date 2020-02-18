@@ -1,0 +1,68 @@
+# This is a deployment to test volumes, pvc, secrets and configmaps
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: httpd
+  labels:
+    app: httpd
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: httpd
+    spec:
+      volumes:
+      - name: vol-traefik-toml-file
+        configMap:
+          # Configmap needs to be created manually from the traefik.toml file.
+          name: configmap-traefik-toml
+      - name: vol-acme-json-file
+        persistentVolumeClaim:
+          # The definition of this pvc should be in this (same) deployment file, at the top.
+          claimName: pvc-traefik-acme-json
+      - name: vol-dashboard-users-file
+        secret:
+          # secret should be created manually from the dashboard-users.htpasswd file
+          secretName: secret-traefik-dashboard-users
+      containers:
+      - name: httpd
+        image: httpd:2.4
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "5m"
+          requests:
+            cpu: 1m
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_HOSTED_ZONE_ID
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_HOSTED_ZONE_ID
+          - name: AWS_DEFAULT_REGION
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_DEFAULT_REGION
+        volumeMounts:
+        - mountPath: "/etc/traefik/"
+          name: vol-traefik-toml-file
+        - mountPath: "/acme/"
+          name: vol-acme-json-file
+        - mountPath: "/secrets/"
+          name: vol-dashboard-users-file
+

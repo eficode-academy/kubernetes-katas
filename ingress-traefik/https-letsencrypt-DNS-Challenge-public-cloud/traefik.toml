@@ -1,0 +1,50 @@
+defaultEntryPoints = ["http", "https"]
+logLevel = "INFO"
+
+[kubernetes]
+  exposedByDefault = false
+
+# enabling api is not absolutely necessary, it is needed only if you need dashboard.
+[api]
+  dashboard = true
+  entrypoint = "dashboard"
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+
+  [entryPoints.dashboard]
+  address = ":8080"
+
+    [entryPoints.dashboard.auth.basic]
+    # admin/secret
+    # users = ["admin:$2y$08$64hQda74gXS80mS63hN3xOFsffgfdA2vUOXtW.NDaBjX9pEHq7qdUa"]
+    # Or:
+    usersFile = "/secrets/dashboard-users.htpasswd"
+
+
+[acme]
+email = "someone@somewhere.tld"
+# email = "kamran@wbitt.com"
+storage = "/acme/acme.json"
+entryPoint = "https"
+
+# CA server to use.
+# Uncomment the 'caServer' line to use Let's Encrypt's staging server,
+#   leave commented to goto/use prod certificates.
+#
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+
+  [acme.dnsChallenge]
+  provider = "route53"
+  delayBeforeCheck = 0
+
+  [[acme.domains]]
+  main = "*.demo.wbitt.com"
