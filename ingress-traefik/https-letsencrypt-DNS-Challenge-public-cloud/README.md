@@ -1,4 +1,4 @@
-# Setup Traefik with HTTPS through LetsEncrypt - using "DNS Challenge":
+# Setup Traefik with HTTPS through LetsEncrypt - using "DNS Challenge": 
 (**Infrastructure on Public Internet**)
 
 DNS challenge is the only method to obtain wildcard SSL certificates. i.e. Single SSL certificate for `*.demo.wbitt.com`. That is the idea in this example/guide. DNS Challenge is also the only solution, if you want to obtain SSL certificates for your services running inside a private network. (More on this later).
@@ -47,7 +47,12 @@ For the setup discussed in this guide, our infrastructure is on public internet 
 
 
 ## Little about LetsEncryptDNS Challenges:
-LetsEncrypt has two main methods of verifying that you/your-server/service is what you/your-server claims to be. One is HTTP (actually HTTP-01) Challenge, and the other is DNS (actually DNS-01) Challenge. In this article/guide, we have used DNS Challenge.
+A picture is worth a thousand words, so here is a useful diagram for you!
+
+| ![traefik-letsencrypt-dns-challenge-kubernetes.png](traefik-letsencrypt-dns-challenge-kubernetes.png) |
+| ----------------------------------------------------------------------------------------------------- |
+
+LetsEncrypt has two main methods of verifying that you/your-server/service is what you/your-server claims to be. One is HTTP (actually HTTP-01) Challenge, and the other is DNS (actually DNS-01) Challenge. In this article/guide, I have used DNS Challenge.
 
 
 ### DNS Challenge:
