@@ -1,4 +1,5 @@
-# Setup Traefik with HTTPS through LetsEncrypt - using "DNS Challenge" - Infrastructure on Public Internet
+# Setup Traefik with HTTPS through LetsEncrypt - using "DNS Challenge":
+(**Infrastructure on Public Internet**)
 
 DNS challenge is the only method to obtain wildcard SSL certificates. i.e. Single SSL certificate for `*.demo.wbitt.com`. That is the idea in this example/guide. DNS Challenge is also the only solution, if you want to obtain SSL certificates for your services running inside a private network. (More on this later).
 
@@ -23,7 +24,7 @@ You can also have DNS setup as:
 ```
 *.demo.wbitt.com.        IN  CNAME   traefik.demo.wbitt.com
 traefik.demo.wbitt.com.  IN  A       1.2.3.4
-``
+```
 
 Interestingly, even if you have absolutely nothing in your DNS zone file, the DNS challenge will still work. (You need the basic SOA and NS entries anyway). So if your DNS zone does not have any of the above entries, and is just empty, as shown in the screenshot below. DNS challenge will work. 
 
