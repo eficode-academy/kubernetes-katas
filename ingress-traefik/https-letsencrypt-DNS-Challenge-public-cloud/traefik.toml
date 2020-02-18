@@ -32,7 +32,6 @@ logLevel = "INFO"
 
 [acme]
 email = "someone@somewhere.tld"
-# email = "kamran@wbitt.com"
 storage = "/acme/acme.json"
 entryPoint = "https"
 
