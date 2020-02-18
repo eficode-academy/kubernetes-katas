@@ -150,8 +150,6 @@ $ aws route53 list-hosted-zones
 HOSTEDZONES	52DC4776-B6FA-D97F-8A7F-4A4CF965169A	/hostedzone/Z1SVJKHSFGHRL7	      demo.wbitt.com.	4
 CONFIG	a subdomain for demo purpose	False
 
-HOSTEDZONES	9D1EE80A-9AE0-15D7-827E-980D92411578	/hostedzone/Z0829183RIIY1PT2O9N5	  demo.wbitt.com.	4
-CONFIG	True
 . . . 
 (rest of DNS zones list)
 ```
@@ -312,7 +310,7 @@ configmap/configmap-traefik-toml created
 
 ### Create a secret for AWS DNS credentials:
 ```
-$ kubectl create secret generic secret-aws-dns-credentials \
+$ kubectl --namespace=kube-system create secret generic secret-aws-dns-credentials \
   --from-literal=AWS_ACCESS_KEY_ID=AKIAJSNVTLH43A2Q \
   --from-literal=AWS_SECRET_ACCESS_KEY=uC2QCpfDBUEWGG4L4693Hltm0HZchbb83 \
   --from-literal=AWS_HOSTED_ZONE_ID=Z1SVJKHSFGHRL7 \
