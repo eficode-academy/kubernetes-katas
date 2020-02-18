@@ -1,3 +1,14 @@
+**Note:** This is part three of the three-part tutorial, where each part is completely independent of each other. For learning though, the following sequence is advised:
+
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https)
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-HTTP-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-HTTP-Challenge)
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge)
+
+
+Also, if you are interested in learning the basics of LetsEncrypt, then the following might prove useful:
+* [https://github.com/KamranAzeem/learn-letsencrypt](https://github.com/KamranAzeem/learn-letsencrypt)
+
+
 # Setup Traefik with HTTPS through LetsEncrypt - using "DNS Challenge": 
 (**Infrastructure on Public Internet**)
 
