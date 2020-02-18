@@ -68,14 +68,27 @@ spec:
           containerPort: 443
         - name: webui
           containerPort: 8080
-        # Removed all args, as we are passing the traefik.toml to traefik.
-        # args:
-        #  Removed the --api argument, because we are passing a traefik.toml file as a configmap,
-        #    , which contains [api] section in it already. 
-        #  If you keep this enabled, traefik will fail to start because port 8080 will alredy be in use.
-        # - --api
-        # - --kubernetes
-        # - --logLevel=INFO
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_HOSTED_ZONE_ID
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_HOSTED_ZONE_ID
+          - name: AWS_DEFAULT_REGION
+            valueFrom:
+              secretKeyRef:
+                name: secret-aws-dns-credentials
+                key: AWS_DEFAULT_REGION
         volumeMounts:
         - mountPath: "/etc/traefik/"
           name: vol-traefik-toml-file
