@@ -1,4 +1,14 @@
-# Setup some services you would like to access from outside:
+**Note:** This is part one of the three-part tutorial, where each part is completely independent of each other. For learning though, the following sequence is advised:
+
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/basic-setup-without-https)
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-HTTP-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-HTTP-Challenge)
+* [https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge](https://github.com/KamranAzeem/kubernetes-katas/tree/master/ingress-traefik/https-letsencrypt-DNS-Challenge)
+
+
+Also, if you are interested in learning the basics of LetsEncrypt, then the following might prove useful:
+* [https://github.com/KamranAzeem/learn-letsencrypt](https://github.com/KamranAzeem/learn-letsencrypt)
+
+# Start by setting up some services you would like to access from outside:
 
 ## Create nginx.example.com 
 The following creates a service on port 80, with ingress set to nginx.example.com
