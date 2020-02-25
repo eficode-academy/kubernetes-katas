@@ -1,6 +1,6 @@
 # Storage
 
-This exercise shows how to provide persistent storage to your pods, so your data is safe across pod creation cycles. You will learn to create **PVs** and **PVCs** and how to use **storage classes**. You will also learn the difference of storage provisioning when using **Deployment** and **StatefulSet** objects.
+This article shows how to provide persistent storage to your pods, so your data is safe across pod creation cycles. You will learn to create **PVs** and **PVCs** and how to use **storage classes**. You will also learn the difference of storage provisioning when using **Deployment** and **StatefulSet** objects.
 
 ## Semi-Automatic / Semi-Dynamic provisioning - with Deployments:
 When you want to provide some persistent storage to your pods, you define/create a persistent volume claim (PVC), which the pod consumes by the mounting this PVC at a certain mount-point in it's file system. As soon as the PVC is created (using dynamic provisioning), a corresponding persistent volume (PV) is created. The PV in-turn takes a slice of storage from the storage class. As soon as the PV acquires this storage slice, the PVC binds to the this PV.
