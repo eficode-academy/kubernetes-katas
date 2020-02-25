@@ -1,8 +1,8 @@
 # Storage
 
-This exercise shows how to provide persistent storage to your pods, so your data is safe across pod creation cycles. You will learn to create **PVs** and **PVCs** and how to use **storage classes**.
+This exercise shows how to provide persistent storage to your pods, so your data is safe across pod creation cycles. You will learn to create **PVs** and **PVCs** and how to use **storage classes**. You will also learn the difference of storage provisioning when using **Deployment** and **StatefulSet** objects.
 
-## Semi-Automatic / Semi-Dynamic provisioning:
+## Semi-Automatic / Semi-Dynamic provisioning - with Deployments:
 When you want to provide some persistent storage to your pods, you define/create a persistent volume claim (PVC), which the pod consumes by the mounting this PVC at a certain mount-point in it's file system. As soon as the PVC is created (using dynamic provisioning), a corresponding persistent volume (PV) is created. The PV in-turn takes a slice of storage from the storage class. As soon as the PV acquires this storage slice, the PVC binds to the this PV.
 
 A **storage class** has actual physical storage underneath it - provided/managed by the cloud provider; though, the storage class hides this information, and provides an abstraction layer for you. Normally, all cloud providers have a default storage class created for you, ready to be used.
@@ -516,9 +516,9 @@ In Linux the directory `lost+found` exists on the root of any disk / partition. 
 ### What just happened, and why?
 
 This is explained here: [https://github.com/kubernetes/kubernetes/issues/48609](https://github.com/kubernetes/kubernetes/issues/48609), in these words:
-```
-When you delete a PVC, corresponding PV becomes Released. This PV can contain sensitive data (say credit card numbers) and therefore nobody can ever bind to it, even if it is a PVC with the same name and in the same namespace as the previous one - who knows who's trying to steal the data!
-```
+
+> When you delete a PVC, corresponding PV becomes Released. This PV can contain sensitive data (say credit card numbers) and therefore nobody can ever bind to it, even if it is a PVC with the same name and in the same namespace as the previous one - who knows who's trying to steal the data!
+
 
 So, if you want to keep the data , don't delete the PVC. In this way, no matter how many times you create or delete the deployment, the deployment will re-use the same PVC. Also, the PVC creation and deletion should be outside the development cycle. This adds some load on the people responsible for the kubernetes cluster. Each time developers wants persistent storage for their deployments, they will need to do this manually.
 
@@ -536,7 +536,7 @@ If you really want to automate this part and really want a solid persistent-stor
 -----------------
 
 
-## Fully-Automatic / Fully-Dynamic provisioning:
+## Fully-Automatic / Fully-Dynamic provisioning - with StatefulSets:
 When you want to provide some persistent storage to your pods, yet easily managed by the developers themselves, without adding any load on people managing the cluster , or without complicating the CI/CD pipelines,  you need to use **"StatefulSet"** instead of **"Deployment"** object, and use **"PersistentVolumeClaimTemplate"** inside those StatefulSet(s).
 
 When StatefulSet objects are created - and they use `PersistentVolumeClaimTemplate` directive/field inside them, then kubernetes creates a PVC at the time the Statefulset is created, creates a corresponding PV and binds them together. The only advantage is, that when a StatefulSet is deleted, the PVC it spawned is **not deleted**. When you re-created the StatefulSet, kubernetes does not create yet another PVC. Instead, it uses the existing PVC. This type of storage is suitable for stateful services like `mysql`, etc. Though you should remember that the default "Reclaim Policy" may still be set to "Delete" for this PV-PVC pair, (as it is derived from the storage class), and the PV **will be deleted** if it's related PVC is ever deleted. To prevent accidents and data loss, you should patch the PV right after it is created , to change it's Reclaim Policy to Retain instead of Delete. That way even if the related PVC is deleted, the PV will continue to exist and you can recover data by creating a PVC manually and binding it to this existing PV manually, and then using some utility pod to extract the data our of the PV.
