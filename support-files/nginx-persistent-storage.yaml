@@ -24,6 +24,13 @@ spec:
         ports:
         - containerPort: 443
         - containerPort: 80
+        resources:
+          limits:
+            cpu: 50m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
         volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: nginx-htmldir-volume
