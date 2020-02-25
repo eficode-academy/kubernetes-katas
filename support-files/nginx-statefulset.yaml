@@ -1,0 +1,66 @@
+apiVersion: apps/v1 
+kind: StatefulSet
+metadata:
+  name: nginx-statefulset
+  labels:
+    app: nginx-statefulset
+spec:
+  # "serviceName" is REQUIRED in statefulset. 
+  #   If it is missing K8s will not create the  statefulset.
+  # The service needs to be created separately. 
+  # The service does not need to be headless. It can be of type LoadBalancer, as in nginx.
+
+  serviceName: nginx-statefulset
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-statefulset
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: nginx-statefulset
+        tier: frontend
+    spec:
+      containers:
+      - image: nginx:1.9.1
+        name: nginx-statefulset
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 10m
+            memory: 20Mi
+          requests:
+            cpu: 5m
+            memory: 5Mi
+        volumeMounts:
+        - name: nginx-persistent-storage
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: nginx-persistent-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 100Mi
+---
+
+# Lastly we need service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-statefulset
+  labels:
+    app: nginx-statefulset
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: nginx-statefulset
+    tier: frontend
+  type: ClusterIP
+
