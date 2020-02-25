@@ -1,0 +1,30 @@
+# a comment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: multitool
+  labels:
+    app: multitool          # arbitrary label on deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:        # labels the replica selector should match
+      app: multitool
+  template:
+    metadata:
+      labels:
+        app: multitool      # label for replica selector to match
+    spec:
+      containers:
+      - name: multitool
+        image: praqma/network-multitool
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 50m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
+
