@@ -11,9 +11,9 @@ This workshop assignment looks at the ready part, which is the internal health c
 
 The difference between a container being healthy or unhealthy, is vital. A container can be creating, failing or otherwise deployed but unavailable - and in this state Kubernetes will choose not to route traffic to the container if it deems it unhealthy. 
 
-Howevever in some cases an app looks "healthy" despite having issues. This is where customized health checks become important. 
+However, in some cases an app looks "healthy" despite having issues. This is where customized health checks become important. 
 
-Examples include the database running, but being unreachable, the app functioning but a volume to store files in being unavailable and so on. 
+Examples include the database running but being unreachable, the app functioning but a volume to store files in being unavailable and so on. 
 
 [This deployment](health-checks/deployment.yml) shows this quite nicely. 
 

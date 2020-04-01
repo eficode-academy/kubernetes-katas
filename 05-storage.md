@@ -98,7 +98,7 @@ bash-4.4#
 
 Exit the multitool pod again if you are using that.
 
-Create a file in the htmldir inside the nginx pod and add some text in it:
+Create a file in the `html` dir inside the nginx pod and add some text in it:
 
 ```shell
 $ kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 -- bash
@@ -134,7 +134,7 @@ multitool-69d6b7fc59-gbghn          1/1       Running   0          10m       10.
 nginx-deployment-6665c87fd8-nh7bs   1/1       Running   0          1m        10.0.96.8   gke-dcn-cluster-2-default-pool-4955357e-8rnp
 ```
 
-Again, from multitool, curl the new nginx pod. You should see the page you created in previous step:
+Again, from multitool, curl the new nginx pod. You should see the page you created in the previous step:
 
 ```shell
 $ kubectl exec -it multitool-69d6b7fc59-gbghn bash

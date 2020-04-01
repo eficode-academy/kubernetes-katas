@@ -4,13 +4,13 @@ Secrets are a way to store things that you do not want floating around in your c
 
 It's things like passwords for databases, API keys and certificates.
 
-Similarly configmaps are for configuration, that doesn't really belong in code but needs to change. Examples include loadbalancer configurations, jenkins configuration and so forth.
+Similarly, configmaps are for configuration, that doesn't really belong in code but needs to change. Examples include loadbalancer configurations, jenkins configuration and so forth.
 
 We will look at both these in this coming exercise.
 
 ## Secrets as environment variables
 
-Our [magnificent app](./secrets/secretapp.js) requries it's API key and language.  Rather than hardcode this sensitive information and commit it to git for all the world to see, we source these values from environment variables.
+Our [magnificent app](./secrets/secretapp.js) requires its API key and language. Rather than hardcode this sensitive information and commit it to git for all the world to see, we source these values from environment variables.
 
 The first step to fixing it, would be to make our variables as environmental variables.
 
@@ -47,7 +47,7 @@ Expose the deployment on a nodeport, so you can see the running container.
 
 Despite the default value in the Dockerfile, it should now be overwritten by the deployment env values!
 
-However we just moved it from being hardcoded in our app to being hardcoded in our Dockerfile.
+However we just moved it from being hardcoded in our app to being hardcoded in our deployment file.
 
 ## Secrets using the kubernetes secret resource
 
@@ -125,7 +125,7 @@ by issuing: `kubectl apply -f deployment.yml` .
 
 You should now see the variables being loaded from configmap and secret respectively.
 
-Pods are not recreated automatically when serets or configmaps change, i.e. to
+Pods are not recreated automatically when secrets or configmaps change, i.e. to
 hot swapping the values becomes a two step process:
 
 ```shell

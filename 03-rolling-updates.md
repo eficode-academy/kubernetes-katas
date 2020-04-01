@@ -36,7 +36,7 @@ $ while true; do  curl -sI 35.205.60.29  | grep Server; sleep 2; done
 
 ## Update Deployment
 
-Rollout an update to  the image:
+Rollout an update to the image:
 
 ```shell
 $ kubectl set image deployment nginx nginx=nginx:1.9.1 --record

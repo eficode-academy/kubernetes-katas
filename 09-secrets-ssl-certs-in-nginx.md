@@ -2,7 +2,7 @@
 
 The objective of this exercise use SSL certs in nginx, using secrets. 
 
-Generate self signed certs: (check support-files/  directory)
+Generate self signed certs: (check support-files/ directory)
 ```
 ./generate-self-signed-certs.sh
 ```
