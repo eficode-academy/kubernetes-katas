@@ -698,22 +698,20 @@ multitool-5cb86d97cb-bq2t5   1/1     Running   0          129m
 nginx-statefulset-0          1/1     Running   0          5m18s
 nginx-statefulset-1          1/1     Running   0          28s
 ```
-
+```
 $ kubectl get pvc
 NAME                                           STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 nginx-persistent-storage-nginx-statefulset-0   Bound    pvc-857123f5-5762-11ea-b461-42010aa601ba   1Gi        RWO            standard       22m
 nginx-persistent-storage-nginx-statefulset-1   Bound    pvc-70ae8a0a-5765-11ea-b461-42010aa601ba   1Gi        RWO            standard       118s
-
-
+```
+```
 $ kubectl get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM                                                  STORAGECLASS   REASON   AGE
 pvc-70ae8a0a-5765-11ea-b461-42010aa601ba   1Gi        RWO            Delete           Bound      default/nginx-persistent-storage-nginx-statefulset-1   standard                119s
 pvc-857123f5-5762-11ea-b461-42010aa601ba   1Gi        RWO            Delete           Bound      default/nginx-persistent-storage-nginx-statefulset-0   standard                22m
-
+```
 
 If we run `curl` in a loop, in multitool, we should be able to see that both pods belonging to same nginx-statefulset **do not share** the PVCs. Each one has it's own. One of them has our index.html in it, the other one has empty PVC, and will show us "403 Forbidden" error.
-
-
 
 ```
 kubernetes-katas]$ kubectl exec -it multitool-5cb86d97cb-bq2t5 bash
