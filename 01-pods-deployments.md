@@ -2,7 +2,7 @@
 
 A **Pod** (*not container*) is the smallest building-block/worker-unit in Kubernetes,
   it has a specification of one or more containers and exists for the duration of the containers;
-  if all the containers stops or terminates, the Pod is stopped.
+  if all the containers stop or terminate, the Pod is stopped.
   Usually a pod will be part of a **Deployment**; a more controlled or _robust_ way of running Pods.
   A deployment can be configured to automatically delete stopped or exited Pods and start new ones,
   as well as run a number of identical Pods e.g. to provide high-availability.
@@ -220,7 +220,7 @@ nginx-431080787-tx5m7        1/1       Running   0          12s
 
 ## Clean up
 
-Delete the `nginx` deployment:
+Delete the `nginx` and `multitool` deployments:
 
 ```shell
 $ kubectl delete deployment nginx

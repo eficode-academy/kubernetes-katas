@@ -30,7 +30,7 @@ nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
 ```
 
 
-The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within cluster using its `CLUSTER-IP`. Lets see if we can access this service from within our multitool, the one from the Pods and Deployments exercise.
+The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within the cluster using its `CLUSTER-IP`. Let's see if we can access this service from within our multitool, the one from the Pods and Deployments exercise.
 
 Get the name of the `multitool` pod with:
 
@@ -64,7 +64,7 @@ bash-4.4# curl -s 100.70.204.237 | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-It worked! But there's more.. we can also access a service using DNS.
+It worked! But there's more... we can also access a service using DNS.
 
 The DNS shortname of a service is simply its name:
 
@@ -269,7 +269,7 @@ service "nginx" deleted
 
 ## Extra-credit: High Availability Exercise
 
-To prove that multiple pods of the same deployment provide high availability, we do a small exercise. To visualize it, we need to run a small web server which could return us some uniqe content when we access it. We will use our trusted multitool for it. Lets run it as a separate deployment and access it from our local computer.
+To prove that multiple pods of the same deployment provide high availability, we do a small exercise. To visualize it, we need to run a small web server which could return us some unique content when we access it. We will use our trusted multitool for it. Let's run it as a separate deployment and access it from our local computer.
 
 ```shell
 $ kubectl create deployment customnginx --image=praqma/network-multitool
@@ -288,7 +288,7 @@ customnginx-3557040084-fw1t3   1/1       Running   0          49s
 multitool-5f9bdcb789-k7f4q     1/1       Running   0          19m
 ```
 
-Lets create a service for this deployment as a type=LoadBalancer:
+Let's create a service for this deployment as a type=LoadBalancer:
 
 ```shell
 $ kubectl expose deployment customnginx --port=80 --type=LoadBalancer
@@ -363,11 +363,11 @@ customnginx-3557040084-fw1t3   1/1       Running       0          16m
 customnginx-3557040084-xqk1n   1/1       Running       0          15s
 ```
 
-This proves, Kubernets provides us High Availability, using multiple replicas of a pod.
+This proves, Kubernetes provides us High Availability, using multiple replicas of a pod.
 
 ## Clean up
 
-Delete deployments and services as follow:
+Delete deployments and services as follows:
 
 ```shell
 $ kubectl delete deployment customnginx

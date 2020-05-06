@@ -174,7 +174,7 @@ Now visit the address `traefik-ui.example.com` , you should see a dashboard.
 ![](ingress-traefik/traefik-dashboard.png)
 
 ## Setup additional ingress for your application(s):
-Its time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
+It's time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
 
 ```
 apiVersion: extensions/v1beta1
