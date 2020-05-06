@@ -49,7 +49,7 @@ pod/multitool-5c8676565d-wnw2v   1/1       Running   0          1m
 ```
 
 > A ReplicaSet is something which deals with the number of copies of this pod.
-It will be covered in later exercise, but it's mentioned and shown above just for the sake of completeness.
+It will be covered in a later exercise, but it's mentioned and shown above for completeness.
 
 ## 1.1.1 Testing access to our Pod (optional)
 
