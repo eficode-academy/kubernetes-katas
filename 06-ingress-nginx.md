@@ -6,7 +6,8 @@ To enable an ingress object, we need an ingress controller. In this example we w
 
 To get started with NGINX ingress, we (re)deploy an app of our choice: 
 ```
-kubectl run ingress-test --image=<your-image> --replicas=3
+kubectl create deployment ingress-test --image=<your-image>
+kubectl scale deployment ingress-test --replicas=3
 kubectl expose deployment ingress-test --port=<your-port>
 ```
 
