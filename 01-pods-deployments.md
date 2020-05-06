@@ -171,9 +171,9 @@ Verify that the deployment is created:
 
 ```shell
 $ kubectl get deployments
-NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-multitool   1         1         1            1           59m
-nginx       1         1         1            1           36s
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+multitool   1/1     1            1           59m
+nginx       1/1     1            1           36s
 ```
 
 Check if the pods are running:
