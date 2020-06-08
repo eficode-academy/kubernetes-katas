@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-share
+  labels:
+    app: nfs-server
+spec:
+  # The PVC for the NFS server is created from the (default) "standard" storage class,
+  #   available in kubernetes cluster running on GKE/GCE/GCP.
+  storageClassName: "standard"
+  
+  accessModes: [ "ReadWriteOnce" ]
+  
+  resources:
+    requests:
+      storage: 1Gi

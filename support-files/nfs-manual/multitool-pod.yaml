@@ -1,0 +1,18 @@
+# multitool to check stuff
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool
+spec:
+  containers:
+  - name: multitool
+    image: praqma/network-multitool
+    
+    resources:
+      limits:
+        cpu: 2m
+        memory: 10Mi
+      requests:
+        cpu: 1m
+        memory: 5Mi 

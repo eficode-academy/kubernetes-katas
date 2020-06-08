@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-nfs-site1
+spec:
+  storageClassName: ""
+
+  capacity:
+    storage: 10Mi
+
+  accessModes:
+    - ReadWriteMany
+
+  nfs:
+    server: nfs-server.default.svc.cluster.local
+    path: "/site1"

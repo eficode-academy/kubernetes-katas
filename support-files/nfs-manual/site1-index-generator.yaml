@@ -1,0 +1,90 @@
+# This mounts the nfs volume claim into /mnt and continuously
+# overwrites /mnt/index.html with the time and hostname of the pod.
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: index-generator
+spec:
+  replicas: 1
+  selector:
+    name: index-generator
+  template:
+    metadata:
+      labels:
+        name: index-generator
+    spec:
+      securityContext:
+        # 101 is id of nginx user
+        # 33 is ID of user www-data on debian systems (apache runs as www-data)
+        # 48 is ID of user apache on centos systems
+        #
+        # Note 1: fsGroup cannot be used at container level. 
+        #       It must be defined at Pod level.
+        fsGroup: 101
+        #
+        # Note 2: fsGroup "DOES NOT WORK" on NFS
+        #         We need to use the initContainer approach.
+        #         volumes.https://github.com/kubernetes/examples/issues/260
+        #
+        # Note 2: fsGroup "DOES NOT WORK" on NFS
+        #         We need to use the initContainer approach.
+        #         volumes.https://github.com/kubernetes/examples/issues/260        
+
+      initContainers:
+        - name: nfs-ownership-fixer
+          image: alpine
+          resources:
+            limits:
+              cpu: 10m
+              memory: 10Mi
+            requests:
+              cpu: 5m
+              memory: 5Mi           
+          securityContext:
+            # run as root, so we can change ownership and permissions of the nfs volume. 
+            runAsUser: 0
+          volumeMounts:
+          - name: vol-nfs
+            mountPath: /nfs
+          command:
+          - sh
+          - -c
+          - (chown -R 101:101 /nfs)
+          # - (chown -R <id>:<id> /nfs; chmod 0775 /nfs)
+
+      containers:
+      - image: busybox
+        command:
+          - sh
+          - -c
+          - 'while true; do date > /mnt/index.html; hostname >> /mnt/index.html; sleep 5 ; done'
+        imagePullPolicy: IfNotPresent
+        name: busybox
+        securityContext:
+          # 101 is id of nginx user
+          # 33 is ID of user www-data on debian systems (apache runs as www-data)
+          # 48 is ID of user apache on centos systems
+          #
+          runAsUser: 101
+          runAsGroup: 101
+
+               
+        resources:
+          limits:
+            cpu: 2m
+            memory: 10Mi
+          requests:
+            cpu: 1m
+            memory: 5Mi   
+
+                   
+        volumeMounts:
+          # name must match the volume name below
+          - name: vol-nfs
+            mountPath: "/mnt"
+
+      volumes:
+      - name: vol-nfs
+        persistentVolumeClaim:
+          claimName: pvc-nfs-site1
