@@ -93,7 +93,7 @@ root@nginx-deployment-6665c87fd8-cc8k9:/#
 Exit the nginx pod again. Run curl again, you should see the web page:
 
 ```shell
-$ curl 35.205.60.29
+$ curl 35.205.60.29:32078
 <h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage.
 ```
 
@@ -115,7 +115,7 @@ nginx-deployment-6665c87fd8-nh7bs   1/1       Running   0          1m        10.
 Again, curl the new nginx pod. You should see the page you created in previous step:
 
 ```shell
-$ curl 35.205.60.29
+$ curl 35.205.60.29:32078
 <h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage.
 ```
 
