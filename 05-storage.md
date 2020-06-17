@@ -81,7 +81,7 @@ Now, try to access the Nginx instance using curl. You should get a "403 Forbidde
 > Hint. In order to access the nginx instance, you can expose the nginx deployment on a NodePort as we learned in the [service
 > discovery](02-service-discovery-and-loadbalancing.md) exercise. And afterwards you can curl it on the NodePort from any computer connected at the Internet and that has curl.
 
-Create a file in the htmldir inside the nginx pod and add some text in it:
+Create a file in the `html` dir inside the nginx pod and add some text in it:
 
 ```shell
 $ kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 -- bash

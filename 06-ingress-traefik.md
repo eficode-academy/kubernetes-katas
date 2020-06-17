@@ -174,7 +174,7 @@ Now visit the address `traefik-ui.example.com` , you should see a dashboard.
 ![](ingress-traefik/traefik-dashboard.png)
 
 ## Setup additional ingress for your application(s):
-Its time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
+It's time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
 
 ```
 apiVersion: extensions/v1beta1
@@ -321,7 +321,8 @@ So the magic here is that:
 Let's try with a different container. Deploy any given image and expose a service for it. 
 
 ```
-kubectl run ingress-test --image=<your-image> --replicas=3
+kubectl create deployment ingress-test --image=<your-image>
+kubectl scale deployment ingress-test  --replicas=3
 kubectl expose deployment ingress-test --port=<your-port>
 ```
 

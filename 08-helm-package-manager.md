@@ -1,5 +1,5 @@
 # The Kubernetes package manager
-[Enter Helm](https://github.com/kubernetes/helm) - the answer to how to pacakage multi-container applications, and how to easily install packages on Kubernetes.
+[Enter Helm](https://github.com/kubernetes/helm) - the answer to how to package multi-container applications, and how to easily install packages on Kubernetes.
 
 Helm helps you to:
 
@@ -18,7 +18,7 @@ To setup the Helm server on your targeted cluster, run:
 helm init
 ```
 
-This will install a tiller server in the Kubernetes cluster, which Helm uses to fetch and unpackage resources in the cluster.
+This will install a tiller server in the Kubernetes cluster, which Helm uses to fetch and unpack resources in the cluster.
 
 Helm uses a packaging format called [Charts](https://github.com/helm/helm/blob/master/docs/charts.md).  A Chart is a collection of files that describe k8s resources.  
 

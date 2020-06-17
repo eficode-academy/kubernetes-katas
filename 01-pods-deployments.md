@@ -2,7 +2,7 @@
 
 A **Pod** (*not container*) is the smallest building-block/worker-unit in Kubernetes,
   it has a specification of one or more containers and exists for the duration of the containers;
-  if all the containers stops or terminates, the Pod is stopped.
+  if all the containers stop or terminate, the Pod is stopped.
   Usually a pod will be part of a **Deployment**; a more controlled or _robust_ way of running Pods.
   A deployment can be configured to automatically delete stopped or exited Pods and start new ones,
   as well as run a number of identical Pods e.g. to provide high-availability.
@@ -49,7 +49,7 @@ pod/multitool-5c8676565d-wnw2v   1/1       Running   0          1m
 ```
 
 > A ReplicaSet is something which deals with the number of copies of this pod.
-It will be covered in later exercise, but it's mentioned and shown above just for the sake of completeness.
+It will be covered in a later exercise, but it's mentioned and shown above for completeness.
 
 ## 1.1.1 Testing access to our Pod (optional)
 
@@ -171,9 +171,9 @@ Verify that the deployment is created:
 
 ```shell
 $ kubectl get deployments
-NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-multitool   1         1         1            1           59m
-nginx       1         1         1            1           36s
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+multitool   1/1     1            1           59m
+nginx       1/1     1            1           36s
 ```
 
 Check if the pods are running:
@@ -220,7 +220,7 @@ nginx-431080787-tx5m7        1/1       Running   0          12s
 
 ## Clean up
 
-Delete the `nginx` deployment:
+Delete the `nginx` and `multitool` deployments:
 
 ```shell
 $ kubectl delete deployment nginx

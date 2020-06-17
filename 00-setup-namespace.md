@@ -7,7 +7,7 @@ Namespaces are the default way for kubernetes to separate resources.
 
 ## 1.1 Create a namespace
 
-Choose a name for your namespace, something unique so you don't clash with one of the other participants at the workshop.
+Namespaces are resources themselves, so they can be created like any other resource. Choose a name for your namespace, something unique so you don't clash with one of the other participants at the workshop.
 
 ```shell
 $ kubectl create namespace my-namespace
