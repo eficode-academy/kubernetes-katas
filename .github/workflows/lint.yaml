@@ -1,0 +1,27 @@
+name: Lint
+
+on: push
+
+jobs:
+  deprecated-kubernetes:
+    name: Deprecated Kubernetes Resources
+
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        kubernetes-version: [ '1.16.0' ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Pluto
+      run: brew install FairwindsOps/tap/pluto
+
+    - name: Detect Outdated Kubernetes Resources
+      run: |
+        pluto detect-files \
+        --directory . \
+        --target-versions k8s=v${{ matrix.kubernetes-version }} \
+        --output custom \
+        --columns "NAME,KIND,VERSION,REPLACEMENT,DEPRECATED,DEPRECATED,DEPRECATED IN,REMOVED,REMOVED IN,FILEPATH"
+
