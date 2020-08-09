@@ -17,6 +17,9 @@ jobs:
     - name: Install Pluto
       run: brew install FairwindsOps/tap/pluto
 
+    - name: Extract K8s YAML from Markdown files
+      run: sh .test/extract_all_k8s_from_md.sh
+
     - name: Detect Outdated Kubernetes Resources
       run: |
         pluto detect-files \
