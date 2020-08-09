@@ -141,7 +141,7 @@ deployment.extensions/nginx created
 
 The contents of `support-files/nginx-simple-deployment.yaml` are as follows:
 
-```shell
+```yaml,k8s
 # a comment
 apiVersion: extensions/v1beta1
 kind: Deployment

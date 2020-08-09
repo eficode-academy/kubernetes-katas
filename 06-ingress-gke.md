@@ -51,7 +51,7 @@ annotations:
 
 So lets put the following ingress spec into `ingress-file.yaml`:
 
-```yaml
+```yaml,k8s
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -97,7 +97,7 @@ You should be able to visit this address, and see the nginx homesite!
 
 Normally you *COULD* add a dns rule, and say "I want nginx.local to route to this container" and it would look something like this:
 
-```yaml
+```yaml,k8s
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
