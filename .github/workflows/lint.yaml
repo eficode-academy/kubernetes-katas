@@ -25,6 +25,7 @@ jobs:
         pluto detect-files \
         --directory . \
         --target-versions k8s=v${{ matrix.kubernetes-version }} \
+        --ignore-deprecations `# Do not error when merely deprecated resources are found` \
         --output custom \
         --columns "NAME,KIND,VERSION,REPLACEMENT,DEPRECATED,DEPRECATED,DEPRECATED IN,REMOVED,REMOVED IN,FILEPATH"
 
