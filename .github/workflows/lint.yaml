@@ -37,6 +37,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Extract K8s YAML from Markdown files
+      run: sh .test/extract_all_k8s_from_md.sh
+
     - name: Lint Kubernetes Resources
       run: sh .test/lint_kubeval.sh
 
