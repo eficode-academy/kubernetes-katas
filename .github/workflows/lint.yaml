@@ -33,9 +33,6 @@ jobs:
     name: Valid K8s Resources
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        kubernetes-version: [ '1.16.0' ]
 
     steps:
     - uses: actions/checkout@v2
