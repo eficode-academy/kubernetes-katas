@@ -28,3 +28,17 @@ jobs:
         --output custom \
         --columns "NAME,KIND,VERSION,REPLACEMENT,DEPRECATED,DEPRECATED,DEPRECATED IN,REMOVED,REMOVED IN,FILEPATH"
 
+  valid-kubernetes-resources:
+    name: Valid Kubernete Resources
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        kubernetes-version: [ '1.16.0' ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Lint Kubernetes Resources
+      run: sh .test/lint_kubeval.sh
+
