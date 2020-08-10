@@ -3,8 +3,8 @@ name: Lint
 on: push
 
 jobs:
-  deprecated-kubernetes:
-    name: Deprecated Kubernetes Resources
+  outdated-kubernetes:
+    name: Outdated K8s Resources
 
     runs-on: macos-latest
     strategy:
@@ -30,7 +30,7 @@ jobs:
         --columns "NAME,KIND,VERSION,REPLACEMENT,DEPRECATED,DEPRECATED,DEPRECATED IN,REMOVED,REMOVED IN,FILEPATH"
 
   valid-kubernetes-resources:
-    name: Valid Kubernete Resources
+    name: Valid K8s Resources
 
     runs-on: ubuntu-latest
     strategy:
