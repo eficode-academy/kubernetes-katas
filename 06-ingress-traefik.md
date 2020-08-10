@@ -64,7 +64,7 @@ metadata:
   namespace: kube-system
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
   namespace: kube-system
@@ -177,7 +177,7 @@ Now visit the address `traefik-ui.example.com` , you should see a dashboard.
 It's time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
 
 ```yaml,k8s
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
@@ -185,6 +185,9 @@ metadata:
     app: nginx
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
   template:
     metadata:
       labels:

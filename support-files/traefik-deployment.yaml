@@ -1,6 +1,6 @@
 kind: Deployment
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
   namespace: default
