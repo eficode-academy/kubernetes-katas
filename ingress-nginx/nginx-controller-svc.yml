@@ -1,10 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: nginx-ingress-controller
+  labels:
+    app: nginx-ingress-controller
 spec: 
   replicas: 1
   revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: nginx-ingress-controller
   template: 
     metadata: 
       labels: 

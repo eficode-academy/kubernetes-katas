@@ -36,8 +36,8 @@ pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            Delete     
 
 We are going to use the file `support-files/nginx-persistent-storage.yaml` file to use storage/volume directives:
 
-```
-apiVersion: extensions/v1beta1
+```yaml,k8s
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment

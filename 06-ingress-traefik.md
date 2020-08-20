@@ -9,7 +9,7 @@ To enable an ingress object, we need an ingress controller. In this example we w
 ## Related RBAC configuration:
 Create a file named traefik-rbac.yaml with the following contents. This will setup correct global cluster role binding.
 
-```
+```yaml,k8s
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
@@ -49,14 +49,14 @@ subjects:
 ```
 
 Create the traefik RBAC configuration using:
-```
+```shell
 kubectl create -f ingress-traefik/traefik-rbac.yaml
 ```
 
 ## Deploy Traefik:
 Create a file named traefik-deployment.yaml with the following contents.
 
-```
+```yaml,k8s
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -64,7 +64,7 @@ metadata:
   namespace: kube-system
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
   namespace: kube-system
@@ -117,14 +117,14 @@ spec:
 
 
 Create the objects defined in the traefik-deployment.yaml:
-```
+```shell
 kubectl create -f ingress-traefik/traefik-deployment.yaml
 ```
 
 
 ## Create Ingress for Traefik Web-UI:
 Create a file traefik-webui-ingress.yaml with the following contents to create a Service and an Ingress that will expose the Traefik Web UI.
-```
+```yaml,k8s
 apiVersion: v1
 kind: Service
 metadata:
@@ -155,7 +155,7 @@ spec:
 ``` 
 
 Create the objects:
-```
+```shell
 kubectl create -f traefik-webui-ingress.yaml
 ```
 
@@ -176,8 +176,8 @@ Now visit the address `traefik-ui.example.com` , you should see a dashboard.
 ## Setup additional ingress for your application(s):
 It's time to setup an additional service for any of our application. For now, I will use a simple nginx web server. Create a file examplenginx-deployment.yaml with the following contents:
 
-```
-apiVersion: extensions/v1beta1
+```yaml,k8s
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
@@ -185,6 +185,9 @@ metadata:
     app: nginx
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
   template:
     metadata:
       labels:
@@ -233,7 +236,7 @@ spec:
 
 Create the objects from the above file:
 
-```
+```shell
 kubectl create -f ingress-traefik/example-nginx-deployment.yaml
 ```
 
@@ -245,8 +248,8 @@ If you visit the Traefik dashboard now, you should be able to see a new ingress 
 
 Visiting www.example.com should show nginx webpage:
 
-```
-[kamran@kworkhorse kubernetes-katas]$ curl www.example.com
+```shell
+$ curl www.example.com
 <!DOCTYPE html>
 <html>
 <head>
@@ -272,7 +275,6 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
-[kamran@kworkhorse kubernetes-katas]$ 
 ```
 
 
@@ -287,23 +289,23 @@ Commercial support is available at
 
 
 So, therefore we start with the ingress controller: 
-```
+```shell
 kubectl create -f ingress-traefik/traefik-ingress-controller.yml
 ```
 
 Ingress has a nice little GUI which shows current ingress rules and settings in a cluster, which we can take advantage of to create an overview. 
 
 Create the service: 
-```
+```shell
 kubectl create -f ingress-traefik/traefik-service.yml
 ```
 ... and the ingress rule: 
-```
+```shell
 kubectl create -f ingress-traefik/traefik-ingress.yml
 ```
 
 Instead of going through the trouble of setting up a proper DNS, we can modify the host file - below is an example of doing this for minikube:
-```
+```shell
 echo "$(minikube ip) traefik-ui.local" | sudo tee -a /etc/hosts
 ```
 
@@ -320,14 +322,14 @@ So the magic here is that:
 
 Let's try with a different container. Deploy any given image and expose a service for it. 
 
-```
+```shell
 kubectl create deployment ingress-test --image=<your-image>
 kubectl scale deployment ingress-test  --replicas=3
 kubectl expose deployment ingress-test --port=<your-port>
 ```
 
 Then [go to the ingress] and modify the port (servicePort: replaceport), followed by: 
-```
+```shell
 kubectl create -f ingress-traefik/my-ingress.yml
 echo "$(minikube ip) myapp.local" | sudo tee -a /etc/hosts
 ```

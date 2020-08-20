@@ -5,7 +5,7 @@ It takes care of things like load balancing traffic, terminating SSL and naming 
 To enable an ingress object, we need an ingress controller. In this example we will be using [NGINX](https://www.nginx.com/). If you prefer [Træfik (optimized for Kubernetes) there is another exercise doing it with Træfik](./03-ingress-traefik.md).
 
 To get started with NGINX ingress, we (re)deploy an app of our choice: 
-```
+```shell
 kubectl create deployment ingress-test --image=<your-image>
 kubectl scale deployment ingress-test --replicas=3
 kubectl expose deployment ingress-test --port=<your-port>
@@ -19,7 +19,7 @@ It will:
 The [example deployment file for nginx-ingress-controller](ingress-nginx/nginx-backend/nginx-backend.yml) is taken from [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx), as is the [service exposing the backend](ingress-nginx/nginx-backend/nginx-service.yml).
 
 Deploy by running: 
-```
+```shell
 kubectl create -f ingress-nginx/nginx-backend/.
 ```
 
@@ -27,7 +27,7 @@ We will need a certificate for NGINX, which has been prepared in [a script](ingr
 
 When prompted to put a "common name" in the certificate, write myapp.local (*important!*). This is going to be our host rule for our ingress later.
 
-```
+```shell
 ./ingress-nginx/self-signed-cert.sh
 kubectl create secret tls tls-certificate --key tls-key.key --cert tls-cert.crt
 kubectl create secret generic tls-dhparam --from-file=dhparam.pem
@@ -52,7 +52,7 @@ Enabling gave us:
 
 
 Nginx can be accessed this way : 
-```
+```shell
 curl $(minikube service nginx-ingress --url)
 ```
 
@@ -62,7 +62,7 @@ Go and modify [the yaml for your ingress](./ingress-nginx/ingress.yml) to reflec
 
 Ingress works by using the DNS name, so we need to modify our hostfile to reflect the correct name (modify hosts file to include myapp.local pointing to the cluster): 
 
-```
+```shell
 echo "$(minikube ip) myapp.local" | sudo tee -a /etc/hosts
 ```
 
