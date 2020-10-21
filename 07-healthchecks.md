@@ -28,26 +28,6 @@ Look at the logs:
 kubectl describe pod liveness-exec
 ```  
 
-Any (http) code greater than or equal to 200 and less than 400 indicates success. Any other code indicates failure.
+Notice that the pod fails after 30 seconds. What happens after?
 
-Let's go back to our applications, and create a custom health check. 
-
-Create an endpoint that does something customized, and returns 200. (Make sure it can fail and return an error above 500 if you want to test). 
-
-Push the container, and create a deployment for it and include: 
-
-```
-  livenessProbe:
-      httpGet:
-        path: /healthz #Your endpoint for health check.
-        port: 8080
-        httpHeaders:
-        - name: X-Custom-Header
-          value: Awesome
-      initialDelaySeconds: 3
-      periodSeconds: 3
-```
-
-Verify that the healthcheck fails when conditions are not met. 
-
-This concludes the exercise for health checks!
+# This concludes the exercise for health checks!
