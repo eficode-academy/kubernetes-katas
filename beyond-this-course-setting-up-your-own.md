@@ -7,7 +7,7 @@ For Microsoft Azure the [Azure Container Service (AKS)](https://docs.microsoft.c
 
 Similarly on Google Cloud Platform there is the [Google Container Engine (GCE)](https://cloud.google.com/container-engine/). 
 
-Amazon Web Services is currently lacking their own service for this (most likely due to Lambda), but [Kubernetes Operations (KOPS)](https://github.com/kubernetes/kops) gets around this.
+For Amazon Web Services [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/). Also [Kubernetes Operations (KOPS)](https://github.com/kubernetes/kops) is used quite often to have more control over the cluster.
 
 Going back to kubeadm, you will have to select a master and a given amount of nodes.
 
