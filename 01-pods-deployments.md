@@ -3,6 +3,7 @@
 A **Pod** (*not container*) is the smallest building-block/worker-unit in Kubernetes,
   it has a specification of one or more containers and exists for the duration of the containers;
   if all the containers stop or terminate, the Pod is stopped.
+  
   Usually a pod will be part of a **Deployment**; a more controlled or _robust_ way of running Pods.
   A deployment can be configured to automatically delete stopped or exited Pods and start new ones,
   as well as run a number of identical Pods e.g. to provide high-availability.
@@ -23,14 +24,8 @@ $ kubectl create deployment multitool --image=praqma/network-multitool
 deployment.apps/multitool created
 ```
 
-> With older versions of kubectl (< v1.12.0), the 'run' command was typically used to create deployments, i.e. in older guides you would have seen the following command. This approach is however being deprecated for deployments.
-> ```shell
-> $ kubectl run multitool --image=praqma/network-multitool
-> deployment.apps "multitool" created
-> ```
-
 So what happened? The `create`-command is great for imperative testing, and getting something up and running fast.
-  It creates a _deployment_ named `multitool`, which creates a _replicaset_, which starts a _pod_ using the docker image `praqma/network-multitool`. You don't need to concern yourself with all these details at this stage, this is just extra (however notable) information.
+  It creates a _[deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)_ named `multitool`, which creates a _[replicaset](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_, which starts a _[pod](https://kubernetes.io/docs/concepts/workloads/pods/)_ using the docker image `praqma/network-multitool`. You don't need to concern yourself with all these details at this stage, this is just extra (however notable) information.
 
 Just so you know what we're talking about,
   you can check the objects you've created with `get <object>`,
@@ -51,43 +46,43 @@ pod/multitool-5c8676565d-wnw2v   1/1       Running   0          1m
 > A ReplicaSet is something which deals with the number of copies of this pod.
 It will be covered in a later exercise, but it's mentioned and shown above for completeness.
 
-## 1.1.1 Testing access to our Pod (optional)
+## 1.1.1 Testing access to our Pod
 
-> We are getting a little ahead of our exercises here, but just to illustrate that we actually have
-> a functioning web-server running in our pod, let's try exposing it to the internet and access it from a browser!
->
-> First use the following command to create a `service` for your `deployment`:
-> ```shell
-> $ kubectl expose deployment multitool --port 80 --type NodePort
-> service/multitool exposed
-> ```
->
-> Get the `service` called `multitool` and note down the NodePort:
->
-> ```shell
-> $ kubectl get service multitool
-> NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-> multitool   NodePort   10.96.223.218   <none>        80:32458/TCP   12s
-> ```
->
-> In this example, Kubernetes has chosen port `32458`.
->
-> Finally, look up the IP address of a node in the cluster with:
->
-> ```shell
-> $ kubectl get nodes -o wide           # The -o wide flag makes the output more verbose, i.e. to include the IPs
-> NAME    STATUS   . . . INTERNAL-IP  EXTERNAL-IP     . . .
-> node1   Ready    . . . 10.123.0.8   35.240.20.246   . . .
-> node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
-> ```
->
-> Since your `service` is of type `NodePort` it will be exposed on _any_ of the nodes,
-> on the port from before, so choose one of the `EXTERNAL-IP`'s,
-> and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`. Alternatively, if you
-> use e.g. curl from within the training infrastructure, you should use the <INTERNAL-IP>
-> address.
->
-> The next exercise will cover what we did here in more detail.
+ We are getting a little ahead of our exercises here, but to illustrate that we actually have
+ a functioning web-server running in our pod, let's try exposing it to the internet and access it from a browser!
+
+ First use the following command to create a `service` for your `deployment`:
+ ```shell
+ $ kubectl expose deployment multitool --port 80 --type NodePort
+ service/multitool exposed
+ ```
+
+ Get the `service` called `multitool` and note down the NodePort:
+
+```shell
+ $ kubectl get service multitool
+ NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+ multitool   NodePort   10.96.223.218   <none>        80:32458/TCP   12s
+```
+
+ In this example, Kubernetes has chosen port `32458`.
+
+ Finally, look up the IP address of a node in the cluster with:
+
+ ```shell
+ $ kubectl get nodes -o wide           # The -o wide flag makes the output more verbose, i.e. to include the IPs
+ NAME    STATUS   . . . INTERNAL-IP  EXTERNAL-IP     . . .
+ node1   Ready    . . . 10.123.0.8   35.240.20.246   . . .
+ node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
+ ```
+
+ Since your `service` is of type `NodePort` it will be exposed on _any_ of the nodes,
+ on the port from before, so choose one of the `EXTERNAL-IP`'s,
+ and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`. Alternatively, if you
+ use e.g. curl from within the training infrastructure, you should use the <INTERNAL-IP>
+ address.
+
+ The next exercise will cover what we did here in more detail.
 
 ## 1.2 Specifying the image version
 
