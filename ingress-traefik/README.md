@@ -1,2 +1,1 @@
-Follow: [https://github.com/containous/traefik/blob/master/docs/user-guide/kubernetes.md](https://github.com/containous/traefik/blob/master/docs/user-guide/kubernetes.md)
-
+Follow: [https://github.com/traefik/traefik/blob/v1.7/docs/user-guide/kubernetes.md](https://github.com/traefik/traefik/blob/v1.7/docs/user-guide/kubernetes.md)
