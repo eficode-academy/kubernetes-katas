@@ -1,6 +1,12 @@
 # Kubernetes health checks
 
-Kubernetes have two built-in ways of making a
+Health checks in Kubernetes are a mechanism to
+check if a pod able to handle load. This status
+can be used by Kubernetes to avoid routing traffic
+to pods which are unhealthy, or automatically
+recreate unhealthy pods.
+
+Kubernetes has two built-in ways of making a
 health check on a pod:
 
 - _readnissprobe_ that finds out if your pod is
@@ -8,13 +14,18 @@ health check on a pod:
 - _livelinessprobe_ that finds out if your pod is
   alive and well
 
-When a container runs in a pod, Kubernetes reports
-back four things:
+When we use `kubectl` to print the status of a
+pod, we receive information on the status of the
+pod.
 
 ```
 NAME                     READY   STATUS    RESTARTS   AGE
 probe-59cf4f5578-vwllc   1/1     Running   1          10m
 ```
+
+In this example, "1/1" in the READY-column means
+shows the amount of containers in this pod which
+Kubernetes identified to be in the READY-state.
 
 The difference between a container being healthy
 or unhealthy, is vital. A container can be
@@ -36,17 +47,18 @@ Apply the deployment and service found in the
   [service discovery assignment](./02-service-discovery-and-loadbalancing.md).
 - Scale the deployment by changing the `replicas`
   amount to 2 in the `probes.yaml`
-- Access it again through your browser multiple
-  times to see that you hit both of the instances
+- Again, access the application through your
+  browser. Refresh the page multiple times such
+  that you hit both of the instances
 - Execute a bash session in one of the instances
   `kubectl exec -ti probe-59cf4f5578-vwllc bash`
 - First, remove the file `/tmp/ready`, and monitor
   that the browser will eventually not route
   traffic to that pod.
-- remove the file `/tmp/alive`, and observe that
-  you within a short while will get kicked out of
+- Remove the file `/tmp/alive`, and observe that
+  within a short while you will get kicked out of
   the container, as the pod is restarting.
-- observe that the pod has now been restarted when
+- Observe that the pod has now been restarted when
   you list the pods with `kubectl get pods`
 - Look at the logs:
   `kubectl describe pod probe-59cf4f5578-vwllc`
