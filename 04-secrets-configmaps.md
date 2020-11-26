@@ -121,7 +121,7 @@ To:
 
 After you have edited the `deployment.yml` file (or you can use the prepared one
 `secrets/final.deployment.yml`), you need to apply the new edition of the file
-by issuing: `kubectl apply -f deployment.yml` .
+by issuing: `kubectl apply -f secrets/deployment.yml` .
 
 You should now see the variables being loaded from configmap and secret respectively.
 
@@ -129,9 +129,9 @@ Pods are not recreated automatically when secrets or configmaps change, i.e. to
 hot swapping the values becomes a two step process:
 
 ```shell
-$ kubectl create configmap language --from-literal=LANGUAGE=Elvish -o yaml --dry-run | kubectl replace -f -
+$ kubectl create configmap language --from-literal=LANGUAGE=Elvish -o yaml --dry-run=client | kubectl replace -f -
 configmap/language replaced
-$ kubectl create secret generic apikey --from-literal=API_KEY=andinthedarknessbindthem -o yaml --dry-run | kubectl replace -f -
+$ kubectl create secret generic apikey --from-literal=API_KEY=andinthedarknessbindthem -o yaml --dry-run=client | kubectl replace -f -
 secret/apikey replaced
 ```
 
