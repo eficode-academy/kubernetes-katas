@@ -319,7 +319,7 @@ Events:            <none>
 ```
 
 
-Now, lets create a PVC, which takes a slice of storage out of this PV. That PVC will then be used/consumed by a pod. Note that I have set storageClassName to null, because I want the PVC to *not* use any storage classes. Instead I want it to bind to the PV of my choice by using a *selector*. In this example, it is important to set storageclass to null because if it is simply absent, then by default the **default** (or "standard") storage class is used automatically. (This is not what I want - at the moment)
+Now, lets create a PVC. That PVC will then be used/consumed by a pod. Note that I have set storageClassName to null, because I want the PVC to *not* use any storage classes. Instead I want it to bind to the PV of my choice by using a *selector*. In this example, it is important to set storageclass to "" (null) because if it is simply absent, then by default the **default** (or "standard") storage class is used automatically. (This is not what I want - at the moment)
 
 
 ```
@@ -342,7 +342,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Mi
+      storage: 100Mi
 
 ```
 
