@@ -1,31 +1,40 @@
 # kubernetes-katas
 
-This is a selection of exercises to learn to use Kubernetes (K8s). The exercises are ordered in the way we think it makes sense to introduce Kubernetes concepts.
+This is a selection of exercises to learn to use Kubernetes (K8s). The exercises are ordered in the way I think it makes sense to introduce Kubernetes concepts.
 
+This repository was forked from [Praqma's Kubernetes Katas](https://github.com/praqma-training/kubernetes-katas)
 
 You can find a summary of many of the commands used in the exercises in the [cheatsheet.md](cheatsheet.md).
 
 ## Important note about cluster setup:
 Normally, in a classroom setup, each student is provided with a small individual kubernetes cluster - normally on Google Cloud Platform (GCP). The student is provided with a `config` file, which the student simply places in his/her home directory (under `~/.kube/`), and no further setup is required except downloading the correct `kubectl` binary for your personal computer's operating system. This will be the case for most of the students.
 
-There are students who want to setup their own cluster, on their computer. For them the options are [minikube](https://kubernetes.io/docs/setup/minikube/), [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/), [microk8s](https://microk8s.io/), etc. 
+There are students who want to setup their own cluster, on their computer. For them the options are:
+* [minikube](https://kubernetes.io/docs/setup/minikube/), 
+* [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/),
+* [microk8s](https://microk8s.io/), etc. 
 
 ### Minikube:
-Minikube is a simple installer, which runs on your host/physical computer, and sets up a one node VM **itself**. This VM is configured as a single node Kubernetes cluster. The possible problems with this setup is that the minikube installer may or may not work well with the virtualization software you are using on your computer. For example, it is found that it works well with VirtualBox , but is a challenge to setup on Libvirt/KVM due to various kernel modules mismatch, etc.
+Minikube is a simple installer, which runs on your host/physical computer, and sets up a virtual machine (VM) **itself**. This VM is configured as a single node Kubernetes cluster. The possible problems with this setup is that the minikube installer may or may not work well with the virtualization software you are using on your computer. So far it is reported to work well with:
+* KVM/Libvirt
+* HyperV
+* VirtualBox
 
-Instructions on setting up minikube are here: [https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube](https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube) 
+Brief instructions on setting up minikube on KVM are here: [https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube](https://github.com/KamranAzeem/learn-kubernetes/tree/master/minikube) 
 
 **Note:** Due to restrictions with virtualization inside a virtual machine (nested virtualization), you cannot run minikube on cloud VMs. Minikube is a part of the Kubernetes open source project, with the single goal of getting a simple cluster up and running with just one virtual machine acting as a master+worker node. So, if you want to use minikube, you will have to set it up on a physical PC, such as your personal/work computer.
 
+**Note:** Minikube is a combination of `boot2docker`, `docker-machine`, and `kubeadm`.
+
 ### Kubeadm:
-Kubeadm is another type of installer, which runs **inside** the VM. This is a sure-shot way to setup a one node or multi node kubernetes cluster on your personal computer. The idea is that you simply install a VM inside the virtualization sofware / hypervisor of your choice on your personal computer, with any supported Linux OS (CentOS, Fedora, Ubuntu, etc). Then you download the kubeadm installer *inside* this VM and run it. This sets up a master kubernetes node, which you can *also use* as a worker node. The master node has `kubectl`, and you simply login to the master node and use the cluster as usual.
+Kubeadm is another type of installer, which runs **inside** the VM. This is a sure-shot way to setup a *one-node* or even a *multi-node* kubernetes cluster on your personal computer. The idea is that you simply create a VM inside the virtualization sofware / hypervisor of your choice, on your personal computer, with any supported Linux OS (CentOS, Fedora, Ubuntu, etc). Then you download the **kubeadm installer** *inside* this VM and run it. This sets up a master kubernetes node, which you can *also use* as a worker node. The master node has `kubectl`, and you simply login to the master node and use the cluster as usual.
 
 Instructions on setting up a kubeadm cluster are here: [https://github.com/KamranAzeem/learn-kubernetes/tree/master/kubeadm](https://github.com/KamranAzeem/learn-kubernetes/tree/master/kubeadm)
 
 ## Important note about CPU and memory resources on worker node:
-It is possible that the worker node in the kubernetes cluster you received from your instructor, is a small spec node (1 CPU and 1.7 GB RAM). In that case, please note that certain *system pods* running in **kube-system** namespace take away as much as 60% (or 600m) of the CPU, and you are left with 40% of CPU to run your pods to do these excercises. It is also important to note that by default each `nginx` and `nginx:alpine` instance will take away 10% (or 100m) CPU. This means, that at any given time, you will not be able to run more than four (light weight) pods in total. So when you do the **scaling** and **rolling updates** exercises, you need to keep that in mind. You can also limit the use of CPU and Memory resources in your pods and assign them very little CPU. e.g. Allocating `5m` CPU to nginx pods does not have any negative effect, and they just run fine.
+It is possible that the worker node in the kubernetes cluster you received from your instructor, is a small spec node (1 CPU and 1.7 GB RAM). In that case, please note that certain *system pods* running in **kube-system** namespace take away as much as 60% (or 600m) of the CPU, and you are left with 40% of CPU to run your pods to do these exercises. This means, that at any given time, you will not be able to run more than few pods. So when you do the **scaling** and **rolling updates** exercises, you need to keep that in mind. You can also limit the use of CPU and Memory resources in your pods and assign them very little CPU. e.g. Allocating `2m` CPU to nginx pods does not have any negative effect, and they run just fine.
 
-If you are running a cluster of your own such as minikube or kubeadm based cluster, and if you setup the VMs to have multiple CPUs during the VM setup, you will not likely encounter this limitation. But you should still make a note of it. 
+You may encounter the same limitations, if you are running a cluster of your own such as minikube or kubeadm based cluster. 
 
 
 ## Setup
@@ -45,7 +54,7 @@ If you are running a cluster of your own such as minikube or kubeadm based clust
 * [05-cpu-and-memory-limits.md](05-cpu-and-memory-limits.md)
 * [06-rolling-updates.md](06-rolling-updates.md)
 * [07-secrets-configmaps.md](07-secrets-configmaps.md)
-* [08-storage-basic-dynamic-provisioning.md](08-storage-basic-dynamic-provisioning.md)
+* [08-storage-basic.md](08-storage-basic.md)
 * [08-storage-detailed.md](08-storage-detailed.md)
 * [09-ingress-gke.md](09-ingress-gke.md)
 * [09-ingress-nginx.md](09-ingress-nginx.md)
@@ -65,50 +74,57 @@ If you are running a cluster of your own such as minikube or kubeadm based clust
 
 On Linux, using bash, run the following commands:
 
-```shell
+```
 $ echo "source <(kubectl completion bash)" >> ~/.bashrc
-$ . ~/.bashrc
+$ source ~/.bashrc
 ```
 
-The commands above will enable kubectl autocompletion when you start a new bash session and source (reload) bashrc i.e. enable kubectl autocompletion in your current session.
+The commands above will enable kubectl autocompletion when you start a new bash session.
 
 See [Kubernetes.io - Enabling shell autocompletion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion) for more info.
 
-# Command Cheatsheet
+# Helpful commands:
 
 A collection of useful commands to use throughout the exercises. 
 
 The first thing you should know about your setup is what is your client (kubectl) version and what is the server version. Having this information helps in many situations.
 
-```shell
+```
 $ kubectl version
 Client Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.8", GitCommit:"7eab6a49736cc7b01869a15f9f05dc5b49efb9fc", GitTreeState:"clean", BuildDate:"2018-09-14T16:06:30Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
+
 Server Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.3", GitCommit:"721bfa751924da8d1680787490c54b9179b1fed0", GitTreeState:"clean", BuildDate:"2019-02-01T20:00:57Z", GoVersion:"go1.11.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-Other useful commands:
+## Other useful commands:
 
-```shell
+```
 $ kubectl api-resources         # List resource types - kubectl 1.11+
+```
 
 OR
 
+```
 $ kubectl api-versions         # List resource types 
+```
 
-
+```
 $ kubectl explain <resource-type>    # Show information about a resource (e.g. api version, etc); not to confuse with "describe"
 $ kubectl explain pod 
+```
 
-
-# List resources in cluster
+## List resources in cluster
+```
 $ kubectl get <resource-type> [resource-name]    # In current namespace
 $ kubectl get <resource-type> -n <namespace>     # In specific namespace
 $ kubectl get <resource> --all-namespaces   # In all namespaces
 $ kubectl get <resource> -o wide            # Add extended information
 $ kubectl get <resource> -o yaml            # output in YAML format
 $ kubectl get <resource> -o json            # output in JSON format
+```
 
-# Examples
+## Examples
+```
 $ kubectl get pods 
 $ kubectl get pods nginx-76542036-5431 -n development
 
@@ -129,7 +145,6 @@ $ kubectl logs -f nginx-76542036-5431
 
 # Check kubernetes events:
 $ kubectl get events --sort-by=.metadata.creationTimestamp
-
 ```
 
 You can get a list of all possible commands by simply typing `kubectl` without any parameters. Note that each (newer) version of `kubectl` will have more  commands/options than the previous version. The output of `kubectl` command below is from kubectl-1.10.8.
