@@ -1,14 +1,41 @@
 # Storage
-
-This article shows how to provide persistent storage to your pods, so your data is safe across pod creation cycles. You will learn to create **PVs** and **PVCs** and how to use **storage classes**. You will also learn the difference of storage provisioning when using **Deployment** and **StatefulSet** objects.
+To provide persistent storage to your applications on a Kubernets cluster, you will need understand how **PV**s and **PVC**s work. 
 
 | ![images/kubernetes-storage.png](images/kubernetes-storage.png) |
 | --------------------------------------------------------------- |
 
-## Semi-Automatic / Semi-Dynamic provisioning - with Deployments:
-When you want to provide some persistent storage to your pods, you define/create a persistent volume claim (PVC), which the pod consumes by the mounting this PVC at a certain mount-point in it's file system. As soon as the PVC is created (using dynamic provisioning), a corresponding persistent volume (PV) is created. The PV in-turn takes a slice of storage from the storage class. As soon as the PV acquires this storage slice, the PVC binds to the this PV.
 
-A **storage class** has actual physical storage underneath it - provided/managed by the cloud provider; though, the storage class hides this information, and provides an abstraction layer for you. Normally, all cloud providers have a default storage class created for you, ready to be used.
+This article shows how to provide persistent storage to your applications/pods, so your data is safe across pod creation cycles. You will learn to create **PVs** and **PVCs** and how to use **storage classes**. You will also learn the difference of storage provisioning when using **Deployment** and **StatefulSet** objects.
+
+In this document, I will show three modes/methods of PV and PVC provisioning:
+* Manual
+* Semi automatic
+* Fully automatic
+
+
+## Manual provisioning of PV and PVC:
+In *manual* mode, you create a PV manually; then, create a PVC to use that PV; and then, configure your pod to use that PVC on a mount-point in the file-system of the pod.
+
+Remember, you cannot use a storage class to provision PVs *manually*. Storage class is only used for dynamic provisioning (discussed next). So, for PVs being created manually, you must define the "method" to acquire physical storage for the PV you are creating manually. Among other settings, this means you must set the storageClassName to "" (null) in a PV's definition.
+  
+# Notes:
+# You need to create the "path" on a kubernetes node, if it does not exist.
+# You may also need to adjust it's permissions to allow it being used in the pod.
+#
+# sudo mkdir -p /opt/pv/apache
+
+```
+[kamran@kworkhorse support-files]$ kubectl apply -f pv-manual-apache.yaml 
+persistentvolume/pv-apache created
+[kamran@kworkhorse support-files]$ 
+```
+
+
+
+## Semi-Automatic / Semi-Dynamic provisioning - with Deployments:
+In this mode, you start by defining/creating a persistent volume claim (PVC). The pod consumes it by the mounting this PVC at a certain mount-point in it's file system. As soon as the PVC is created, a corresponding persistent volume (PV) is created (using dynamic provisioning). The PV in-turn takes a slice of storage from the storage class. As soon as the PV acquires this storage slice, the PVC binds to the this PV.
+
+A **storage class** has actual physical storage underneath it - provided/managed by the cloud provider - or your cluster administrator; though, the storage class hides this information, and provides an abstraction layer for you. Normally, all cloud providers have a default storage class created for you, ready to be used.
 
 **Note:** Minikube provides a `standard` storageclass of type `hostPath` out of the box. Kubeadm based clusters do not. 
 
