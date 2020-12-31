@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: apache-pod-using-pvc
+spec:
+  volumes:
+  - name: apache-htdocs
+    persistentVolumeClaim:
+      claimName: pvc-apache
+  containers:
+  - name: apache
+    image: httpd:alpine
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - mountPath: "/var/www/html"
+      name: apache-htdocs
+
+
+

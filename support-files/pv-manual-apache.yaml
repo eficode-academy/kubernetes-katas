@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-apache
+  labels:
+    name: pv-apache
+    app: apache
+spec:
+  # You cannot use a storage class to provision PVs manually.
+  # storage class is only used for dynamic provisioning.
+  # You must define the "method" to acquire physical storage for the PV you are creating manually.
+  # Therefore, you must set the storageClassName to "" (null).
+  storageClassName: ""
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/opt/pv/apache"
+
+# Notes:
+# You need to create the above mentioned "path" on the kubernetes node, if it does not exist.
+# You may also need to adjust it's permissions to allow it being used in the pod.
+#
+# sudo mkdir -p /opt/pv/apache

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-apache
+  labels:
+    name: pvc-apache
+    app: apache
+spec:
+  # Use a pre-existing PV 
+  selector:
+    matchLabels:
+      name: "pv-apache"
+      app: "apache"
+  accessModes:
+    # Though accessmode is already defined in pv definition. It is still needed here.
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+
+

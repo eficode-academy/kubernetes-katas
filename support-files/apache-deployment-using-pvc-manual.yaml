@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+# apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apache
+  labels:
+    name: apache
+    app: apache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: apache
+      app: apache
+  template:
+    metadata:
+      labels:
+        name: apache
+        app: apache
+    spec:
+      volumes:
+      - name: apache-htdocs
+        persistentVolumeClaim:
+          claimName: pvc-apache
+      containers:
+      - name: apache
+        image: httpd:alpine
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 5m
+            memory: 10Mi
+          requests:
+            cpu: 2m
+            memory: 5Mi
+        volumeMounts:
+        - mountPath: "/var/www/html"
+          name: apache-htdocs
+
