@@ -132,10 +132,10 @@ pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   100Mi      RWO            Delete     
 **Note:** Above may be confusing, and demands some explanation. The `pvc-nginx` **PVC** above, is being created manually, using a `yaml` file; but, the related **PV** is being created automatically. Kubernetes cannot guess it's name (obviously), so it gives it a random/unique name/ID, which begins with **pvc**. This ID is reflected in the **VOLUME**  column of the `kubectl get pvc` command.
 
 
-Next, we are going to create a deployment, and the pod from this deployment will use this PVC storage. Here is the file `support-files/nginx-with-persistent-storage.yaml`:
+Next, we are going to create a deployment, and the pod from this deployment will use this PVC storage. Here is the file `support-files/nginx-deployment-with-persistent-storage.yaml`:
 
 ```
-$ cat support-files/nginx-with-persistent-storage.yaml
+$ cat support-files/nginx-deployment-with-persistent-storage.yaml
 
 apiVersion: apps/v1
 kind: Deployment
@@ -178,7 +178,7 @@ spec:
 Create the deployment: 
 
 ```
-$ kubectl apply -f support-files/nginx-with-persistent-storage.yaml
+$ kubectl apply -f support-files/nginx-deployment-with-persistent-storage.yaml
 deployment.extensions/nginx created
 
 $ kubectl get deployments
@@ -194,13 +194,13 @@ nginx-7b874889c6-2zdxf              1/1     Running   0          61s
 After the deployment is created and the pod starts, you should examine it by using `kubectl describe pod nginx`, and look out for volume declarations. Optionally, create a service (of type ClusterIP) out of this deployment.
 
 ```
-$ kubectl expose deployment nginx --type ClusterIP
+$ kubectl expose deployment nginx --type ClusterIP --port 80
 service/nginx exposed
 
 $ kubectl get services
 NAME               TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
 kubernetes         ClusterIP   10.4.0.1     <none>        443/TCP          26m
-nginx              ClusterIP   10.4.9.9     <none>        443/TCP,80/TCP   7s
+nginx              ClusterIP   10.4.9.9     <none>        80/TCP           7s
 ```
 
 
@@ -390,7 +390,7 @@ $ kubectl create -f support-files/pvc-nginx.yaml
 
 $ kubectl apply -f support-files/nginx-deployment-with-persistent-storage.yaml
 
-$ kubectl expose deployment nginx --type ClusterIP
+$ kubectl expose deployment nginx --type ClusterIP --port 80
 
 $ kubectl create deployment multitool --image=praqma/network-multitool
 ```
@@ -414,8 +414,8 @@ Check the endpoints for the nginx service. It shows four endpoints because there
 
 ```
 $ kubectl get endpoints nginx
-NAME               ENDPOINTS                                              AGE
-nginx              10.0.0.12:443,10.0.0.14:443,10.0.0.12:80 + 1 more...   5m41s
+NAME               ENDPOINTS                      AGE
+nginx              10.0.0.12:80,10.0.0.14:80      5m41s
 ```
 
 Now, we open two separate terminals and check the logs of both nginx containers. We access the nginx service from the multitool repeatedly. Both nginx containers should show activity, though on the multitool, curl will show the same web content being served from the service's back-ends.
