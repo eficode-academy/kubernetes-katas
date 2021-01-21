@@ -1,7 +1,7 @@
 # Kubernetes health checks
 
 Health checks in Kubernetes are a mechanism to
-check if a pod able to handle load. This status
+check if a pod is able to handle load. This status
 can be used by Kubernetes to avoid routing traffic
 to pods which are unhealthy, or automatically
 recreate unhealthy pods.
@@ -9,16 +9,16 @@ recreate unhealthy pods.
 Kubernetes has two built-in ways of making a
 health check on a pod:
 
-- _readnissprobe_ that finds out if your pod is
+- _readiness probes_ that finds out if your pod is
   ready to receive traffic
-- _livelinessprobe_ that finds out if your pod is
+- _liveness probes_ that finds out if your pod is
   alive and well
 
 When we use `kubectl` to print the status of a
 pod, we receive information on the status of the
 pod.
 
-```
+```shell
 NAME                     READY   STATUS    RESTARTS   AGE
 probe-59cf4f5578-vwllc   1/1     Running   1          10m
 ```
