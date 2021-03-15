@@ -21,7 +21,7 @@ We have sourced the values in the code like this:
   const API_KEY = process.env.API_KEY;
 ```
 
-Because we are reading from the env variables we can specify some default in the Dockerfile.  We have used this:
+Because we are reading from the env variables we can specify some default in the `Dockerfile`.  We have used this:
 
 ```shell
 FROM node:9.1.0-alpine
@@ -45,7 +45,7 @@ Expose the deployment on a nodeport, so you can see the running container.
 
 > You learned about exposing nodeports in the [service discovery](02-service-discovery-and-loadbalancing.md) exercise. And remember that the application is running on port `3000`
 
-Despite the default value in the Dockerfile, it should now be overwritten by the deployment env values!
+Despite the default value in the `Dockerfile`, it should now be overwritten by the deployment env values!
 
 However we just moved it from being hardcoded in our app to being hardcoded in our deployment file.
 
