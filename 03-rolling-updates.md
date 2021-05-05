@@ -31,7 +31,7 @@ $ kubectl scale deployment nginx --replicas=4
 From another terminal on your machine check (using load balancer IP) which version is currently running and to see changes when rollout is happening:
 
 ```shell
-$ while true; do  curl -sI 35.205.60.29  | grep Server; sleep 2; done
+$ while true; do  curl -m 1 -sI 35.205.60.29  | grep Server; sleep 2; done
 ```
 
 ## Update Deployment
