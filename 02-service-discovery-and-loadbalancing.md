@@ -6,7 +6,7 @@ To access any service inside any given pod (e.g. nginx web service), we need to 
 
 > NB: this exercise assumes you have the nginx and multitool deployments from exercise 1 running. If not, you can start them with
 > ```shell
-> $ kubectl create deployment multitool --image=praqma/network-multitool
+> $ kubectl create deployment multitool --image=praqma/network-multitool:extra
 > deployment.apps/multitool created
 > $ kubectl create deployment nginx --image=nginx:1.7.9
 > deployment.apps/nginx created
