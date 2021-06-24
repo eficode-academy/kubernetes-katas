@@ -6,18 +6,23 @@
 
 * Look at the nginx deployment yaml file in `rolling-updates/nginx-deployment.yaml`
 * Look at the service file in `rolling-updates/nginx-svc.yaml`
-* Apply the nginx deployment: `kubectl apply -f rolling-updates/nginx-deployment.yaml`
-* Apply the service: `kubectl apply -f rolling-updates/nginx-svc.yaml`
 
-> remember that it might take a few minutes for the cloud infrastructure to deploy the load balancer, i.e. the external IP might be shown as `pending`
+Now go ahead and `apply` the deployment and the service:
 
-* Note down the loadbalancer IP from the services command: `kubectl get service`
-* Increase the replicas to four:
+* Apply the nginx deployment: `$ kubectl apply -f rolling-updates/nginx-deployment.yaml`
+* Apply the service: `$ kubectl apply -f rolling-updates/nginx-svc.yaml`
+
+> :bulb: Remember that it might take a few minutes for the cloud infrastructure to deploy the load balancer, i.e. the external IP might be shown as `pending`
+
+* Note down the loadbalancer IP from the services command: `$ kubectl get service`
+* Increase the replicas to four in the deployment yaml file:
 
 ```yaml
 spec:
   replicas: 4
 ```
+
+* Apply the service again to increase the replica count of your deployment.
 
 From another terminal check which version is currently running and to see changes when rollout is happening:
 
@@ -27,11 +32,12 @@ $ while true; do  curl --connect-timeout 1 -m 1 -sI <loadbalancerIP>  | grep Ser
 
 ## Update Deployment
 
-Now we will try to rollout an update to the image.
+Now we will try to roll out an update to the image.
 
 * Set image tag to `1.9`:
 
 ```YAML
+    ...
     spec:
       containers:
       - image: nginx:1.9
@@ -39,12 +45,11 @@ Now we will try to rollout an update to the image.
 
 * Apply the new version of your deployment.
 
-* Check the rollout status: `kubectl rollout status deployment nginx`
+* Check the rollout status: `$ kubectl rollout status deployment nginx`
 
-* Investigate rollout history: `kubectl rollout history deployment nginx`
+* Investigate rollout history: `$ kubectl rollout history deployment nginx`
 
-* Try rolling out other image version by repeating the commands from
-above.  Suggested image versions are 1.12.2, 1.13.12, 1.14.1, 1.15.2.
+* Try rolling out other image version by repeating the commands from above. Suggested image versions are `1.12.2`, `1.13.12`, `1.14.1`, `1.15.2`.
 
 * Try also rolling out a version that does not exist:
 
@@ -57,12 +62,12 @@ above.  Suggested image versions are 1.12.2, 1.13.12, 1.14.1, 1.15.2.
 
 What happened - do the curl operation still work?
 
-* Investigate the running pods with: `kubectl get pods`
+* Investigate the running pods with: `$ kubectl get pods`
 
 ## Undo Update
 
 The rollout above using a non-existing image version caused some pods to be
-non-functioning. Next, we will undo this faulty deployment. 
+non-functioning. Next, we will undo this faulty deployment.
 
 * Investigate rollout history: `kubectl rollout history deployment nginx`
 
