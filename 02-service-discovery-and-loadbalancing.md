@@ -268,14 +268,13 @@ service "nginx" deleted
 
 ## Extra-credit: High Availability Exercise
 
-To prove that multiple pods of the same deployment provide high availability, we do a small exercise. To visualize it, we need to run a small web server which could return us some unique content when we access it. We will use our trusted multitool for it. Let's run it as a separate deployment and access it from our local computer.
+To prove that multiple pods of the same deployment provide high availability, we do a small exercise. To visualize it, we need to run a small web server which could return us some unique content when we access it.
 
-```shell
-$ kubectl create deployment customnginx --image=praqma/network-multitool
-deployment.apps/customnginx created
-$ kubectl scale deployment customnginx --replicas=4
-deployment.extensions/customnginx scaled
-```
+We will use our multitool image for it. Let's run it as a separate deployment and access it.
+
+* Look at the deployment and service in `service-discovery-loadbalancing/extra/`
+* Apply them to the cluster `kubectl apply -f service-discovery-loadbalancing/extra/`
+* Observe that the pods are running:
 
 ```shell
 $ kubectl get pods
@@ -284,17 +283,9 @@ customnginx-3557040084-1z489   1/1       Running   0          49s
 customnginx-3557040084-3hhlt   1/1       Running   0          49s
 customnginx-3557040084-c6skw   1/1       Running   0          49s
 customnginx-3557040084-fw1t3   1/1       Running   0          49s
-multitool-5f9bdcb789-k7f4q     1/1       Running   0          19m
 ```
 
-Let's create a service for this deployment as a type=LoadBalancer:
-
-```shell
-$ kubectl expose deployment customnginx --port=80 --type=LoadBalancer
-service/customnginx exposed
-```
-
-Verify the service and note the public IP address:
+* Verify the service and note the public IP address:
 
 ```shell
 $ kubectl get services
@@ -312,7 +303,7 @@ Praqma Network MultiTool (with NGINX) - customnginx-7cf9899b84-rjgrb - 10.8.2.47
 Next, setup a small bash loop on your local computer to curl this IP address, and get it's IP address.
 
 ```shell
-$ while true; do  curl --connect-timeout 1 -m 1 -sI <loadbalancerIP>  | grep Server; sleep 0,5; done
+$ while true; do  curl --connect-timeout 1 -m 1 -s <loadbalancerIP>  | grep Server; sleep 0.5; done
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.36 <BR></p>
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.1.150 <BR></p>
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.37 <BR></p>
@@ -333,19 +324,14 @@ pod "customnginx-3557040084-c6skw" deleted
 Immediately check the other terminal for any failed curl commands or timeouts.
 
 ```shell
-Container IP: 100.96.1.150 <BR></p>
-Container IP: 100.96.1.150 <BR></p>
-Container IP: 100.96.2.37 <BR></p>
-Container IP: 100.96.1.149 <BR></p>
-Container IP: 100.96.1.149 <BR></p>
-Container IP: 100.96.1.150 <BR></p>
-Container IP: 100.96.2.36 <BR></p>
-Container IP: 100.96.2.37 <BR></p>
-Container IP: 100.96.2.37 <BR></p>
-Container IP: 100.96.2.38 <BR></p>
-Container IP: 100.96.2.38 <BR></p>
-Container IP: 100.96.2.38 <BR></p>
-Container IP: 100.96.1.151 <BR></p>
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-4w4gf - 10.244.0.19
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-h2dbg - 10.244.0.21
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-5xbjc - 10.244.0.22
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-h2dbg - 10.244.0.21
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-4wn9c - 10.244.0.20
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-5xbjc - 10.244.0.22
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-h2dbg - 10.244.0.21
+Praqma Network MultiTool (with NGINX) - customnginx-59db6cff7b-5xbjc - 10.244.0.22
 ```
 
 We notice that no curl command failed, and actually we have started seeing new IPs. Why is that? It is because, as soon as the pods are deleted, the deployment sees that it's desired state is four pods, and there is only one running, so it immediately starts three more to reach that desired state. And, while the pods are in process of starting, one surviving pod takes the traffic.
@@ -368,8 +354,4 @@ This proves, Kubernetes provides us High Availability, using multiple replicas o
 
 Delete deployments and services as follows:
 
-```shell
-$ kubectl delete deployment customnginx
-$ kubectl delete deployment multitool
-$ kubectl delete service customnginx
-```
+* `kubectl delete -f service-discovery-loadbalancing/extra`
