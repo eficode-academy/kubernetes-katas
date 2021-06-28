@@ -27,7 +27,7 @@ spec:
 From another terminal check which version is currently running and to see changes when rollout is happening:
 
 ```shell
-$ while true; do  curl --connect-timeout 1 -m 1 -sI <loadbalancerIP>  | grep Server; sleep 0,5; done
+$ while true; do  curl --connect-timeout 1 -m 1 -sI <loadbalancerIP>  | grep Server; sleep 0.5; done
 ```
 
 ## Update Deployment
