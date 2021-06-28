@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        kubernetes-version: [ '1.16.0' ]
+        kubernetes-version: [ '1.16.0', '1.21.0' ]
 
     steps:
     - uses: actions/checkout@v2
