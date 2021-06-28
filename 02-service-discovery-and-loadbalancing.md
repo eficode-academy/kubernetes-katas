@@ -4,24 +4,27 @@
 
 To access any service inside any given pod (e.g. nginx web service), we need to *expose* the related deployment as a *service*. We have three main ways of exposing the deployment , or in other words, we have three ways to define a *service* , which we can access in three different ways. A service is (normally) created on top of an existing deployment.
 
-> NB: this exercise assumes you have the nginx and multitool deployments from exercise 1 running. If not, you can start them with
-> ```shell
-> $ kubectl create deployment multitool --image=praqma/network-multitool:extra
-> deployment.apps/multitool created
-> $ kubectl create deployment nginx --image=nginx:1.7.9
-> deployment.apps/nginx created
-> ```
+We are switching our approach from the imperative (`kubectl create`) to declarative (`kubectl apply -f`) and yaml files.
+
+### Setup
+
+Deploy both `nginx` and `network-multitool` deployments that is going to be used in the exercise.
+
+#### Tasks
+
+* Look at the two deployments in the folder `service-discovery-loadbalancing`
+* Deploy the multitool `kubectl apply -f service-discovery-loadbalancing/multitool-deployment.yaml`
+* Deploy Nginx `kubectl apply -f service-discovery-loadbalancing/nginx-deployment.yaml`
 
 ### Service type: ClusterIP
 
-Expose the deployment as a service - type=ClusterIP:
+Services of type ClusterIP will only create a DNS entry with the name of the service, as well as an internal cluster IP that routes traffic over to the deployments hit by the `selector` part of the service.
 
-```shell
-$ kubectl expose deployment nginx --port 80 --type ClusterIP
-service/nginx exposed
-```
+Expose the nginx deployment as a service of type ClusterIP:
 
-Check the list of services:
+* Look at the service file in `service-discovery-loadbalancing`
+* Apply the service `kubectl apply -f service-discovery-loadbalancing/nginx-svc.yaml`
+* Check the list of services:
 
 ```shell
 $ kubectl get services
@@ -29,10 +32,11 @@ NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
 ```
 
+The service does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within the cluster using its `CLUSTER-IP`.
 
-The service in focus is nginx, which does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within the cluster using its `CLUSTER-IP`. Let's see if we can access this service from within our multitool, the one from the Pods and Deployments exercise.
+Let's see if we can access this service from within our multitool, the one from the Pods and Deployments exercise.
 
-Get the name of the `multitool` pod with:
+* Get the name of the `multitool` pod with:
 
 ```shell
 $ kubectl get pods
@@ -40,13 +44,14 @@ NAME                         READY     STATUS    RESTARTS   AGE
 multitool-5c8676565d-rc982   1/1       Running   0          3s
 ```
 
-Run an interactive shell inside the `network-multitool`-container in the pod with:
+* Run an interactive shell inside the `network-multitool`-container in the pod with:
 
 ```shell
 $ kubectl exec -it multitool-5c8676565d-rc982 -c network-multitool -- bash
 bash-5.0#
 ```
 
+> :bulb: 
 > `kubectl exec` can be used to execute a command inside a container inside a pod.
 > Since the multitool-5c8676565d-rc982 pod only runs a single container, called `network-multitool`,
 > we do not have to specify the container explicitly, i.e.
@@ -57,7 +62,7 @@ bash-5.0#
 > `-it` attaches our terminal interactively to the container,
 > and `bash` is the command we enter the container with. The `--` separates the kubectl command from the command being run inside the container and is particularly important when the command have arguments.
 
-Try to `curl` the `CLUSTER-IP` of the `nginx`-service above:
+* Try to `curl` the `CLUSTER-IP` of the `nginx`-service above:
 
 ```shell
 bash-4.4# curl -s 100.70.204.237 | grep h1
@@ -73,19 +78,18 @@ bash-4.4# curl -s nginx | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-We can use this to access services in our current namespace.
-    To access a service in a different namespace, use its full DNS name:
-    `<service name>.<namespace>.svc.cluster.local`:
+> :bulb: We can use this to access services in our current namespace.
+> To access a service in a different namespace, use its full DNS name:
+> `<service name>.<namespace>.svc.cluster.local`
 
-If you're doing this exercise along others, try to `curl` their nginx-service with:
+* If you're doing this exercise along others, try to `curl` their nginx-service with:
 
 ```shell
 bash-4.4# curl -s nginx.<namespace>.svc.cluster.local | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-Log out of the bash in the multitool container with the `exit` command,
-    or by pressing `ctrl+d`.
+* Log out of the bash in the multitool container with the `exit` command, or by pressing `ctrl+d`.
 
 #### Describe
 
@@ -109,32 +113,23 @@ Events:            <none>
 
 You can of-course use `... describe pod ...` , `... describe deployment ...` , etc.
 
-#### Additional notes about the Cluster-IP
+<details>
+    <summary> :bulb: Additional notes about the Cluster-IP</summary>
 
 * The IPs assigned to services as Cluster-IP are from a different Kubernetes network called *Service Network*, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labeling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
 * No matter what type of service you choose while *exposing* your deployment, Cluster-IP is always assigned to that particular service.
 * Every service has end-points, which point to the actual pods serving as a backends of a particular service.
 * As soon as a service is created, and is assigned a Cluster-IP, an entry is made in Kubernetes' internal DNS against that service, with this service name and the Cluster-IP. e.g. `nginx.default.svc.cluster.local` would point to `100.70.204.237` .
 
+</details>
+
 ### Service type: NodePort
 
 Our nginx service is still not reachable from outside, so now we re-create this service as NodePort.
 
-```shell
-$ kubectl get svc
-NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-nginx        ClusterIP   100.70.204.237   <none>        80/TCP    15m
-```
-
-```shell
-$ kubectl delete svc nginx
-service "nginx" deleted
-```
-
-```shell
-$ kubectl expose deployment nginx --port 80 --type NodePort
-service/nginx exposed
-```
+* Change the type from `ClusterIP` to `NodePort` in `service-discovery-loadbalancing/nginx-svc.yaml`
+* Apply the new version of the service with `kubectl apply -f service-discovery-loadbalancing/nginx-svc.yaml`
+* Check that the service have changed type:
 
 ```shell
 $ kubectl get svc
@@ -151,7 +146,9 @@ gke-dcn-cluster-35-default-pool-dacbcf6d-3918   Ready     <none>    17h       v1
 gke-dcn-cluster-35-default-pool-dacbcf6d-c87z   Ready     <none>    17h       v1.8.8-gke.0   35.187.90.36    Container-Optimized OS from Google   4.4.111+         docker://17.3.2
 ```
 
-Even though we have only one pod (and two worker nodes), we can access any of the nodes with this port, and it will eventually be routed to our pod. Let's try to access it from our local work computer:
+Even though we have only one pod (and two worker nodes), we can access any of the nodes with this port, and it will eventually be routed to our pod.
+
+* try to access it through curl:
 
 ```shell
 $ curl -s 35.205.22.139:32593 | grep h1
@@ -160,19 +157,19 @@ $ curl -s 35.205.22.139:32593 | grep h1
 
 It works!
 
+* Check multiple of the node external IP's to see that it does not matter which of them is hit.
+
 ### Service type: LoadBalancer
 
-So far so good; but, we do not expect the users to know the IP addresses of our worker nodes. It is not a flexible way of doing things. So we re-create the service as `type=LoadBalancer`. The type LoadBalancer is only available for use, if your k8s cluster is setup in any of the public cloud providers, GCE, AWS, etc.
+So far so good; but, we do not expect the users to know the IP addresses of our worker nodes.
 
-```shell
-$ kubectl delete svc nginx
-service "nginx" deleted
-```
+It is not a flexible way of doing things.
 
-```shell
-$ kubectl expose deployment nginx --port 80 --type LoadBalancer
-service/nginx exposed
-```
+So we re-create the service as type `LoadBalancer`. The type LoadBalancer is only available for use, if your k8s cluster is setup in any of the public cloud providers, GCE, AWS, etc or that the admin of a local cluster have set it up.
+
+* Change the type from `NodePort` to `LoadBalancer` in `service-discovery-loadbalancing/nginx-svc.yaml`
+* Apply the new version of the service with `kubectl apply -f service-discovery-loadbalancing/nginx-svc.yaml`
+* Check that the service have changed type:
 
 ```shell
 $ kubectl get svc
@@ -190,14 +187,21 @@ nginx        LoadBalancer   100.69.15.89   35.205.60.29  80:31354/TCP   5s
 
 Now, we can access this service without using any special port numbers:
 
+* try to curl the external ip of the loadbalancer:
+
 ```shell
 $ curl -s 35.205.60.29 | grep h1
 <h1>Welcome to nginx!</h1>
 ```
 
-**Additional notes about LoadBalancer:**
+* Even if the type is of `LoadBalancer` can you still reach the site as you did with the type `NodePort`?
 
-* A service defined as LoadBalancer will still have some high-range port number assigned to it's main service port, just like NodePort. This has a clever purpose, but is an advance topic and is not our focus at this point.
+<details>
+    <summary> :bulb: Additional notes about Load Balancer</summary>
+
+> A service defined as LoadBalancer will still have some high-range port number assigned to it's main service port, just like NodePort. This has a clever purpose, but is an advance topic and is not our focus at this point.
+
+</details>
 
 # High Availability
 
@@ -205,12 +209,9 @@ So far we have seen pods, deployments and services. We have also seen Kubernetes
 
 Let's increase the number of replicas of our nginx deployment to four(4):
 
-```shell
-$ kubectl scale deployment nginx --replicas=4
-deployment.extensions/nginx scaled
-```
-
-Check the deployment and pods:
+* Change the `replicas` from 1 to 4 in `service-discovery-loadbalancing/nginx-deployment.yaml`
+* Apply the new version of the deployment with `kubectl apply -f service-discovery-loadbalancing/nginx-deployment.yaml`
+* Check the deployment and pods:
 
 ```shell
 $ kubectl get deployments
@@ -229,14 +230,12 @@ nginx-569477d6d8-s6lsn       1/1       Running   0          34s
 nginx-569477d6d8-v8srx       1/1       Running   0          35s
 ```
 
-**Notice:** The nginx deployment says Ready=4/4, Up-to-date=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was already running (being older), and the other three are started just now.
+> :bulb: The nginx deployment says Ready=4/4, Up-to-date=4, Available=4. And the pods also show the same. There are now 4 nginx pods running; one of them was already running (being older), and the other three are started just now.
 
 You can also scale down! - e.g. to 2:
 
-```shell
-$ kubectl scale deployment nginx --replicas=2
-deployment.extensions/nginx scaled
-```
+* Try to adjust the number of replicas to 2 and apply as before.
+* Quickly thereafter, run `kubectl get pods`:
 
 ```shell
 $ kubectl get pods
@@ -258,12 +257,12 @@ nginx-569477d6d8-4msf8       1/1       Running   0          22m
 nginx-569477d6d8-v8srx       1/1       Running   0          2m
 ```
 
-You can delete the nginx deployment and service at this point. We have no use for these anymore. Besides, you can always re-create them.
+You can delete the deployments and service at this point. We have no use for these anymore. Besides, you can always re-create them, as they are described _as code_.
 
 ```shell
-$ kubectl delete deployment nginx
-deployment.extensions "nginx" deleted
-$ kubectl delete service nginx
+$ kubectl delete -f service-discovery-loadbalancing/
+deployment.apps "multitool" deleted
+deployment.apps "nginx" deleted
 service "nginx" deleted
 ```
 
@@ -313,7 +312,7 @@ Praqma Network MultiTool (with NGINX) - customnginx-7cf9899b84-rjgrb - 10.8.2.47
 Next, setup a small bash loop on your local computer to curl this IP address, and get it's IP address.
 
 ```shell
-$ while true; do sleep 1; curl -s 35.205.60.41; done
+$ while true; do  curl --connect-timeout 1 -m 1 -sI <loadbalancerIP>  | grep Server; sleep 0,5; done
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.36 <BR></p>
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.1.150 <BR></p>
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.37 <BR></p>
