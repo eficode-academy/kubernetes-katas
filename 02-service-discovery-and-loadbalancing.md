@@ -20,9 +20,35 @@ Deploy both `nginx` and `network-multitool` deployments that is going to be used
 
 Services of type ClusterIP will only create a DNS entry with the name of the service, as well as an internal cluster IP that routes traffic over to the deployments hit by the `selector` part of the service.
 
+The service type ClusterIP does not have any external IP. This means it is not accessible over internet, but we can still access it from within the cluster using its `CLUSTER-IP`.
+
+The first thing we need is to create the service file so we can `apply` it afterwards.
+
+#### Tasks
+
 Expose the nginx deployment as a service of type ClusterIP:
 
-* Look at the service file in `service-discovery-loadbalancing`
+* Create the service file with kubectl: `kubectl expose deployment nginx -o yaml --dry-run=client --type=ClusterIP --port=80 > service-discovery-loadbalancing/nginx-svc.yaml`
+
+<details>
+    <summary> :bulb: Exmplanaition of what that command just did`</summary>
+
+* `kubectl` kubernetes commandline
+* `expose` expose a
+* `deployment` type deployment
+* `nginx` with the name `nginx`
+* `-o yaml` formats the output to YAML format
+* `--dry-run=client`  makes sure that the kubctl command will not be sent to the Kubernetes API server
+* `--type=ClusterIP` creates the service of type `ClusterIP`
+* `--port=80` makes the service exposed on port `80`
+* `>` linux command to pipe all from standard output (what you see in the terminal) to a file
+* `service-discovery-loadbalancing/nginx-svc.yaml` the name of the file
+
+>:bulb: Using this approach of -o and dry-run is a very good way to create skeleton templates for all kubernetes objects like services/deployments/configmaps etc.
+
+</details>
+
+* Look at the service file you just created in `service-discovery-loadbalancing/nginx-svc.yaml`
 * Apply the service `kubectl apply -f service-discovery-loadbalancing/nginx-svc.yaml`
 * Check the list of services:
 
@@ -32,7 +58,7 @@ NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 nginx        ClusterIP   100.70.204.237   <none>        80/TCP    4s
 ```
 
-The service does not have any external IP, nor does it say anything about any other ports except 80/TCP. This means it is not accessible over internet, but we can still access it from within the cluster using its `CLUSTER-IP`.
+We here can see both the cluster ip where the service is reachable, and on what port.
 
 Let's see if we can access this service from within our multitool, the one from the Pods and Deployments exercise.
 
@@ -125,6 +151,12 @@ You can of-course use `... describe pod ...` , `... describe deployment ...` , e
 
 ### Service type: NodePort
 
+A service type NodePort creates a port on the service that is reachable from the outside. Notice that we still don't have an external IP, but we now have an extra port e.g. `32593` for this service.
+
+This port is a **NodePort** exposed on the worker nodes. So now, if we know the IP of our nodes, we can access this service from the internet.
+
+#### Tasks
+
 Our nginx service is still not reachable from outside, so now we re-create this service as NodePort.
 
 * Change the type from `ClusterIP` to `NodePort` in `service-discovery-loadbalancing/nginx-svc.yaml`
@@ -137,7 +169,7 @@ NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 nginx        NodePort    100.65.29.172  <none>        80:32593/TCP   8s
 ```
 
-Notice that we still don't have an external IP, but we now have an extra port `32593` for this pod. This port is a **NodePort** exposed on the worker nodes. So now, if we know the IP of our nodes, we can access this nginx service from the internet. First, we find the public IP of the nodes:
+ First, we find the public IP of one of the worker nodes:
 
 ```shell
 $ kubectl get nodes -o wide
@@ -166,6 +198,8 @@ So far so good; but, we do not expect the users to know the IP addresses of our 
 It is not a flexible way of doing things.
 
 So we re-create the service as type `LoadBalancer`. The type LoadBalancer is only available for use, if your k8s cluster is setup in any of the public cloud providers, GCE, AWS, etc or that the admin of a local cluster have set it up.
+
+#### Tasks
 
 * Change the type from `NodePort` to `LoadBalancer` in `service-discovery-loadbalancing/nginx-svc.yaml`
 * Apply the new version of the service with `kubectl apply -f service-discovery-loadbalancing/nginx-svc.yaml`
