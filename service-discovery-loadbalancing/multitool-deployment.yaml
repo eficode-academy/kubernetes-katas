@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: nginx
-  name: nginx
+    app: multitool
+  name: multitool
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: multitool
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: nginx
+        app: multitool
     spec:
       containers:
-      - image: nginx:1.7
-        name: nginx
+      - image: praqma/network-multitool:extra
+        name: network-multitool
         resources: {}
 status: {}
