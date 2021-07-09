@@ -31,7 +31,7 @@ Expose the nginx deployment as a service of type ClusterIP:
 * Create the service file with kubectl: `kubectl expose deployment nginx -o yaml --dry-run=client --type=ClusterIP --port=80 > service-discovery-loadbalancing/nginx-svc.yaml`
 
 <details>
-    <summary> :bulb: Exmplanaition of what that command just did`</summary>
+    <summary> :bulb: Explanaition of what that command just did</summary>
 
 * `kubectl` kubernetes commandline
 * `expose` expose a

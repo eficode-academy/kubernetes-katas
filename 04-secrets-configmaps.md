@@ -45,6 +45,28 @@ Expose the deployment on a nodeport, so you can see the running container.
 
 > You learned about exposing nodeports in the [service discovery](02-service-discovery-and-loadbalancing.md) exercise. And remember that the application is running on port `3000`
 
+<details>
+    <summary> :bulb: Recap of how to expose a service</summary>
+
+Example: This is the example of how you should do it. But it won't work to copy paste, you need to adapt the command:
+
+Breakdown of the command: `kubectl expose deployment nginx -o yaml --dry-run=client --type=ClusterIP --port=80 > service-discovery-loadbalancing/nginx-svc.yaml`
+
+>* `kubectl` kubernetes commandline
+>* `expose` expose a
+>* `deployment` type deployment
+>* `nginx` with the name `nginx`
+>* `-o yaml` formats the output to YAML format
+>* `--dry-run=client`  makes sure that the kubctl command will not be sent to the Kubernetes API server
+>* `--type=ClusterIP` creates the service of type `ClusterIP`
+>* `--port=80` makes the service exposed on port `80`
+>* `>` linux command to pipe all from standard output (what you see in the terminal) to a file
+>* `service-discovery-loadbalancing/nginx-svc.yaml` the name of the file
+>
+>:bulb: Using this approach of -o and dry-run is a very good way to create skeleton templates for all kubernetes objects like services/deployments/configmaps etc.
+
+</details>
+
 Despite the default value in the `Dockerfile`, it should now be overwritten by the deployment env values!
 
 However we just moved it from being hardcoded in our app to being hardcoded in our deployment file.
