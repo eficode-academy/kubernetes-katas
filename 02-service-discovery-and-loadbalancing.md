@@ -337,7 +337,7 @@ Praqma Network MultiTool (with NGINX) - customnginx-7cf9899b84-rjgrb - 10.8.2.47
 Next, setup a small bash loop on your local computer to curl this IP address, and get it's IP address.
 
 ```shell
-$ while true; do  curl --connect-timeout 1 -m 1 -s <loadbalancerIP>  | grep Server; sleep 0.5; done
+$ while true; do  curl --connect-timeout 1 -m 1 -s <loadbalancerIP> ; sleep 0.5; done
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.36 <BR></p>
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.1.150 <BR></p>
 Praqma Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.37 <BR></p>
