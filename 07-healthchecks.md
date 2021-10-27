@@ -39,8 +39,8 @@ deems it unhealthy.
 Apply the deployment and service found in the
 `health-checks` folder:
 
-- `kubectl apply -f kubernetes-katas/health-checks/probes.yaml `
-- `kubectl apply -f kubernetes-katas/health-checks/probes-svc.yaml`
+- `kubectl apply -f health-checks/probes.yaml `
+- `kubectl apply -f health-checks/probes-svc.yaml`
 - Try to access the service through the public IP
   of one of the nodes, just like we worked with in
   the
