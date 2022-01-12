@@ -20,12 +20,12 @@ We start by creating our first deployment. Normally people will run a pod with a
 Here is the command to do it:
 
 ```shell
-$ kubectl create deployment multitool --image=praqma/network-multitool
+$ kubectl create deployment multitool --image=wbitt/network-multitool
 deployment.apps/multitool created
 ```
 
 So what happened? The `create`-command is great for imperative testing, and getting something up and running fast.
-  It creates a _[deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)_ named `multitool`, which creates a _[replicaset](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_, which starts a _[pod](https://kubernetes.io/docs/concepts/workloads/pods/)_ using the docker image `praqma/network-multitool`. You don't need to concern yourself with all these details at this stage, this is just extra (however notable) information.
+  It creates a _[deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)_ named `multitool`, which creates a _[replicaset](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_, which starts a _[pod](https://kubernetes.io/docs/concepts/workloads/pods/)_ using the docker image `wbitt/network-multitool`. You don't need to concern yourself with all these details at this stage, this is just extra (however notable) information.
 
 Just so you know what we're talking about,
   you can check the objects you've created with `get <object>`,
