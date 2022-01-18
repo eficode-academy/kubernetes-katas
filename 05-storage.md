@@ -6,7 +6,7 @@ List the available storage classes:
 kubectl get storageclass
 ```
 
-Create a claim for a dynamically provisioned volume (PVC) for nginx. 
+Create a claim for a dynamically provisioned volume (PVC) for nginx.
 
 ```shell
 $ kubectl create -f support-files/pvc-nginx.yaml
@@ -25,6 +25,14 @@ $ kubectl get pvc
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 pvc-nginx   Bound     pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            standard       4m
 ```
+
+> NB: if it's not bound, try to `describe` it and see the message?
+>
+> Notice the output from `kubectl get storageclass`, if it says
+> `VOLUMEBINDINGMODE=WaitForFirstConsumer`
+> then you need a Pod or Deployment to "use" it first.
+> There's a deployment like that, a couple of lines down from here.
+
 
 There should be a corresponding auto-created persistent volume (PV) against this PVC:
 
@@ -68,7 +76,7 @@ spec:
           name: nginx-htmldir-volume
 ```
 
-Deploy nginx again. 
+Deploy nginx again.
 
 ```shell
 $ kubectl create -f support-files/nginx-persistent-storage.yaml
