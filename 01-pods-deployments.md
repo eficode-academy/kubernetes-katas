@@ -3,7 +3,7 @@
 A **Pod** (*not container*) is the smallest building-block/worker-unit in Kubernetes,
   it has a specification of one or more containers and exists for the duration of the containers;
   if all the containers stop or terminate, the Pod is stopped.
-  
+
   Usually a pod will be part of a **Deployment**; a more controlled or _robust_ way of running Pods.
   A deployment can be configured to automatically delete stopped or exited Pods and start new ones,
   as well as run a number of identical Pods e.g. to provide high-availability.
@@ -112,7 +112,7 @@ rs/nginx-1480123054       1         1         1         14s
 
 ## 1.3 Deploying applications using declarative configuration files
 
-Although the `kubctl create` command allows us to specify a number of flags
+Although the `kubectl create` command allows us to specify a number of flags
   to configure which kind of deployment should be created,
   it's a bit easier to work with if we instead specify it in a _deployment spec_-file
   and `create` that instead.

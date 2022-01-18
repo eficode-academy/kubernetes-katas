@@ -38,7 +38,7 @@ Expose the nginx deployment as a service of type ClusterIP:
 * `deployment` type deployment
 * `nginx` with the name `nginx`
 * `-o yaml` formats the output to YAML format
-* `--dry-run=client`  makes sure that the kubctl command will not be sent to the Kubernetes API server
+* `--dry-run=client`  makes sure that the kubectl command will not be sent to the Kubernetes API server
 * `--type=ClusterIP` creates the service of type `ClusterIP`
 * `--port=80` makes the service exposed on port `80`
 * `>` linux command to pipe all from standard output (what you see in the terminal) to a file
@@ -77,7 +77,7 @@ $ kubectl exec -it multitool-5c8676565d-rc982 -c network-multitool -- bash
 bash-5.0#
 ```
 
-> :bulb: 
+> :bulb:
 > `kubectl exec` can be used to execute a command inside a container inside a pod.
 > Since the multitool-5c8676565d-rc982 pod only runs a single container, called `network-multitool`,
 > we do not have to specify the container explicitly, i.e.

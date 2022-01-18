@@ -57,7 +57,7 @@ Breakdown of the command: `kubectl expose deployment nginx -o yaml --dry-run=cli
 >* `deployment` type deployment
 >* `nginx` with the name `nginx`
 >* `-o yaml` formats the output to YAML format
->* `--dry-run=client`  makes sure that the kubctl command will not be sent to the Kubernetes API server
+>* `--dry-run=client`  makes sure that the kubectl command will not be sent to the Kubernetes API server
 >* `--type=ClusterIP` creates the service of type `ClusterIP`
 >* `--port=80` makes the service exposed on port `80`
 >* `>` linux command to pipe all from standard output (what you see in the terminal) to a file
