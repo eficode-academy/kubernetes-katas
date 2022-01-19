@@ -3,7 +3,7 @@
 List the available storage classes:
 
 ```shell
-kubectl get storageclass
+$ kubectl get storageclass
 ```
 
 Create a claim for a dynamically provisioned volume (PVC) for nginx.
