@@ -71,3 +71,9 @@ You have now tried out both to pause traffic to a
 given pod when its readinessprobe is failing, and
 trigger a pod restart when the livelinessprobe is
 failing.
+
+## Clean up
+
+```shell
+$ kubectl delete -f health-checks
+```
