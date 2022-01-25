@@ -18,7 +18,7 @@ spec:
         app: customnginx
     spec:
       containers:
-      - image: praqma/network-multitool:extra
+      - image: wbitt/network-multitool
         name: network-multitool
         resources: {}
 status: {}
