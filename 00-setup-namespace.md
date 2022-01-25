@@ -54,7 +54,7 @@ Most errors you will get throughout the rest of the workshop will 99% be due to 
 Namespaces are quite powerful. On a user level, it is also possible to limit namespaces and resources by users but this is a bit too involved for your first experience with Kubernetes.
     Therefore, please be aware that other people's namespaces are off limits for this workshop; even if you do have access ;)
 
-Kubernetes clusters come with a namespace called `default`, which in this case might contain some pods deployed previously by Praqma,
+Kubernetes clusters come with a namespace called `default`, which in this case might contain some pods deployed previously by the trainers,
     and usually one called `kube-system` which will contain some of the kubernetes services running in the cluster.
 
 You might see later that the namespace is specified directly in the yaml files describing the resources.
