@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: probe
-        image: wbitt/network-multitool:alpine-extra
+        image: ghcr.io/eficode-academy/network-multitool
         command: ['sh', '-c', 'touch /tmp/alive && touch /tmp/ready && /docker-entrypoint.sh /usr/sbin/nginx -g "daemon off;"']
         resources:
           limits:
