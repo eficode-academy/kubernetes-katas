@@ -18,7 +18,7 @@ spec:
         app: customnginx
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/network-multitool
+      - image: wbitt/network-multitool
         name: network-multitool
         resources: {}
 status: {}

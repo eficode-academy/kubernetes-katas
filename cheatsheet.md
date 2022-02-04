@@ -21,7 +21,7 @@ kubectl create namespace my-namespace                    # Create namespace
                                                          # Set default namespace
 kubectl config set-context $(kubectl config current-context) --namespace=<my-namespace>
 
-kubectl run multitool --image=ghcr.io/eficode-academy/network-multitool --restart Never   # Create plain pod
+kubectl run multitool --image=wbitt/network-multitool --restart Never   # Create plain pod
 kubectl create deployment nginx --image=nginx:1.7.9      # Create deployment
 
 kubectl set image deployment/nginx nginx=nginx:1.9.1     # Update image in deployment pod template
