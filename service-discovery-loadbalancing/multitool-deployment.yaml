@@ -18,7 +18,7 @@ spec:
         app: multitool
     spec:
       containers:
-      - image: wbitt/network-multitool
+      - image: ghcr.io/eficode-academy/network-multitool
         name: network-multitool
         resources: {}
 status: {}
