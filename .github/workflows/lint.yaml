@@ -20,7 +20,7 @@ jobs:
 
     - name: Detect Outdated Kubernetes Resources
       run: |
-        docker run -v $(pwd):/files/ quay.io/fairwinds/pluto:v4.0.7 \
+        docker run -v $(pwd):/files/ quay.io/fairwinds/pluto:v4.1.2 \
         detect-files \
         --directory /files/ \
         --target-versions k8s=v${{ matrix.kubernetes-version }} \
