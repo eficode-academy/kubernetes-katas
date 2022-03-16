@@ -1,5 +1,8 @@
 # Setup kubectl
 
+> NB: if you are in an instructor facilited training, please don't run the commands below, 
+> as your machine will have already been configured with the proper access.
+
 It is assumed that you are provided with a kubernetes cluster by the instructor. Before you are able to do anything on the cluster, you need to be able to *talk* to this cluster from/using your computer. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - short for Kubernetes Controller - is *the* command line tool to talk to a Kubernetes cluster. To get that on your computer, you download it in the following way:
 
 
