@@ -3,12 +3,7 @@
 > NB: if you are in an instructor facilited training, please don't run the commands below, 
 > as your machine will have already been configured with the proper access.
 
-It is assumed that you are provided with a kubernetes cluster by the instructor. Before you are able to do anything on the cluster, you need to be able to *talk* to this cluster from/using your computer. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - short for Kubernetes Controller - is *the* command line tool to talk to a Kubernetes cluster. To get that on your computer, you download it in the following way:
-
-
-```shell
-$ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
-```
+It is assumed that you are provided with a kubernetes cluster by the instructor. Before you are able to do anything on the cluster, you need to be able to *talk* to this cluster from/using your computer. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - short for Kubernetes Controller - is *the* command line tool to talk to a Kubernetes cluster. To get that on your computer follow the instructions for `kubectl` on this page: <https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/>
 
 Kubectl is a *go* binary which allows you to execute commands on your cluster. Your cluster could be a single node VM, such as [minikube](https://github.com/kubernetes/minikube), or a set of VMs on your local computer or somewhere on a host in your data center, a bare-metal cluster, or a cluster provided by any of the cloud providers - as a service - such as GCP.
 
