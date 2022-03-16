@@ -1,5 +1,8 @@
 # Setup Namespace
 
+> NB: If you are in an instructor facilitated training, the namespaces have already been configured,
+> but please read on, to get to know more about namespaces.
+
 Namespaces are the default way for kubernetes to separate resources.
     Namespaces do not share anything between them, which is important to know,
     and thus come in handy when you have multiple users on the same cluster,
