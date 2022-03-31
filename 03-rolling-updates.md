@@ -12,7 +12,7 @@ Now go ahead and `apply` the deployment and the service:
 * Apply the nginx deployment: `$ kubectl apply -f rolling-updates/nginx-deployment.yaml`
 * Apply the service: `$ kubectl apply -f rolling-updates/nginx-svc.yaml`
 
-> :bulb: Remember that it might take a few minutes for the cloud infrastructure to deploy the load balancer, i.e. the external IP might be shown as `pending`
+> :bulb: Remember that it might take a few minutes for the cloud infrastructure to deploy the load balancer.
 
 * Note down the loadbalancer IP from the services command: `$ kubectl get service`
 * Increase the replicas to four in the deployment yaml file:

@@ -208,16 +208,10 @@ So we re-create the service as type `LoadBalancer`. The type LoadBalancer is onl
 ```shell
 $ kubectl get svc
 NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-nginx        LoadBalancer   100.69.15.89   <pending>     80:31354/TCP   5s
+nginx        LoadBalancer   100.69.15.89   http://<uniqueID>.eu-west-1.elb.amazonaws.com/     80:31354/TCP   5s
 ```
 
-In few minutes of time the external IP will have some value instead of the word 'pending' .
-
-```shell
-$ kubectl get svc
-NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-nginx        LoadBalancer   100.69.15.89   35.205.60.29  80:31354/TCP   5s
-```
+> :bulb: Even though the External ip (which is really a URL instead of an IP) is already shown, it will take a couple of minutes for the routing to work. Revisit the URL once in a while to see if it is up and running.
 
 Now, we can access this service without using any special port numbers:
 
@@ -319,7 +313,7 @@ customnginx-3557040084-c6skw   1/1       Running   0          49s
 customnginx-3557040084-fw1t3   1/1       Running   0          49s
 ```
 
-* Verify the service and note the public IP address:
+* Verify the service and note the external IP (or URL) address:
 
 ```shell
 $ kubectl get services
