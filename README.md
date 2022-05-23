@@ -8,7 +8,7 @@ The exercises are ordered in the way we think it makes sense to introduce
 Kubernetes concepts.
 
 
-There are tree variants of the ingress exercise - one of
+There are three variants of the ingress exercise - one of
 them is Google Kubernetes Engine (gke) specific, whereas the two others are
 generic and should work on any Kubernetes cluster.
 
