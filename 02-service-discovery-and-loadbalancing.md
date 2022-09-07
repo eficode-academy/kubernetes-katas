@@ -74,7 +74,7 @@ multitool-5c8676565d-rc982   1/1       Running   0          3s
 
 ```shell
 $ kubectl exec -it multitool-5c8676565d-rc982 -c network-multitool -- bash
-bash-5.0#
+bash-5.1#
 ```
 
 > :bulb:
