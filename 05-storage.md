@@ -94,7 +94,7 @@ Create a file in the `html` dir inside the nginx pod and add some text in it:
 ```shell
 $ kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 -- bash
 
-root@nginx-deployment-6665c87fd8-cc8k9:/# echo "<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage."  > /usr/share/nginx/html/index.html
+root@nginx-deployment-6665c87fd8-cc8k9:/# echo "<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from Cloud Storage."  > /usr/share/nginx/html/index.html
 root@nginx-deployment-6665c87fd8-cc8k9:/#
 ```
 
