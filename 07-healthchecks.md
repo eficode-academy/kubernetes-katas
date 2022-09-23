@@ -51,7 +51,7 @@ Apply the deployment and service found in the
   browser. Refresh the page multiple times such
   that you hit both of the instances
 - Execute a bash session in one of the instances
-  `kubectl exec -ti probe-59cf4f5578-vwllc bash`
+  `kubectl exec -ti probe-59cf4f5578-vwllc -- bash`
 - First, remove the file `/tmp/ready`, and monitor
   that the browser will eventually not route
   traffic to that pod.
