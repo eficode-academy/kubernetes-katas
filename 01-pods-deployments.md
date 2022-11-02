@@ -130,7 +130,7 @@ To create the `nginx` deployment above, you can use the provided `support-files/
 To create one or more objects specified by a file, run:
 
 ```shell
-$ kubectl create -f support-files/nginx-simple-deployment.yaml
+$ kubectl apply -f support-files/nginx-simple-deployment.yaml
 deployment.extensions/nginx created
 ```
 
