@@ -22,7 +22,7 @@ spec:
   replicas: 4
 ```
 
-* Apply the service again to increase the replica count of your deployment.
+* Apply the deployment again to increase the replica count of your deployment.
 
 From another terminal check which version is currently running and to see changes when rollout is happening:
 
