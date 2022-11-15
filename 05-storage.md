@@ -3,25 +3,30 @@
 List the available storage classes:
 
 ```shell
-$ kubectl get storageclass
+kubectl get storageclass
 ```
 
-Create a claim for a dynamically provisioned volume (PVC) for nginx.
+Apply a claim for a dynamically provisioned volume (PVC) for nginx.
 
 ```shell
-$ kubectl create -f support-files/pvc-nginx.yaml
+kubectl apply -f support-files/pvc-nginx.yaml
 ```
 
 Check that the PVC exists and is bound:
 
 ```shell
-$ kubectl get pvc
+kubectl get pvc
 ```
 
 Example:
 
 ```shell
-$ kubectl get pvc
+kubectl get pvc
+```
+
+Expected output:
+
+```shell
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 pvc-nginx   Bound     pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            standard       4m
 ```
@@ -33,11 +38,15 @@ pvc-nginx   Bound     pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO 
 > then you need a Pod or Deployment to "use" it first.
 > There's a deployment like that, a couple of lines down from here.
 
-
 There should be a corresponding auto-created persistent volume (PV) against this PVC:
 
 ```shell
-$ kubectl get pv
+kubectl get pv
+```
+
+Expected Output:
+
+```shell
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM               STORAGECLASS   REASON    AGE
 pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            Delete           Bound     default/pvc-nginx   standard                 5m
 ```
@@ -79,7 +88,7 @@ spec:
 Deploy nginx again.
 
 ```shell
-$ kubectl create -f support-files/nginx-persistent-storage.yaml
+kubectl apply -f support-files/nginx-persistent-storage.yaml
 ```
 
 After it starts, you may want to examine it by using `kubectl describe pod nginx` and look out for volume declarations.

@@ -16,14 +16,14 @@ The first step to fixing it, would be to make our variables as environmental var
 
 We have sourced the values in the code like this:
 
-```shell
-  const language = process.env.LANGUAGE;
-  const API_KEY = process.env.API_KEY;
+```js
+const language = process.env.LANGUAGE;
+const API_KEY = process.env.API_KEY;
 ```
 
-Because we are reading from the env variables we can specify some default in the `Dockerfile`.  We have used this:
+Because we are reading from the env variables we can specify some default in the `Dockerfile`. We have used this:
 
-```shell
+```dockerfile
 FROM node:9.1.0-alpine
 EXPOSE 3000
 ENV LANGUAGE English
@@ -32,12 +32,17 @@ COPY secretapp.js .
 ENTRYPOINT node secretapp.js
 ```
 
-This image is available as `praqma/secrets-demo`. We can run that in our Kubernetes cluster by using the [the deployment file](./secrets/deployment.yml). Notice the env values added in the bottom.
+This image is available as `eficodeacademy/secrets-demo`. We can run that in our Kubernetes cluster by using the [the deployment file](./secrets/deployment.yml). Notice the env values added in the bottom.
 
 Run the deployment by writing:
 
-```shell
-$ kubectl apply -f secrets/deployment.yml
+```
+kubectl apply -f secrets/deployment.yml
+```
+
+Expected output:
+
+```
 deployment.extensions/envtest created
 ```
 
@@ -52,18 +57,18 @@ Example: This is the example of how you should do it. But it won't work to copy 
 
 Breakdown of the command: `kubectl expose deployment nginx -o yaml --dry-run=client --type=ClusterIP --port=80 > service-discovery-loadbalancing/nginx-svc.yaml`
 
->* `kubectl` kubernetes commandline
->* `expose` expose a
->* `deployment` type deployment
->* `nginx` with the name `nginx`
->* `-o yaml` formats the output to YAML format
->* `--dry-run=client`  makes sure that the kubectl command will not be sent to the Kubernetes API server
->* `--type=ClusterIP` creates the service of type `ClusterIP`
->* `--port=80` makes the service exposed on port `80`
->* `>` linux command to pipe all from standard output (what you see in the terminal) to a file
->* `service-discovery-loadbalancing/nginx-svc.yaml` the name of the file
+> - `kubectl` kubernetes commandline
+> - `expose` expose a
+> - `deployment` type deployment
+> - `nginx` with the name `nginx`
+> - `-o yaml` formats the output to YAML format
+> - `--dry-run=client` makes sure that the kubectl command will not be sent to the Kubernetes API server
+> - `--type=ClusterIP` creates the service of type `ClusterIP`
+> - `--port=80` makes the service exposed on port `80`
+> - `>` linux command to pipe all from standard output (what you see in the terminal) to a file
+> - `service-discovery-loadbalancing/nginx-svc.yaml` the name of the file
 >
->:bulb: Using this approach of -o and dry-run is a very good way to create skeleton templates for all kubernetes objects like services/deployments/configmaps etc.
+> :bulb: Using this approach of -o and dry-run is a very good way to create skeleton templates for all kubernetes objects like services/deployments/configmaps etc.
 
 </details>
 
@@ -75,8 +80,13 @@ However we just moved it from being hardcoded in our app to being hardcoded in o
 
 Let's move the API key to a (generic) secret:
 
-```shell
-$ kubectl create secret generic apikey --from-literal=API_KEY=oneringtorulethemall
+```
+kubectl create secret generic apikey --from-literal=API_KEY=oneringtorulethemall
+```
+
+Expected output:
+
+```
 secret/apikey created
 ```
 
@@ -84,61 +94,83 @@ Kubernetes supports different kinds of preconfigured secrets, but for now we'll 
 
 Similarly for the language into a configmap:
 
-```shell
-$ kubectl create configmap language --from-literal=LANGUAGE=Orcish
+```
+kubectl create configmap language --from-literal=LANGUAGE=Orcish
+```
+
+Expected output:
+
+```
 configmap/language created
 ```
 
 Similarly to all other objects, you can run "get" on them.
 
-```shell
-$ kubectl get secrets
+Get secrets:
+
+```
+kubectl get secrets
+```
+
+Expected output:
+
+```
 NAME                  TYPE                                  DATA      AGE
 apikey                Opaque                                1         4m
 default-token-td78d   kubernetes.io/service-account-token   3         3h
 ```
 
-```shell
-$ kubectl get configmaps
+Get configmaps:
+
+```
+kubectl get configmaps
+```
+
+Expected output:
+
+```
 NAME       DATA      AGE
 language   1         2m
 ```
 
 > Try to investigate the secret by using the kubectl describe command:
-> ```shell
-> $ kubectl describe secret apikey
+>
 > ```
+> kubectl describe secret apikey
+> ```
+>
 > Note that the actual value of API_KEY is not shown. To see the encoded value use:
-> ```shell
-> $ kubectl get secret apikey -o yaml
+>
+> ```
+> kubectl get secret apikey -o yaml
 > ```
 
 Last step is to change the Kubernetes deployment file to use the secrets.
 
 Change:
 
-```shell
-        env:
-        - name: LANGUAGE
-          value: Polish
-        - name: API_KEY
-          value: 333-444-555
+```yaml
+env:
+  - name: LANGUAGE
+    value: Polish
+  - name: API_KEY
+    value: 333-444-555
 ```
 
 To:
 
-```shell
-        env:
-        - name: LANGUAGE
-          valueFrom:
-            configMapKeyRef:
-              name: language
-              key: LANGUAGE
-        - name: API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: apikey
-              key: API_KEY
+```yaml
+env:
+  - name: LANGUAGE
+    valueFrom:
+      configMapKeyRef:
+        name: language
+        key: LANGUAGE
+  - name: API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: apikey
+        key: API_KEY
 ```
 
 After you have edited the `deployment.yml` file (or you can use the prepared one
@@ -150,17 +182,39 @@ You should now see the variables being loaded from configmap and secret respecti
 Pods are not recreated automatically when secrets or configmaps change, i.e. to
 hot swapping the values becomes a two step process:
 
-```shell
-$ kubectl create configmap language --from-literal=LANGUAGE=Elvish -o yaml --dry-run=client | kubectl replace -f -
+First, recreate the configmap:
+
+```
+kubectl create configmap language --from-literal=LANGUAGE=Elvish -o yaml --dry-run=client | kubectl replace -f -
+```
+
+Expected output:
+
+```
 configmap/language replaced
-$ kubectl create secret generic apikey --from-literal=API_KEY=andinthedarknessbindthem -o yaml --dry-run=client | kubectl replace -f -
+```
+
+Then recreate the secret:
+
+```
+kubectl create secret generic apikey --from-literal=API_KEY=andinthedarknessbindthem -o yaml --dry-run=client | kubectl replace -f -
+```
+
+Expected output:
+
+```
 secret/apikey replaced
 ```
 
 Then delete the pod (so it's recreated with the replaced configmap and secret) :
 
-```shell
-$ kubectl delete pod envtest-3380598928-kgj9d
+```
+kubectl delete pod envtest-3380598928-kgj9d
+```
+
+Expected output:
+
+```
 pod "envtest-3380598928-kgj9d" deleted
 ```
 
@@ -169,8 +223,8 @@ Access it in a webbrowser again, to see the updated values.
 ## Clean up
 
 ```shell
-$ kubectl delete deployment envtest
-$ kubectl delete service envtest
-$ kubectl delete configmap language
-$ kubectl delete secret apikey
+kubectl delete deployment envtest
+kubectl delete service envtest
+kubectl delete configmap language
+kubectl delete secret apikey
 ```
