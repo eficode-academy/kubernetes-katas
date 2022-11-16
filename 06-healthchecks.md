@@ -18,7 +18,7 @@ When we use `kubectl` to print the status of a
 pod, we receive information on the status of the
 pod.
 
-```shell
+```
 NAME                     READY   STATUS    RESTARTS   AGE
 probe-59cf4f5578-vwllc   1/1     Running   1          10m
 ```
