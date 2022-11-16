@@ -10,7 +10,7 @@ as well as run a number of identical Pods e.g. to provide high-availability.
 
 So let's try to use some of the Kubernetes objects, starting with a deployment.
 
-## 1.1 Creating deployments using 'create' command
+## Create deployments using `create` command
 
 We start by creating our first deployment. Normally people will run a pod with an Nginx container as a first example.
 You can surely do that.
@@ -56,7 +56,7 @@ pod/multitool-5c8676565d-wnw2v   1/1       Running   0          1m
 > A ReplicaSet is something which deals with the number of copies of this pod.
 > It will be covered in a later exercise, but it's mentioned and shown above for completeness.
 
-## 1.1.1 Testing access to our Pod
+## Test access to our Pod
 
 We are getting a little ahead of our exercises here, but to illustrate that we actually have
 a functioning web-server running in our pod, let's try exposing it to the internet and access it from a browser!
@@ -110,7 +110,7 @@ address.
 
 The next exercise will cover what we did here in more detail.
 
-## 1.2 Specifying the image version
+## Specify the image version
 
 Lets setup another pod, a traditional nginx deployment, with a specific version i.e. `1.7.9`.
 
@@ -146,7 +146,7 @@ rs/multitool-3148954972   1         1         1         25m
 rs/nginx-1480123054       1         1         1         14s
 ```
 
-## 1.3 Deploying applications using declarative configuration files
+## Deploy an application using a declarative configuration file
 
 Although the `kubectl create` command allows us to specify a number of flags
 to configure which kind of deployment should be created,
@@ -238,7 +238,7 @@ multitool-3148954972-k8q06   1/1       Running   0          1h
 nginx-431080787-9r0lx        1/1       Running   0          40s
 ```
 
-## 1.4 Testing Kubernetes promise of resilience by deleting a pod
+## Test Kubernetes promise of resilience by deleting a pod
 
 > A great first mistake that many newcomers make,
 > is to create a _deployment_, and when they're done,
