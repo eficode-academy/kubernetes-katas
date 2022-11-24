@@ -9,6 +9,7 @@ The exercise should have the following sections:
 * Exercise (Step-by-step instructions on how to solve the exercise)
 * Extras and wrap-up (optional)
 
+When creating a new exercise, you should use the [exercise template](exercise-template.md) as a starting point.
 ## Best practices
 
 ### Hints
