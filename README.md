@@ -1,5 +1,3 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/eficode-academy/kubernetes-katas)
-
 # kubernetes-katas
 
 A selection of exercises for Kubernetes (K8s).
@@ -37,7 +35,7 @@ You can find a summary of many of the commands used in the exercises in the
 * [09-secrets-ssl-certs-in-nginx.md](09-secrets-ssl-certs-in-nginx.md)
 
 * [Setup your own cluster with kubeadm](beyond-this-course-setting-up-your-own.md)
-* [Spinup a Sock-Shop application with Grafana and Prometheus monitoring](sock-shop/README.md)
+
 
 # kubectl autocompletion
 
