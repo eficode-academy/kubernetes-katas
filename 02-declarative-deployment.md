@@ -7,8 +7,9 @@ configure which kind of deployment should be created, it's a bit easier to work
 with if we instead specify it in a _deployment spec_-file and `create` that
 instead.
 
-To create the `nginx` deployment above, you can use the provided
-`support-files/nginx-simple-deployment.yaml` file.
+To create the `nginx` from the[Pods and Deployments](01-pods-deployments.md)
+exercise, you can use the provided `support-files/nginx-simple-deployment.yaml`
+file.
 
 > NB: before you execute the command shown below, note that it will try to
 > create a deployment with the name **nginx**. If you already have a deployment
