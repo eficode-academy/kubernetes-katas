@@ -1,4 +1,4 @@
-[![Open in Gitpod][gitpod]
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
 
 # kubernetes-katas
 
@@ -101,7 +101,7 @@ See:
 [kubectl - Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
 for a more extended overview of the `kubectl` command.
 
-[gitpod]: https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/eficode-academy/kubernetes-katas
+[gitpod]: https://gitpod.io/#https://github.com/eficode-academy/kubernetes-katas
 [kata-def]: https://en.wikipedia.org/wiki/Kata
 [eks]: https://aws.amazon.com/ecs/pricing/
 [gke]:
