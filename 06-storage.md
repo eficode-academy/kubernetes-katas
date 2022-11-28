@@ -46,7 +46,7 @@ kubectl get pv
 
 Expected Output:
 
-```shell
+```
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM               STORAGECLASS   REASON    AGE
 pvc-e8a4fc89-2bae-11e8-b065-42010a8400e3   5Gi        RWO            Delete           Bound     default/pvc-nginx   standard                 5m
 ```
@@ -87,7 +87,7 @@ spec:
 
 Deploy nginx again.
 
-```shell
+```
 kubectl apply -f support-files/nginx-persistent-storage.yaml
 ```
 
@@ -100,8 +100,8 @@ Now, try to access the Nginx instance using curl. You should get a "403 Forbidde
 
 Create a file in the `html` dir inside the nginx pod and add some text in it:
 
-```shell
-$ kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 -- bash
+```
+kubectl exec -it nginx-deployment-6665c87fd8-cc8k9 -- bash
 
 root@nginx-deployment-6665c87fd8-cc8k9:/# echo "<h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from Cloud Storage."  > /usr/share/nginx/html/index.html
 root@nginx-deployment-6665c87fd8-cc8k9:/#
@@ -109,37 +109,39 @@ root@nginx-deployment-6665c87fd8-cc8k9:/#
 
 Exit the nginx pod again. Run curl again, you should see the web page:
 
-```shell
-$ curl 35.205.60.29:32078
+```
+curl 35.205.60.29:32078
+
 <h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage.
 ```
 
 Kill the pod:
 
-```shell
-$ kubectl delete pod nginx-deployment-6665c87fd8-cc8k9
+```
+kubectl delete pod nginx-deployment-6665c87fd8-cc8k9
 pod "nginx-deployment-6665c87fd8-cc8k9" deleted
 ```
 
 Check if it is up (notice a new pod):
 
-```shell
-$ kubectl get pods -o wide
+```
+kubectl get pods -o wide
 NAME                                READY     STATUS    RESTARTS   AGE       IP          NODE
 nginx-deployment-6665c87fd8-nh7bs   1/1       Running   0          1m        10.0.96.8   gke-dcn-cluster-2-default-pool-4955357e-8rnp
 ```
 
 Again, curl the new nginx pod. You should see the page you created in previous step:
 
-```shell
-$ curl 35.205.60.29:32078
+```
+curl 35.205.60.29:32078
+
 <h1>Welcome to Nginx</h1>This is Nginx with html directory mounted as a volume from GCE Storage.
 ```
 
 ## Clean up
 
-```shell
-$ kubectl delete deployment nginx-deployment
-$ kubectl delete service nginx-deployment
-$ kubectl delete pvc pvc-nginx
+```
+kubectl delete deployment nginx-deployment
+kubectl delete service nginx-deployment
+kubectl delete pvc pvc-nginx
 ```

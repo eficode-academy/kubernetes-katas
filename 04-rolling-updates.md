@@ -36,7 +36,7 @@ Now we will try to roll out an update to the image.
 
 - Set image tag to `1.9`:
 
-```YAML
+```yaml
     ...
     spec:
       containers:
@@ -53,7 +53,7 @@ Now we will try to roll out an update to the image.
 
 - Try also rolling out a version that does not exist:
 
-```YAML
+```yaml
     spec:
       containers:
       - image: nginx:not-a-version
