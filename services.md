@@ -44,7 +44,7 @@ The service type ClusterIP does not have any external IP. This means it is not a
 - The IPs assigned to services as Cluster-IP are from a different Kubernetes network called _Service Network_, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labeling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
 - No matter what type of service you choose while _exposing_ your pod, Cluster-IP is always assigned to that particular service.
 - Every service has end-points, which point to the actual pod serving as a backend of a particular service.
-- As soon as a service is created, and is assigned a Cluster-IP, an entry is made in Kubernetes' internal DNS against that service, with this service name and the Cluster-IP. e.g. `backend.default.svc.cluster.local` would point to `100.70.204.237` .
+- As soon as a service is created, and is assigned a Cluster-IP, an entry is made in Kubernetes' internal DNS against that service, with this service name and the Cluster-IP. e.g. `backend.default.svc.cluster.local` would point to Cluster-IP `172.20.114.230` .
 
 </details>
 
@@ -70,6 +70,7 @@ There are other types of services, but we won't cover them in this exercise.
 - Create frontend service with type NodePort
 - Access it from the nodes IP address
 
+:bulb: If you get stuck somewhere along the way, you can check the solution in the done folder.
 
 ### Step by step instructions
 * Go into the `services` directory and the `start` folder.
@@ -99,7 +100,7 @@ you should see something like this:
 
 ```
 NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/backend   ClusterIP   10.108.26.231   <none>        5000/TCP   23s
+service/backend   ClusterIP   172.20.114.230   <none>        5000/TCP   23s
 ```
 
 * Exec into frontend pod
@@ -113,15 +114,21 @@ root@frontend:/app#
 
 Make sure that you are inside a pod and not in your terminal window.
 
-* Now, try to reach backend pod through backend service dns name from within your frontend pod
+* Try to reach backend pod through backend service Cluster-IP from within your frontend pod
 
-`curl backend:5000`
+`curl 172.20.114.230:5000`
 
 you should see something like this:
 
 ```
 Hello from the backend!
 ```
+* Try accessing the service using dns name now
+
+`curl 172.20.114.230:5000`
+
+you should see the same output as above.
+
 You can type `exit` to exit from your container.
 
 * Create the service file for frontend with type NodePort

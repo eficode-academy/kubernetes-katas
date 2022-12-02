@@ -9,4 +9,9 @@ spec:
   - image: ghcr.io/eficode-academy/flask-quotes-frontend:release
     name: frontend
     resources: {}
+    env:
+      - name: backend_host
+        value: backend
+      - name: backend_port
+        value: "5000"
   restartPolicy: Always
