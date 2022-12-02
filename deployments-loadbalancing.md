@@ -427,10 +427,15 @@ kubectl get services
 Expected output:
 
 ```
-NAME               TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-backend-service    ClusterIP
-frontend-service   LoadBalancer
+NAME       TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)          AGE
+backend    ClusterIP      172.20.211.99   <none>                                                                   5000/TCP         3h13m
+frontend   LoadBalancer   172.20.30.195   a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com   5000:32146/TCP   13m
 ```
+
+> Note: The EXTERNAL-IP will be different for you.
+> Note: It may take a few minutes for the EXTERNAL-IP to be assigned.
+
+- Access the frontend through the EXTERNAL-IP from the browser. Rembmer to add the port to the url like: `http://a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com:5000/`
 
 
 
