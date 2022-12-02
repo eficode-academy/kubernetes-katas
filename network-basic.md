@@ -53,12 +53,11 @@ frontend   1/1     Running   0          2m
 
 Port forward can be achieved with:
 
-
-`kubectl port-forward --address 0.0.0.0 frontend-7b45d74f95-b9zzg 8080:5000` 
+`kubectl port-forward --address 0.0.0.0 frontend 8080:5000` 
 
 And can then be accessed on inst<number>.<prefix>.eficode.academy:8080 (from the internet)
 
-:bulb: VSCode will ask you if you wnat to see the open port. Unfortuneatly vscode proxy does not proxy requests correctly back to the pod)
+:bulb: VSCode will ask you if you what to see the open port. Unfortuneatly vscode proxy does not proxy requests correctly back to the pod, so use the url of the instance instead.
 
 
 <details>
@@ -75,3 +74,5 @@ And can then be accessed on inst<number>.<prefix>.eficode.academy:8080 (from the
 ### Clean up
 
 Delete the pod with `kubectl delete pod frontend` command.
+
+Congratulations! You have now learned how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
