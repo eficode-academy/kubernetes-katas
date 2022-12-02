@@ -73,16 +73,8 @@ What happened - do the curl operation still work?
 
 - Investigate the running pods with: `kubectl get pods`
 
-## Undo Update
-
-The rollout above using a non-existing image version caused some pods to be
-non-functioning. Next, we will undo this faulty deployment.
-
-- Investigate rollout history: `kubectl rollout history deployment backend`
-
-- Undo the rollout and restore the previous version: `kubectl rollout undo deployment backend`
-
-- Investigate the running pods: `kubectl get pods`
+## maxSurge and maxUnavailable
+TODO: Add explanation about maxSurge and maxUnavailable
 
 ## Clean up
 
