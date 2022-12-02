@@ -74,6 +74,6 @@ failing.
 
 ## Clean up
 
-```shell
-$ kubectl delete -f health-checks
+```
+kubectl delete -f health-checks
 ```
