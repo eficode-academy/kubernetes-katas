@@ -29,19 +29,26 @@ Rollout strategies
 
 * Create backend deployment
 
-> :bulb: All files for the exercise are found in the `rolling-updates` folder.
+> :bulb: All files for the exercise are found in the `rolling-updates/start` folder.
 
-- Look at the backend deployment yaml file in `rolling-updates/backend-deployment.yaml`
-- Look at the service file in `rolling-updates/backend-svc.yaml`
+- Look at the backend deployment files `backend-deployment.yaml` and `frontend-deployment.yaml`
+- Look at the service files in `backend-svc.yaml` and `frontend-svc.yaml`
 
-Now go ahead and `apply` the deployment and the service:
+Now go ahead and `apply` the deployments and the services:
 
-- Apply the nginx deployment: `kubectl apply -f rolling-updates/backend-deployment.yaml`
-- Apply the service: `kubectl apply -f rolling-updates/backend-svc.yaml`
+- `kubectl apply -f .`
+
+> :bulb: this will apply all the files in the current directory
+
+Access the frontend by the NodePort service:
+
+- `kubectl get svc frontend`
+- `kubectl get nodes -o wide`
+- Access <node-ip>:<node-port> in your browser
 
 ## Update Deployment
 
-Now we will try to roll out an update to the image.
+Now we will try to roll out an update to the backend image.
 
 - Set image tag to `1.0.1`:
 
