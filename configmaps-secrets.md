@@ -37,7 +37,45 @@ data:
 There are three ways to create ConfigMaps using the `kubectl create configmap` command.
 
 * Use the contents of an entire directory with kubectl create configmap my-config --from-file=./my/dir/path/
-* Use the contents of a file or specific set of files with kubectl create configmap my-config --from-file=./my/file.txt
+* Use the contents of a file or specific set of files with kubectl create configmap my-config --from-file=./my/file.properties
+
+<details>
+<summary>:bulb: more info</summary>
+
+Env-files contain a list of environment variables.
+These syntax rules apply:
+-  Each line in an env file has to be in VAR=VAL format.
+-  Lines beginning with # (i.e. comments) are ignored.
+-  Blank lines are ignored.
+-  There is no special handling of quotation marks (i.e. they will be part of the ConfigMap value)).
+
+
+```properties
+enemies=aliens
+lives=3
+allowed="true"
+
+# This comment and the empty line above it are ignored
+```
+
+will be rendered as:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+    enemies: aliens
+    lives: "3"
+    allowed: "true"
+```
+
+[resource](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-configmaps-from-files)
+
+
+</details>
+
 * Use literal key-value pairs defined on the command line with kubectl create configmap my-config --from-literal=key1=value1 --from-literal=key2=value2
 
 > :bulb: remember the `--dry-run=client -o yaml` trick to see what the yaml file will look like before you apply it.
@@ -94,8 +132,9 @@ spec:
 ### Overview
 
 - Add the database part of the application
-- Change the database user into a configmap and implement that in both backend and database
-- Change the database password into a secret, and implement that in both backend and database.
+- Change the database user into a configmap and implement that in the backend
+- Change the database password into a secret, and implement that in the backend.
+- Change database deployment to use the configmap and secret.
 
 ### Step by step instructions
 
@@ -125,7 +164,7 @@ backend-deployement-7d64597fcf-nrchp   1/1     Running   0          4s
 frontend-deployment-5f9b5f46c8-jkw9n   1/1     Running   0          4s
 postgres-6fbd757dd7-ttpqj              1/1     Running   0          4s
 ```
-**Change the database user into a configmap and implement that in both backend and database**
+**Change the database user into a configmap and implement that in the backend**
 We want to change the database user into a configmap, so that we can change it in one place, and use it on all deployments that needs it.
 
 - create a configmap with the name `postgres-config` and filename `postgres-config.yaml` and the information about database configuration as follows:
@@ -179,7 +218,7 @@ env:
 - re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
 - check that the website is still running.
 
-**Change the database password into a secret, and implement that in both backend and database.**
+**Change the database password into a secret, and implement that in the backend.**
 
 We want to change the database password into a secret, so that we can change it in one place, and use it on all deployments that needs it.
 In order for this, we need to change the backend deployment to use the secret instead of the configmap for the password itself.
@@ -229,6 +268,36 @@ env:
 - re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
 
 - check that the website is still running.
+
+**Change database deployment to use the configmap and secret.**
+
+We are going to implement the configmap and secret in the database deployment as well.
+Since Postgres have defined the environment varialbe names, we need to add the configmap and secrets with a different function than we did before.
+
+- open the `database-deployment.yaml` file, and change the way the environment variables are defined to use the configmap and secret.
+    
+```yaml
+          ### using configMapKeyRef
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: db_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: db_password
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: db_name
+```
+
+- re-apply the database deployment with `kubectl apply -f database-deployment.yaml`
+- check that the website is still running, and that the new database can be reached from the backend.
 
 Congratulations! You have now created a configmap and a secret, and used them in your application.
 
