@@ -1,4 +1,19 @@
+New order of exercises:
+
+- basic-deployment
+- declarative-deployment
+- ? (run frontend in pod)
+- network-basic
+- deployments-loadbalancing
+- secrets-configmaps
+- persistent-storage
+
+Below is old readme
+
+---
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
+
 # kubernetes-katas
 
 A selection of [katas][kata-def] for Kubernetes (K8s).
@@ -103,11 +118,9 @@ for a more extended overview of the `kubectl` command.
 [gitpod]: https://gitpod.io/#https://github.com/eficode-academy/kubernetes-katas
 [kata-def]: https://en.wikipedia.org/wiki/Kata
 [eks]: https://aws.amazon.com/ecs/pricing/
-[gke]:
-  https://cloud.google.com/kubernetes-engine/pricing#cluster_management_fee_and_free_tier
+[gke]: https://cloud.google.com/kubernetes-engine/pricing#cluster_management_fee_and_free_tier
 [aks]: https://azure.microsoft.com/en-us/pricing/free-services/
 [oke]: https://www.oracle.com/cloud/free/#free-cloud-trial
 [docker-desktop]: https://docs.docker.com/desktop/
 [kind]: https://kind.sigs.k8s.io/
-[autocompletion]:
-  https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion
+[autocompletion]: https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion
