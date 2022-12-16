@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: frontend
+    app: frontend
   name: frontend
 spec:
   ports:
@@ -10,5 +10,5 @@ spec:
     protocol: TCP
     targetPort: 5000
   selector:
-    run: frontend
+    app: frontend
   type: LoadBalancer

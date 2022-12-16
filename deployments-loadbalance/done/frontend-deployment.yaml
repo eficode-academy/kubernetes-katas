@@ -17,3 +17,8 @@ spec:
       containers:
       - image: ghcr.io/eficode-academy/flask-quotes-frontend:release
         name: flask-quotes-frontend
+        env:
+        - name: BACKEND_SVC_HOST
+          value: backend
+        - name: BACKEND_SVC_PORT
+          value: "5000"
