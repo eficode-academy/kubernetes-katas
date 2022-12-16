@@ -58,6 +58,43 @@ spec:
 
 [pod-api]: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/
 
+- the version is `v1`
+- the `kind` should be `Pod`
+- the `name` should be `frontend`
+- the `image` should be `ghcr.io/eficode-academy/flask-quotes-frontend:release`
+- the `port` should be `5000`
+
+<details>
+<summary>:bulb: Help me out!</summary>
+
+The entire manifest should look like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+spec:
+  containers:
+  - name: frontend
+    image: ghcr.io/eficode-academy/flask-quotes-frontend:release
+    ports:
+    - containerPort: 5000
+```
+
+</details>
+
+- try to apply the manifest with `kubectl apply -f frontend-pod.yaml` command.
+
+- check the status of the pod with `kubectl get pods` command.
+
+expected output:
+
+```bash
+NAME       READY   STATUS    RESTARTS   AGE
+frontend   1/1     Running   0          1m
+```
+
 
 ### Clean up
 
