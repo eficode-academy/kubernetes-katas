@@ -78,7 +78,7 @@ There are other types of services, but we won't cover them in this exercise.
 
 <details>
 <summary>:bulb: hint on how you do that </summary>
-you can use the `kubectl apply -f` command to deploy the pod. The pod is defined in the `backend-pod.yaml` file.
+you can use the `kubectl apply -f` command to deploy the pod. The pod is defined in the `backend-pod.yaml` file. Hint: The apply command can take more than one `-f` parameter to apply more than one yaml file 
 </details>
 
 * Check that the pods are running with `kubectl get pods` command.
