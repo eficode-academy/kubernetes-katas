@@ -125,7 +125,7 @@ Hello from the backend!
 ```
 * Try accessing the service using dns name now
 
-`curl 172.20.114.230:5000`
+`curl backend:5000`
 
 you should see the same output as above.
 
