@@ -4,6 +4,7 @@ New order of exercises:
 - declarative-deployment
 - Manifests
 - network-basic
+- services
 - deployments-loadbalancing
 - secrets-configmaps
 - persistent-storage
