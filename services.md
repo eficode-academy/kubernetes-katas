@@ -125,7 +125,7 @@ Hello from the backend!
 ```
 * Try accessing the service using dns name now
 
-`curl backend:5000`
+`curl 172.20.114.230:5000`
 
 you should see the same output as above.
 
@@ -181,6 +181,6 @@ Think about why you didn't need to exec into a pod to test frontend service but 
 
 ### Clean up
 
-Delete the pods and services with `kubectl delete pod frontend,backend` and `kubectl delete service frontend,backend` commands.
+Delete the pods and services with `kubectl delete pod frontend backend` and `kubectl delete service frontend backend` commands.
 
 You have succesfully tested connectivity between frontend and backend pods using services.
