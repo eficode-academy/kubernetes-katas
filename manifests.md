@@ -62,7 +62,7 @@ spec:
 - the `kind` should be `Pod`
 - the `name` should be `frontend`
 - the `image` should be `ghcr.io/eficode-academy/flask-quotes-frontend:release`
-- the `port` section should have a list underneath with the following data `- containerPort: 5000`
+- the `containerPort` section should have `5000`
 
 <details>
 <summary>:bulb: Help me out!</summary>
