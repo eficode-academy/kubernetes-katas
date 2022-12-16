@@ -49,22 +49,22 @@ Below is the contents of the manifest:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nginx # deployment resource name, pods running as a part of the deployment will share the name.  
   labels:
-    app: nginx # arbitrary label on deployment
+    app: nginx # deployment resource label
 spec:
   replicas: 1
   selector:
-    matchLabels: # labels the replica selector should match
+    matchLabels: # selector labels the replicaset looks for
       app: nginx
   template:
     metadata:
       labels:
-        app: nginx # label for replica selector to match
+        app: nginx # pod labels that must match selector
         version: latest # arbitrary label we can match on elsewhere
     spec:
       containers:
-        - name: nginx
+        - name: nginx # name of the container running inside a pod, not the pod name
           image: nginx:latest
           ports:
             - containerPort: 80
