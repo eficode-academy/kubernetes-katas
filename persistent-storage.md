@@ -56,8 +56,8 @@ Expected output:
 > TODO update with output from exercise cluster (this was run against kind)
 
 ```
-NAME                 PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-standard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  97s
+NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2 (default)   kube
 ```
 
 We see that we indeed have a `StorageClass` available and ready for use!
@@ -110,7 +110,7 @@ Next we fill in the values:
 - The `apiVersion` should be `v1`
 - The `kind` is `PersistenVolumeClaim`
 - The `metadata.name` should be `postgres-pvc`
-- From the previous section we know that we have one available `StorageClass`, so the value of `spec.storageClassName` is the name of that, in this case `"standard"` (with quotes)
+- From the previous section we know that we have one available `StorageClass`, so the value of `spec.storageClassName` is the name of that, in this case `"gp2"` (with quotes)
 - The `spec.accessModes` list should contain one item with the value `ReadWriteOnce`
 - the `spec.resources.requests.storage` is the size of the volume in Gibibytes (Gi), set it to `5Gi`
 
@@ -123,7 +123,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
 spec:
-  storageClassName: "standard"
+  storageClassName: "gp2"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -155,7 +155,7 @@ Expected output:
 
 ```
 NAME           STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-postgres-pvc   Pending                                      standard       3m19s
+postgres-pvc   Pending                                      gp2            3m19s
 ```
 
 Check if a `PersistentVolume` was created using `kubectl get`:
@@ -242,6 +242,7 @@ In the deployment manifest file, add the following section to the postgres conta
 volumeMounts:
   - name:
     mountPath:
+    subPath:
 ```
 
 Fill in the values:
@@ -249,6 +250,8 @@ Fill in the values:
 - `name` should be the name we specified above when we declared the available volumes.
   In this case this should be `postgres-pvc`
 - `mountPath` is the path in container to mount the volume to. For postgres, the database state is stored to the path `/var/lib/postgresql/data`
+- `subPath` should be `postgres`, and specifies a directory to be created within the volume, we need because of a quirk with combining `AWS EBS` with Postgres.
+  (If you are curios why: https://stackoverflow.com/a/51174380)
 
 <details>
 <summary>The finished manifest should look like this</summary>
@@ -277,6 +280,7 @@ spec:
           volumeMounts:
             - name: postgres-pvc
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
 ```
 
 </details>
@@ -303,10 +307,10 @@ Expected output:
 
 ```
 NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-persistentvolumeclaim/postgres-pvc   Bound    pvc-d60a8787-330e-4b34-96d9-c2ad4dc18dbc   5Gi        RWO            standard       38m
+persistentvolumeclaim/postgres-pvc   Bound    pvc-d60a8787-330e-4b34-96d9-c2ad4dc18dbc   5Gi        RWO            gp2            38m
 
 NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                  STORAGECLASS   REASON   AGE
-persistentvolume/pvc-d60a8787-330e-4b34-96d9-c2ad4dc18dbc   5Gi        RWO            Delete           Bound    default/postgres-pvc   standard                4m10s
+persistentvolume/pvc-d60a8787-330e-4b34-96d9-c2ad4dc18dbc   5Gi        RWO            Delete           Bound    default/postgres-pvc   gp2                     4m10s
 ```
 
 ### Delete pod with volume attached and observe that state is persisted when a new pod is created
