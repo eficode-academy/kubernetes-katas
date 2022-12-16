@@ -52,6 +52,7 @@ spec:
   - name:
     image:
     ports:
+    - containerPort:
 ```
 
 - Find the API version for the `pod` resource in the [Kubernetes API documentation][pod-api] and fill out the `apiVersion`
