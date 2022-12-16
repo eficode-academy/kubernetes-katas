@@ -17,7 +17,7 @@ the kubectl port-forward command allows you to forward one or more local ports t
 <details>
 <summary>:bulb: How does this port-forward work?</summary>
 
-TODO: Explain how this works
+Port forwarding is a network address translation that redirects internet packets form one IP address with specified port number to another IP:PORT set. In Kubernetes `port-forwad` creates a tunnel between your local machine and Kubernetes cluster on the specified `IP:PORT` pairs in order to establish connection to the cluster. `kubectl port-forward` allows you to forward not only pods but also services, deployments and other.   
 </details>
 
 ## Exercise
