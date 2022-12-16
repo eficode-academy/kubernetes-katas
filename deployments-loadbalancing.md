@@ -185,7 +185,7 @@ TODO: hint on how to get the IP
 - Open both the backend-deployment.yaml and the backend-pod.yaml files in your editor.
 
 - add the api-version and kind keys to the backend-deployment.yaml file. The api-version should be `apps/v1` and the kind should be `Deployment`.
-- Give the deployment a name of backend-deployment under `metadata.name` key.
+- Give the deployment a name of backend under `metadata.name` key.
 - Add a label of `run: backend` under `metadata.labels` key.
 - The `spec.replicas` key denotes how many replicas we would like. Set it to 1 to begin with.
 
