@@ -93,7 +93,7 @@ Expected output:
 service/nginx exposed
 ```
 
-Get the `service` called `nginx` and note down the NodePort:
+Get the `service` called `nginx` and note down the NodePort (the port number to the right of the `:`):
 
 ```
 kubectl get service nginx
@@ -121,6 +121,8 @@ NAME    STATUS   . . . INTERNAL-IP  EXTERNAL-IP     . . .
 node1   Ready    . . . 10.123.0.8   35.240.20.246   . . .
 node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
 ```
+
+In the example your external IPs are either `35.240.20.246` or `35.205.245.42`.
 
 Since your `service` is of type `NodePort` it will be exposed on _any_ of the nodes,
 on the port from before, so choose one of the `EXTERNAL-IP`'s,

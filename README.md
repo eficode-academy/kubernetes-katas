@@ -2,7 +2,7 @@ New order of exercises:
 
 - basic-deployment
 - declarative-deployment
-- ? (run frontend in pod)
+- Manifests
 - network-basic
 - deployments-loadbalancing
 - secrets-configmaps
