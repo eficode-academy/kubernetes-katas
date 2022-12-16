@@ -100,4 +100,4 @@ frontend   1/1     Running   0          1m
 
 Delete the pod with `kubectl delete pod frontend` command.
 
-Congratulations! You have now learned how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
+Congratulations! You have now learned how to make a manifest detailing our frontend pod.
