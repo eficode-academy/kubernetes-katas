@@ -10,8 +10,8 @@ spec:
     name: frontend
     resources: {}
     env:
-      - name: backend_host
+      - name: BACKEND_HOST
         value: backend
-      - name: backend_port
+      - name: BACKEND_PORT
         value: "5000"
   restartPolicy: Always
