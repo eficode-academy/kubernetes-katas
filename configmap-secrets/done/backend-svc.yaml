@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: backend
+    app: backend
   name: backend
 spec:
   ports:
@@ -10,5 +10,5 @@ spec:
     protocol: TCP
     targetPort: 5000
   selector:
-    run: backend
+    app: backend
   type: ClusterIP
