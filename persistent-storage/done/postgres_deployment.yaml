@@ -46,4 +46,5 @@ spec:
           volumeMounts:
             - name: postgres-pvc
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
 status: {}
