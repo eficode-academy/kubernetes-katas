@@ -73,7 +73,7 @@ Now we see how we can have **high availability** on Kubernetes. The easiest and 
 To scale a deployment, we can simply change the number of replicas in the manifest file, and then apply the changes using `kubectl apply -f <manifest-file>`.
 
 ### Service type: LoadBalancer
-Similar to pods, deployments can also be exposed using services. For all practical purposes, deployments are used alongwith services.
+Similar to pods, deployments can also be exposed using services. For all practical purposes, deployments are used along with services.
 We have seen how to expose a pod using a service type ClusterIP. This service type is only accessible from within the cluster. 
 We have also seen how to expose a pod using a service type NodePort. This service type is accessible from the internet, but only on the port that is exposed on the worker nodes. We do not expect the users to know the IP addresses of our worker nodes.
 
@@ -81,7 +81,7 @@ The only thing that changes when we change the service type from NodePort to Loa
 
 <details>
 <summary>:bulb: More Details</summary>
-The type LoadBalancer is only available for use, if your k8s cluster is setup in any of the public cloud providers, GCE, AWS, etc or that the admin of a local cluster have set it up.
+The type LoadBalancer is only available for use, if your k8s cluster is setup in one of the public cloud providers like GCE, AWS, etc. or if the admin of a local cluster has set it up.
 
 TODO: mention metallb and other solutions for local clusters
 
