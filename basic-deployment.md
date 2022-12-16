@@ -61,7 +61,7 @@ We do this using the `kubect get <kind>` command, in this case the `<kind>` will
 Verify that your pod was created and is running using kubectl:
 
 ```
-kubectl get pods`
+kubectl get pods
 ```
 
 Expected output:
