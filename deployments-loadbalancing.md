@@ -279,6 +279,9 @@ backend-deployment-5f4b8b7b4-5x7xg   1/1       Running   0          1m
 
 - Access the frontend again from the browser. It should now be able to access the backend.
 
+- If this works, please delete the `backend-pod.yaml` file, as we now have upgrated to a deployment!
+
+
 **Scale the deployment by adding a replicas key**
 
 - Scale the deployment by changing the replicas key in the deployment manifest. Set the replicas key to 3.
@@ -402,6 +405,8 @@ frontend-deployment-47b45fb8b-4x7xg   1/1       Running   0          1m
 
 - Access the frontend again from the browser. Note that both the frontend and backend hostname parts of the website should change periodically.
 
+- If this works, please delete the `frontend-pod.yaml` file, as we now have upgrated to a deployment!
+
 **Add frontend service type loadbalancer** 
 
 - Change the frontend service type to `LoadBalancer` in the frontend-service.yaml file.
@@ -436,8 +441,6 @@ frontend   LoadBalancer   172.20.30.195   a99b267dc38c94ec3b0507427c1a2665-36277
 > Note: It may take a few minutes for the EXTERNAL-IP to be assigned.
 
 - Access the frontend through the EXTERNAL-IP from the browser. Rembmer to add the port to the url like: `http://a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com:5000/`
-
-
 
 **Test service promise of high availability**
 
