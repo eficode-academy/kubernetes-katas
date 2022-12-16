@@ -169,5 +169,5 @@ nginx-431080787-tx5m7        1/1       Running   0          12s
 Delete your desired state by using the `kubectl delete -f <file>` command.
 
 ```
-kubectl delete -f declarative-deployment/nginx-depoyment.yaml
+kubectl delete -f declarative-deployment/nginx-deployment.yaml
 ```
