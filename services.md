@@ -184,3 +184,30 @@ Think about why you didn't need to exec into a pod to test frontend service but 
 Delete the pods and services with `kubectl delete pod frontend backend` and `kubectl delete service frontend backend` commands.
 
 You have succesfully tested connectivity between frontend and backend pods using services.
+
+
+### Extra: Filter on the basis of labels
+
+To filter the output of kubectl get pods based on a label, you can use the --selector flag followed by the label key and value. For example, to filter the pods based on a label with the key foo and the value bar, you would run the following command:
+
+`kubectl get pods --selector=foo=bar`
+
+This will return a list of all the pods that have a label with the key foo and the value bar.
+
+You can use the != operator to specify that you want to exclude resources with a particular label value. For example, to filter the pods based on a label with the key foo but exclude those with the value bar, you would run the following command:
+
+`kubectl get pods --selector=foo!=bar`
+
+Try to apply the application again and write four commands that does the following:
+
+* List only the pods with the label app=frontend
+* List only the pods with the label app=backend
+* List only the pods where label app is not frontend
+* List only the pods where label app is not backend
+
+The documentation on this can be found here: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+
+Remember to clean up after you are done.
+
+
+
