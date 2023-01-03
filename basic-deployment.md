@@ -128,6 +128,8 @@ Since your `service` is of type `NodePort` it will be exposed on _any_ of the no
 on the port from before, so choose one of the `EXTERNAL-IP`'s,
 and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`.
 
+In this example, the URL could be `35.240.20.246:32458`.
+
 You should see the default nginx webpage in your browser.
 
 </details>
@@ -138,6 +140,7 @@ This section has some optional extra details.
 
 <details>
 <summary>More details about pods</summary>
+
 A **Pod** (_not container_) is the smallest building-block/worker-unit in Kubernetes,
 it has a specification of one or more containers and exists for the duration of the containers;
 if all the containers stop or terminate, the Pod is stopped.

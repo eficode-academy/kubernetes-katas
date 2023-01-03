@@ -53,7 +53,7 @@ metadata:
   labels:
     app: nginx # deployment resource label
 spec:
-  replicas: 1
+  replicas: 1 # number of pods to run
   selector:
     matchLabels: # selector labels the replicaset looks for
       app: nginx
@@ -67,7 +67,7 @@ spec:
         - name: nginx # name of the container running inside a pod, not the pod name
           image: nginx:latest
           ports:
-            - containerPort: 80
+            - containerPort: 80 # port the container is listening on
 ```
 ## Apply the manifest using the `kubectl apply`.
 
@@ -161,6 +161,10 @@ Expected output:
 NAME                         READY     STATUS    RESTARTS   AGE
 nginx-431080787-tx5m7        1/1       Running   0          12s
 ```
+
+Congratulations! You have now created a deployment using a Kubernetes manifest.
+
+You have also seen that Kubernetes keeps it's promise of fullfilling your desired state, by creating a new pod in the place of the deleted pod.
 
 <!-- </details> -->
 

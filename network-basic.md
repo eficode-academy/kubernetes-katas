@@ -6,18 +6,31 @@
 
 ## Introduction
 
-Deploying a pod is not enough to make it accessible from outside the cluster. In this exercise you will learn how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
+Deploying a pod is not enough to make it accessible from outside the cluster. 
 
-## port-forward
+In this exercise you will learn how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
 
-the kubectl port-forward command allows you to forward one or more local ports to a pod. This can be used to access a pod that is running on the cluster. The command takes two arguments: the pod name and the port to forward. The port can be specified as `local:remote` to forward a local port to a remote port inside the pod.
+## Port-forward
 
+The `kubectl port-forward` command allows you to forward one or more local ports to a pod. This can be used to access a pod that is running in the cluster.
 
+The command takes two arguments: the pod name and the port to forward. The port is specified as `local:remote` to forward a local port to a remote port inside the pod.
+
+For example, if you want to forward port 8080 on your local machine to port 5000 in the pod, you can use the following command:
+
+`kubectl port-forward frontend 8080:5000`
+
+You can then access the pod on `localhost:8080`.
 
 <details>
 <summary>:bulb: How does this port-forward work?</summary>
 
-Port forwarding is a network address translation that redirects internet packets form one IP address with specified port number to another IP:PORT set. In Kubernetes `port-forwad` creates a tunnel between your local machine and Kubernetes cluster on the specified `IP:PORT` pairs in order to establish connection to the cluster. `kubectl port-forward` allows you to forward not only pods but also services, deployments and other.   
+Port forwarding is a network address translation that redirects internet packets form one IP address with specified port number to another IP:PORT set.
+
+In Kubernetes `port-forwad` creates a tunnel between your local machine and Kubernetes cluster on the specified `IP:PORT` pairs in order to establish connection to the cluster. `kubectl port-forward` allows you to forward not only pods but also services, deployments and other.   
+
+More informatin can be found from [here](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
+
 </details>
 
 ## Exercise
@@ -37,7 +50,9 @@ Port forwarding is a network address translation that redirects internet packets
 
 <details>
 <summary>Hint on doing that</summary>
-You can use the `kubectl apply` command to deploy the pod. The pod is defined in the `frontend-pod.yaml` file.
+
+You can use the `kubectl apply -f` command to deploy the pod. The pod is defined in the `frontend-pod.yaml` file.
+
 </details>
 
 * Check that the pod is running with `kubectl get pods` command.
@@ -57,22 +72,15 @@ Port forward can be achieved with:
 
 And can then be accessed on inst<number>.<prefix>.eficode.academy:8080 (from the internet)
 
-:bulb: VSCode will ask you if you what to see the open port. Unfortuneatly vscode proxy does not proxy requests correctly back to the pod, so use the url of the instance instead.
+> :bulb: VSCode will ask you if you what to see the open port. Unfortuneatly vscode proxy does not proxy requests correctly back to the pod, so use the url of the instance instead.
 
-
-<details>
-<summary>More Details</summary>
-
-**take the same bullet names as above and put them in to illustrate how far the student have gone**
-
-- all actions that you believe the student should do, should be in a bullet
-
-> :bulb: Help can be illustrated with bulbs in order to make it easy to distinguish.
-
-</details>
+* Look at it in the browser.
+If you see the frontend, you have succeeded.
 
 ### Clean up
 
-Delete the pod with `kubectl delete pod frontend` command.
+* Stop the port-forward with `Ctrl+C` command.
+
+* Delete the pod with `kubectl delete pod frontend` command.
 
 Congratulations! You have now learned how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
