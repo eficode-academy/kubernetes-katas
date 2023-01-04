@@ -2,18 +2,20 @@
 
 ## Learning Goals
 
-Ability to communicate between pods using services
+Ability to communicate between pods using services.
 
 ## Introduction
 
 In this exercise you'll learn about how pods can be exposed using services and test connectivity between them.
 
-## Accessing a service
-
-To access any service inside any given pod (e.g. backend service), we need to _expose_ the pod as a _service_. We have three main ways of exposing the pods, or in other words, we have three ways to define a _service_ , which we can access in three different ways. A service is (normally) created on top of an existing pod.
-
 ## Service types
 
+Since Kubernetes can create and destroy pods at any time, it is not a good idea to rely on the IP address of a pod. Instead, we can create a service that will expose the pod(s) to the outside world.
+The service IP address will not change, even if the pod(s) it is exposing are destroyed and recreated. It will only change if the service is deleted and recreated.
+
+The service also load balances traffic between the pods it is exposing if there are more than one pod.
+
+The service finds the pods it is exposing by using labels. The service will expose all pods that have the labels specified in the `selector` part of the service.
 ### Kind
 
 A generic service manifest file looks like this: 
@@ -32,14 +34,34 @@ spec:
   selector: # List of labels to match pods
   type: # ClusterIP, NodePort or LoadBalancer
 ```
+
+A filled out example cloud look like this:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: backend
+  name: backend
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: backend
+  type: ClusterIP
+```
+
 ### ClusterIP
 
-Services of type ClusterIP will only create a DNS entry with the name of the service, as well as an internal cluster IP that routes traffic over to the deployments hit by the `selector` part of the service.
-
-The service type ClusterIP does not have any external IP. This means it is not accessible over the internet, but we can still access it from within the cluster using its `CLUSTER-IP`.
+Services of type ClusterIP will only create a DNS entry with the name of the service, as well as an internal cluster IP that routes traffic over to the pods hit by the `selector` part of the service.
 
 <details>
     <summary> :bulb: More about Cluster-IP</summary>
+
+The service type ClusterIP does not have any external IP. This means it is not accessible over the internet, but we can still access it from within the cluster using its `CLUSTER-IP`.
 
 - The IPs assigned to services as Cluster-IP are from a different Kubernetes network called _Service Network_, which is a completely different network altogether. i.e. it is not connected (nor related) to pod-network or the infrastructure network. Technically it is actually not a real network per-se; it is a labeling system, which is used by Kube-proxy on each node to setup correct iptables rules. (This is an advanced topic, and not our focus right now).
 - No matter what type of service you choose while _exposing_ your pod, Cluster-IP is always assigned to that particular service.
@@ -50,17 +72,21 @@ The service type ClusterIP does not have any external IP. This means it is not a
 
 ### NodePort
 
-Services of type NodePort will create a DNS entry with the name of the service, as well as an internal cluster IP that routes traffic over to the pod hit by the `selector` part of the service. In addition to this, it will also create a port on each node in the cluster, which will route traffic to the service.
+Services of type NodePort will create a DNS entry with the name of the service, as well as an internal cluster IP that routes traffic over to the pod hit by the `selector` part of the service. In addition to this, it will also open up a port on each node in the cluster, which will route traffic to the service.
 
-Notice that we still don't have an external IP, but we now have an extra port e.g. `32593` for this service.
+Notice that we still don't have an external IP, but we now have an extra port e.g. `32593` for this service open on all nodes.
 
-This port is a **NodePort** exposed on the worker nodes. So now, if we know the IP of our nodes, we can access this service from the internet.
+This port is a **NodePort** exposed on the worker nodes. So now, if we know the IP of our nodes (and they are externally accessible), we can access this service from the internet.
 
 ### Other types
 
-There are other types of services, but we won't cover them in this exercise.
+There are other types of services, like LoadBalancer, but we won't cover them in this exercise.
+
+If you want to know more about Services, you can read more about them [here](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 ## Exercise
+
+In this exercise you will start both the front and backend pods.
 
 ### Overview
 
@@ -91,7 +117,16 @@ pod/backend   1/1     Running   0          28s
 pod/frontend  1/1     Running   0          20s
 ```
 
-* Create the service file for backend
+Now that we have the pods running, we can create a service that will expose the backend pod to the outside world.
+
+* Open the `backend-svc.yaml` file and fill in the missing parts.
+
+<details>
+<summary>:bulb: hint on how you do that </summary>
+You can use the `kubectl explain service` command to get more information about the service manifest file.
+</details>
+
+
 * Apply backend-svc.yaml that you just created.
 
 * Check that the service is created with `kubectl get services` command.
