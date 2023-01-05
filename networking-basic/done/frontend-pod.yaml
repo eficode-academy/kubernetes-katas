@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+spec:
+  containers:
+  - name: frontend
+    image: ghcr.io/eficode-academy/flask-quotes-frontend:0c8adaa4fe8a40fe703cdda414a8f191f4966fc4 
+    ports:
+    - containerPort: 5000
+    env:
+    - name: BACKEND_HOST
+      value: "172.17.0.8"
+    - name: BACKEND_PORT
+      value: "5000"

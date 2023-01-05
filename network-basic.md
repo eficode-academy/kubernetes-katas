@@ -41,6 +41,11 @@ More informatin can be found from [here](https://kubernetes.io/docs/tasks/access
 - Deploy the frontend pod
 - Expose the frontend with port-forward.
 - Look at it in the browser.
+- Delete the frontend pod
+- Deploy the backend pod
+- Add environment variables to the frontend pod
+- Expose the frontend with port-forward.
+- Execute a curl command to the backend from the frontend pod
 
 
 ### Step by step instructions
@@ -75,7 +80,48 @@ And can then be accessed on inst<number>.<prefix>.eficode.academy:8080 (from the
 > :bulb: VSCode will ask you if you what to see the open port. Unfortuneatly vscode proxy does not proxy requests correctly back to the pod, so use the url of the instance instead.
 
 * Look at it in the browser.
-If you see the frontend, you have succeeded.
+
+Now we will deploy both the frontend and backend pods.
+
+* Delete the frontend pod with `kubectl delete pod frontend` command.
+* Deploy the backend pod with `kubectl apply -f backend-pod.yaml` command.
+* Check that the pod is running, and note down the IP with `kubectl get pods -o wide` command.
+
+You should see something like this:
+    
+```
+k get pods frontend -o wide
+NAME          READY   STATUS        RESTARTS   AGE    IP       		NODE   	NOMINATED NODE   READINESS GATES
+frontend      1/1 	Running      1 		   29s  	  172.17.0.8   	minikube  	<none>       		<none>
+```
+
+In this case the IP is `172.17.0.8`, but it will be different in your case.
+
+
+**Add environment variables to the frontend pod**
+
+* Open the `frontend-pod.yaml` file and add the following environment variables to the pod:
+
+```YAML
+    env:
+    - name: BACKEND_HOST
+      value: "172.17.0.8"
+    - name: BACKEND_PORT
+      value: "5000"
+```
+
+- Deploy the frontend pod with `kubectl apply -f frontend-pod.yaml` command.
+- Check that the pod is running with `kubectl get pods` command.
+
+- Expose the frontend with port-forward.
+
+- Visit the frontend in the browser.
+
+You should see something like this:
+
+![alt](img/app-front-back.png)
+
+- Execute a curl command to the backend from the frontend pod
 
 ### Clean up
 
