@@ -126,6 +126,7 @@ Now that we have the pods running, we can create a service that will expose the 
 You can use the `kubectl explain service` command to get more information about the service manifest file.
 </details>
 
+**TODO** Meat of the exercise
 
 * Apply backend-svc.yaml that you just created.
 
