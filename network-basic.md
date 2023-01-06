@@ -110,23 +110,48 @@ In this case the IP is `172.17.0.8`, but it will be different in your case.
       value: "5000"
 ```
 
-- Deploy the frontend pod with `kubectl apply -f frontend-pod.yaml` command.
-- Check that the pod is running with `kubectl get pods` command.
+* Deploy the frontend pod with `kubectl apply -f frontend-pod.yaml` command.
+* Check that the pod is running with `kubectl get pods` command.
 
-- Expose the frontend with port-forward.
+* Expose the frontend with port-forward.
 
-- Visit the frontend in the browser.
+* Visit the frontend in the browser.
 
 You should see something like this:
 
 ![alt](img/app-front-back.png)
 
-- Execute a curl command to the backend from the frontend pod
+* Exec into the frontend pod with `kubectl exec -it frontend -- /bin/sh` command.
+
+* Execute a curl command to the backend `curl http://<BACKEND_IP>:5000`.
+
+### Extra
+
+While still having the port-forward running
+* Access the frontend in the browser and check that it still works and that frontend have access to the backend.
+* Try to delete the backend pod with `kubectl delete pod backend` command.
+* Try to recreate the backend pod with `kubectl apply -f backend-pod.yaml` command.
+* Access the frontend in the browser.
+* Does it still have access to the backend?
+
+If not, why not?
+
+<details>
+<summary>Solution</summary>
+
+The frontend pod is not configured to automatically re-resolve the backend IP address.
+So when we deleted the pod, and recreated it, the IP address changed, but the frontend pod still had the old IP address in its environment variables.
+
+The solution to this is called services, which we will learn about in the next exercise.
+
+</details>
 
 ### Clean up
 
 * Stop the port-forward with `Ctrl+C` command.
 
 * Delete the pod with `kubectl delete pod frontend` command.
+* Delete the pod with `kubectl delete pod backend` command.
 
-Congratulations! You have now learned how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
+Congratulations! You have now learned how to make temporary connections to a pod inside the cluster via `kubectl port-forward`, and how to use environment variables to configure the pod.
+And lastly, you have learned how to use `kubectl exec` to execute commands inside a pod.
