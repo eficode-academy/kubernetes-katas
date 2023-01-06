@@ -10,7 +10,17 @@ In this exercise you will learn how to persist the filesystem state of your cont
 
 ## Introduction
 
-TODO
+Kubernetes, a persistent volume claim (PVC) is a request for storage by a user.
+It is a way for a pod to request a specific amount of storage from the cluster. When a PVC is created, it is automatically bound to a persistant volume (PV) that satisfies the PVC's requirements.
+
+A storage class (SC) is a way to define the properties of a PV. It is a blueprint for creating PVs, and it specifies things like the type of storage, the amount of storage, and the access modes for the PV. 
+The cluster then uses the storage class to find or create a PV that matches the PVC's requirements.
+
+In summary:
+
+* PVs are the actual storage resources in the cluster
+* PVCs are requests for storage made by users
+* SCs are the specifications for creating PVs.
 
 ## Exercise
 
@@ -35,7 +45,7 @@ Deploy the manifests located in `persistent-storage/start`
 
 - Open the frontend webpage in your browser.
 - Observe that the frontend reports that it is connected to the database.
-- Add some quotes.
+- Add some quotes. We will need them later to test persistency
 - Retrieve all of the quotes, observe that your quotes are part of the retrieved quotes.
 - Now delete the postgres pod using `kubectl delete pod <pod-name>`
 - In the frontend webpage, retrieve quotes, and observe that you now only get the default 5 quotes from the database.
@@ -64,9 +74,9 @@ We see that we indeed have a `StorageClass` available and ready for use!
 
 <details>
 
-<summary>What do the columns mean?</summary>
+<summary>:bulb: What do the columns mean?</summary>
 
-:bulb: The output of the `kubectl get sc` command provides some useful information about the StorageClass:
+The output of the `kubectl get sc` command provides some useful information about the StorageClass:
 
 - `PROVISIONNER` what is the underlying storage provider, in this case `AWS EBS` (Elastic Block Storage)
 - `RECLAIMPOLICY` what will happen with the volume when the `PersistentVolume` resource is deleted, in this case `Delete` will delete the block storage.
@@ -77,7 +87,7 @@ We see that we indeed have a `StorageClass` available and ready for use!
 
 ### Create a PersistentVolume (pv) using dynamic volume provisioning
 
-Let's create a `PersistentVolume`!
+Let's create a `PersistentVolume` (pv)!
 
 While we could create a manifest for a `PersistentVolume` manually we will not do that in this exercise.
 
