@@ -2,17 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: frontend-deployment
-  name: frontend-deployment
+    app: frontend
+  name: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend-deployment
+      app: frontend
   template:
     metadata:
       labels:
-        app: frontend-deployment
+        app: frontend
     spec:
       containers:
       - image: ghcr.io/eficode-academy/quotes-flask-frontend:release
