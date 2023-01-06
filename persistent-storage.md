@@ -63,11 +63,9 @@ kubectl get StorageClasses
 
 Expected output:
 
-> TODO update with output from exercise cluster (this was run against kind)
-
 ```
-NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-gp2 (default)   kube
+AME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  54m
 ```
 
 We see that we indeed have a `StorageClass` available and ready for use!
@@ -109,7 +107,7 @@ metadata:
 spec:
   storageClassName:
   accessModes:
-    - ...
+    - 
   resources:
     requests:
       storage:
@@ -180,21 +178,19 @@ Expected output
 No resources found
 ```
 
-> `PersistentVolumes` objects are `cluster-wide`, ie. "not-namespaced", so you might see `PersistentVolumes` belonging to other users.
+> :bulb: `PersistentVolumes` objects are `cluster-wide`, ie. "not-namespaced", so you might see `PersistentVolumes` belonging to other users.
 
-We expect that a `PersistentVolume` has not been created _yet._
-
-This is because of how the `PersistenVolumeClaim` is configured.
+We expect that a PersistentVolume has not been created _yet._
 
 As we can see in the `kubectl get persistentvolumeclaim` output above, our `PersistenVolumeClaim` is in the `Pending` status.
 
-This is because the `VOLUMEBINDINGMODE` of the `StorageClass` is set to `WaitForFirstConsumer`, as we saw in the previous section.
+This is because the `VOLUMEBINDINGMODE` of the StorageClass is set to `WaitForFirstConsumer`, as we saw in the previous section.
 
 `WaitForFirstConsumer` will not create the actual volume object until it is used by a pod.
 
-> :bulb: The reason you might not want to not always create volumes as soon as `pvc` objects are created is to reduce costs, by not creating resources that are not used.
+> :bulb: The reason you might not want to not always create volumes as soon as `pvc` objects are created is to reduce costs, by not creating resources that are not used before they are attached to a pod.
 
-Let's attach the `PersistenVolumeClaim` to our postgres pod!
+Let's attach the PersistenVolumeClaim to our postgres pod!
 
 ### Consume the PersistentVolume using a PersistentVolumeClaim (pvc) and mounting the volume to a pod
 
@@ -310,7 +306,7 @@ deployment.apps/postgres configured
 Observe that the `PersistentVolume` is now created:
 
 ```
-kubectl get get persistentvolumeclaims,persistentvolumes
+kubectl get persistentvolumeclaims,persistentvolumes
 ```
 
 Expected output:
