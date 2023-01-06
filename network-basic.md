@@ -47,6 +47,7 @@ More informatin can be found from [here](https://kubernetes.io/docs/tasks/access
 - Expose the frontend with port-forward.
 - Execute a curl command to the backend from the frontend pod
 
+> :bulb: If you get stuck somewhere along the way, you can check the solution in the done folder.
 
 ### Step by step instructions
 

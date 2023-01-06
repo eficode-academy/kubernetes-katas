@@ -84,6 +84,7 @@ There are other types of services, like LoadBalancer, but we won't cover them in
 
 If you want to know more about Services, you can read more about them [here](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
+> :bulb: Hint: You can use the `kubectl explain` command to get more information about the fields in the yaml file. For example, `kubectl explain service.spec` will give you more information about the spec field in the service yaml file.
 ## Exercise
 
 In this exercise you will start both the front and backend pods.
@@ -103,8 +104,10 @@ In this exercise you will start both the front and backend pods.
 * Apply the backend-pod.yaml & frontend-pod.yaml files.
 
 <details>
-<summary>:bulb: hint on how you do that </summary>
+<summary>:bulb: Hint </summary>
+
 you can use the `kubectl apply -f` command to deploy the pod. The pod is defined in the `backend-pod.yaml` file. Hint: The apply command can take more than one `-f` parameter to apply more than one yaml file 
+
 </details>
 
 * Check that the pods are running with `kubectl get pods` command.
@@ -121,14 +124,15 @@ Now that we have the pods running, we can create a service that will expose the 
 
 * Open the `backend-svc.yaml` file and fill in the missing parts.
 
-<details>
-<summary>:bulb: hint on how you do that </summary>
-You can use the `kubectl explain service` command to get more information about the service manifest file.
-</details>
+  * apiVersion and kind are already filled in for you.
 
-**TODO** Meat of the exercise
+  * Metadata section should have the name `backend` and a label with key `run` and value `backend`.
+  * Spec section should have a port with port `5000`, protocol `TCP` and targetPort `5000`.
+  * Selector section should have a label with key `run` and value `backend`.
 
-* Apply backend-svc.yaml that you just created.
+> :bulb: If you get stuck somewhere along the way, you can check the solution in the done folder.
+
+* Apply backend-svc.yaml that you just created. `kubectl apply -f backend-svc.yaml`
 
 * Check that the service is created with `kubectl get services` command.
 
@@ -150,7 +154,7 @@ root@frontend:/app#
 
 Make sure that you are inside a pod and not in your terminal window.
 
-* Try to reach backend pod through backend service Cluster-IP from within your frontend pod
+* Try to reach backend pod through backend service `Cluster-IP` from within your frontend pod
 
 `curl 172.20.114.230:5000`
 
@@ -159,6 +163,7 @@ you should see something like this:
 ```
 Hello from the backend!
 ```
+
 * Try accessing the service using dns name now
 
 `curl 172.20.114.230:5000`
@@ -168,6 +173,13 @@ you should see the same output as above.
 You can type `exit` to exit from your container.
 
 * Create the service file for frontend with type NodePort
+
+* Another way to create a service is to use the `kubectl expose` command. The `kubectl expose` command creates a service from a pod or deployment. 
+
+> For example, `kubectl expose pod frontend --type=NodePort --port=5000` will create a service for the frontend pod with type NodePort and port 5000.
+
+* fill in the frontend service yaml file with the command above: `kubectl expose pod frontend --type=NodePort --port=5000 -o yaml --dry-run=client > frontend-svc.yaml`
+
 * Apply frontend-svc.yaml that you just created.
 
 * Check that the service is created with `kubectl get services` command.
@@ -175,12 +187,14 @@ You can type `exit` to exit from your container.
 you should see something like this:
 
 ```
-NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-frontend     NodePort    10.106.136.250   <none>        5000:31941/TCP   23s
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+frontend          NodePort    10.106.136.250   <none>        5000:31941/TCP   23s
+service/backend   ClusterIP   172.20.114.230   <none>        5000/TCP         23s
 ```
 
-- Access it from the nodes IP address
-run `kubectl get nodes -o wide`
+* Note down the port number for the frontend service. In this case it is `31941`
+
+* Get the nodes IP address. Run `kubectl get nodes -o wide`.
 
 you should see something like this:
 
@@ -196,7 +210,9 @@ ip-10-0-62-15.eu-west-1.compute.internal    Ready    <none>   152m   v1.23.9-eks
 5.4.219-126.411.amzn2.x86_64   docker://20.10.17
 ```
 
-Copy the external IP address of any one of the nodes, for example, `34.244.123.152` and paste it in your browser. Copy the port from your frontend service that looks something like `31941` and paste it next to your IP in the browser, for example, `34.244.123.152:31941` and hit it.
+Copy the external IP address of any one of the nodes, for example, `34.244.123.152` and paste it in your browser. 
+
+Copy the port from your frontend service that looks something like `31941` and paste it next to your IP in the browser, for example, `34.244.123.152:31941` and hit it.
 
 Alternatively, you could also test it using curl from your terminal window.
 `curl 34.244.123.152:31941 | grep h1`
@@ -212,7 +228,9 @@ You should see something like this:
 
 <details>
 <summary>:bulb: food for thought </summary>
+
 Think about why you didn't need to exec into a pod to test frontend service but needed it to test backend service.
+
 </details>
 
 ### Clean up
