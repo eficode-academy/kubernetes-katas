@@ -10,8 +10,8 @@ spec:
     name: frontend
     resources: {}
     env:
-      - name: BACKEND_SVC_HOST
+      - name: BACKEND_HOST
         value: backend
-      - name: BACKEND_SVC_PORT
+      - name: BACKEND_PORT
         value: "5000"
   restartPolicy: Always

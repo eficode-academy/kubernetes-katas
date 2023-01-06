@@ -30,12 +30,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: BACKEND_SVC_HOST
+            - name: BACKEND_HOST
               valueFrom:
                 configMapKeyRef:
                   name: backend-config
                   key: backend_host
-            - name: BACKEND_SVC_PORT
+            - name: BACKEND_PORT
               valueFrom:
                 configMapKeyRef:
                   name: backend-config
