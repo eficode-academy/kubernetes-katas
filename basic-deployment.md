@@ -141,7 +141,7 @@ This section has some optional extra details.
 <details>
 <summary>More details about pods</summary>
 
-A `Pod` (_not container_) is the smallest building-block/worker-unit in Kubernetes,
+A `pod` (_not container_) is the smallest building-block/worker-unit in Kubernetes,
 it has a specification of one or more containers and exists for the duration of the containers;
 if all the containers stop or terminate, the Pod is stopped.
 
