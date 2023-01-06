@@ -1,22 +1,22 @@
 # Basic Deployment
 
-In this exercise you will deploy nginx to a Kubernetes Cluster, and access the default nginx welcome page in your browser.
+In this exercise, you will deploy an nginx web server to a Kubernetes Cluster, and access the default nginx _welcome page_ in your browser.
 
 It is not expected that you understand everything going on, yet.
 
 ## Learning Goals
 
 - Use the Kubernetes command line interface (CLI) `kubectl`.
-- Running and accessing an application in Kubernetes.
+- Run and access an application in Kubernetes.
 
 ## Introduction
 
-In Kubernetes we run containers, but we don't manage containers directly, instead containers are placed inside `pods`.
-A pod _contains containers_.
+In Kubernetes, we run containers, but we don't manage containers directly. Containers are instead placed inside `pods`.
+A `pod` _contains_ containers.
 
-Pods in turn are managed by controllers, the most common one is called a `Deployment`.
+Pods in turn are managed by controllers, the most common one is called a `deployment`.
 
-In this exercise you will create a `Deployment`, which will create a `pod`, in which your container will be running.
+In this exercise, you will create a `deployment`, which will create a `pod`, in which your container will be running.
 
 ### Interacting with Kubernetes using kubectl
 
@@ -30,8 +30,8 @@ To use it, type `kubectl <subcommand> <options>` in a terminal.
 
 ### Overview
 
-- Run application using `kubectl create` command
-- Make the application accessible from the internet
+- Run an application in a `pod` using the `kubectl create` command
+- Make the application accessible from the Internet
 
 ### Step by step instructions
 
@@ -54,7 +54,7 @@ Expected output:
 deployment.apps/nginx created
 ```
 
-We can ask Kubernetes about what resources it has, such as our pod.
+We can ask Kubernetes about what resources it has, such as our `pod`.
 
 We do this using the `kubect get <kind>` command, in this case the `<kind>` will be `pod(s)`.
 
@@ -141,7 +141,7 @@ This section has some optional extra details.
 <details>
 <summary>More details about pods</summary>
 
-A **Pod** (_not container_) is the smallest building-block/worker-unit in Kubernetes,
+A `Pod` (_not container_) is the smallest building-block/worker-unit in Kubernetes,
 it has a specification of one or more containers and exists for the duration of the containers;
 if all the containers stop or terminate, the Pod is stopped.
 
@@ -149,7 +149,8 @@ if all the containers stop or terminate, the Pod is stopped.
 
 <details>
 <summary>More details about deployments</summary>
-Usually a pod will be part of a **Deployment**; a more controlled or _robust_ way of running Pods.
+
+Usually a `pod` will be part of a `deployment`; a more controlled or _robust_ way of running `pod`s.
 A deployment can be configured to automatically delete stopped or exited Pods and start new ones,
 as well as run a number of identical Pods e.g. to provide high-availability.
 
