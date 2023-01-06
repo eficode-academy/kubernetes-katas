@@ -6,7 +6,7 @@ New order of exercises:
 - network-basic
 - services
 - deployments-loadbalancing
-- secrets-configmaps
+- configmaps-secrets
 - persistent-storage
 
 Below is old readme
@@ -35,22 +35,23 @@ You can find a summary of many of the commands used in the exercises in the
 
 ## Katas
 
-- [01-pods-deployments.md](01-pods-deployments.md)
-- [02-declarative-deployment.md](02-declarative-deployment.md)
-- [03-service-discovery-and-loadbalancing.md](03-service-discovery-and-loadbalancing.md)
-- [04-rolling-updates.md](04-rolling-updates.md)
-- [05-secrets-configmaps.md](05-secrets-configmaps.md)
-- [06-storage.md](06-storage.md)
-- [07-healthchecks.md](07-healthchecks.md)
+- [basic-deployment](basic-deployment.md)
+- [declarative-deployment](declarative-deployment.md)
+- [manifests](manifests.md)
+- [network-basic](network-basic.md)
+- [services](services.md)
+- [deployments-loadbalancing](deployments-loadbalancing.md)
+- [configmaps-secrets](configmaps-secrets.md)
+- [persistent-storage](persistent-storage.md)
 
 ## Extra Credits
 
 - Ingress
-  - [08-ingress-gke.md](extras/08-ingress-gke.md)
-  - [08-ingress-nginx.md](extras/08-ingress-nginx.md)
-  - [08-ingress-traefik.md](extras/08-ingress-traefik.md)
-- [09-helm-package-manager.md](extras/09-helm-package-manager.md)
-- [10-secrets-ssl-certs-in-nginx.md](extras/10-secrets-ssl-certs-in-nginx.md)
+  - [ingress-gke.md](old/extras/08-ingress-gke.md)
+  - [ingress-nginx.md](old/extras/08-ingress-nginx.md)
+  - [ingress-traefik.md](old/extras/08-ingress-traefik.md)
+- [helm-package-manager.md](old/extras/09-helm-package-manager.md)
+- [secrets-ssl-certs-in-nginx.md](old/extras/10-secrets-ssl-certs-in-nginx.md)
 
 ## Setup
 
@@ -66,9 +67,9 @@ Desktop][docker-desktop] or [Kind][kind].
 Once you have access to a cluster, the following exercises will help you get
 setup for running the katas.
 
-- [00-setup-kubectl-linux](exercise_setup/00-setup-kubectl-linux.md) - Skip if
+- [setup-kubectl-linux](old/exercise_setup/00-setup-kubectl-linux.md) - Skip if
   you've already installed `kubectl` and have access to a cluster.
-- [00-setup-namespace](exercise_setup/00-setup-namespace.md) - Skip if you've
+- [setup-namespace](old/exercise_setup/00-setup-namespace.md) - Skip if you've
   already created a personal namespace and set it as your default.
 
 ### kubectl autocompletion
