@@ -7,8 +7,7 @@
 
 ## Introduction
 
-In this exercise you'll learn about how to update a deployment. You'll also learn about how to test resiliency of a deployment.
-
+In this exercise you'll learn about how to update a deployment.
 ## Subsections
 
 Rollout strategies
