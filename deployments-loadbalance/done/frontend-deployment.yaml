@@ -15,8 +15,8 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/flask-quotes-frontend:release
-        name: flask-quotes-frontend
+      - image: ghcr.io/eficode-academy/quotes-flask-frontend:release
+        name: quotes-flask-frontend
         env:
         - name: BACKEND_SVC_HOST
           value: backend

@@ -6,7 +6,7 @@ metadata:
   name: frontend
 spec:
   containers:
-  - image: ghcr.io/eficode-academy/flask-quotes-frontend:release
+  - image: ghcr.io/eficode-academy/quotes-flask-frontend:release
     name: frontend
     resources: {}
     env:

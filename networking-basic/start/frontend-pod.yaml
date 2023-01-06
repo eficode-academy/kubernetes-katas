@@ -5,6 +5,6 @@ metadata:
 spec:
   containers:
   - name: frontend
-    image: ghcr.io/eficode-academy/flask-quotes-frontend:release
+    image: ghcr.io/eficode-academy/quotes-flask-frontend:release
     ports:
     - containerPort: 5000
