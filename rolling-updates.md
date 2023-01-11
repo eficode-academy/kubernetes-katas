@@ -20,7 +20,7 @@ The `maxSurge` and `maxUnavailable` parameters control how many pods can be crea
 
 ### Rolling update
 
-A rolling update is a deployment strategy that allows you to update your application without downtime. It works by creating a new version of the application and then slowly replacing the old version with the new one. The number of pods that can be created above the desired number of pods is controlled by the `maxSurge` parameter. The number of pods that can be unavailable during the update is controlled by the `maxUnavailable` parameter.
+A rolling update is a deployment strategy that allows you to update your application without downtime. It works by creating a new version of the application and then slowly replacing the old version with the new one.
 ## Exercise
 
 ### Overview
@@ -114,7 +114,7 @@ What happens to the pods that are running the old version?
 - Reset back to a version that exists.
 ## maxSurge and maxUnavailable
 
-We will now try to control the rollout process a but more by setting `maxSurge` and `maxUnavailable` parameters.
+We will now try to control the rollout process a bit more by setting `maxSurge` and `maxUnavailable` parameters.
 
 * open up two terminals and run `kubectl get pods --watch` in one of them
 
