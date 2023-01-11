@@ -9,13 +9,25 @@
 ## Introduction
 
 In this exercise you'll learn about how to update a deployment.
+
+### maxSurge and maxUnavailable parameters
+
+The `maxSurge` and `maxUnavailable` parameters control how many pods can be created above the desired number of pods and how many pods can be unavailable during the update.
+
+- `maxSurge` is the maximum number of pods that can be created above the desired number of pods. It can be a number or a percentage. The default value is 25%.
+
+- `maxUnavailable` is the maximum number of pods that can be unavailable during the update. It can be a number or a percentage. The default value is 25%.
+
+### Rolling update
+
+A rolling update is a deployment strategy that allows you to update your application without downtime. It works by creating a new version of the application and then slowly replacing the old version with the new one. The number of pods that can be created above the desired number of pods is controlled by the `maxSurge` parameter. The number of pods that can be unavailable during the update is controlled by the `maxUnavailable` parameter.
 ## Exercise
 
 ### Overview
 
 - Roll out new version of the either the frontend or backend and see the changes
-- Test resiliency of deployments by deleting pods
 - Roll out a new version that does not exist
+- Change the `maxSurge` and `maxUnavailable` parameters and see how it affects the rollout
 
 ### Step by step instructions
 
@@ -28,9 +40,7 @@ In this exercise you'll learn about how to update a deployment.
 
 Now go ahead and `apply` the deployments and the services:
 
-- `kubectl apply -f .`
-
-> :bulb: this will apply all the files in the current directory
+- `kubectl apply -f .`. This will apply all the files in the current directory
 
 * Access the frontend by the NodePort service
 
@@ -53,7 +63,7 @@ Copy the port from your frontend service that looks something like `31941` and p
 
 Now we will try to roll out an update to the backend image.
 
-- Set image tag to `2.0.0`:
+- Change the image tag from `release` to `2.0.0`:
 
 ```yaml
     ...
@@ -69,8 +79,18 @@ Now we will try to roll out an update to the backend image.
 expected output:
 
 ```
+Waiting for deployment "backend" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
 deployment "backend" successfully rolled out
 ```
+
+It might be that you only see the last line, as the rollout is very fast.
 
 - Check the version of the backend image in the browser
 
@@ -85,26 +105,35 @@ deployment "backend" successfully rolled out
         name: backend
 ```
 
-What happened - do the frontend still work?
+What happened - do the frontend still work? And are you able to see the backend version in the browser?
 
 - Investigate the running pods with: `kubectl get pods`
+
+What happens to the pods that are running the old version?
 
 - Reset back to a version that exists.
 ## maxSurge and maxUnavailable
 
-We will now try to control the rollout process by setting `maxSurge` and `maxUnavailable` parameters.
+We will now try to control the rollout process a but more by setting `maxSurge` and `maxUnavailable` parameters.
 
-In one terminal TODO
+* open up two terminals and run `kubectl get pods --watch` in one of them
 
-- Set `maxSurge` to `1` and `maxUnavailable` to `0`:
+* Add the `maxSurge` and `maxUnavailable` parameters in the deployment file `backend-deployment.yaml`:
 
 ```yaml
+spec:
+  replicas: 3
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
 ```
 
+* Change the image tag to `3.0.0` and apply the changes
+
+* Check the rollout process in the first terminal
+
+* Change the `maxSurge` and `maxUnavailable` parameters and see how it affects the rollout. Try to set `maxSurge` and `maxUnavailable` both to 100%. What happens?
 
 
 ## Clean up
@@ -112,3 +141,6 @@ In one terminal TODO
 Delete deployments and services as follow:
 
 - `kubectl delete -f .`
+
+Congratulations! You have now learned how to update a deployment and how to control the rollout process with `maxSurge` and `maxUnavailable` parameters.
+You have seen how 
