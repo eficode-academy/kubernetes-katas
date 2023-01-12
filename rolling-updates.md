@@ -69,7 +69,7 @@ Now we will try to roll out an update to the backend image.
     ...
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/flask-quotes-backend:2.0.0
+      - image: ghcr.io/eficode-academy/quotes-flask-backend:2.0.0
 ```
 
 - Apply the new version of your deployment.
@@ -101,7 +101,7 @@ It might be that you only see the last line, as the rollout is very fast.
 ```yaml
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/flask-quotes-backend:not-a-version
+      - image: ghcr.io/eficode-academy/quotes-flask-backend:not-a-version
         name: backend
 ```
 

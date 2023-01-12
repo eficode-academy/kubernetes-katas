@@ -56,7 +56,7 @@ deployment.apps/nginx created
 
 We can ask Kubernetes about what resources it has, such as our `pod`.
 
-We do this using the `kubect get <kind>` command, in this case the `<kind>` will be `pod(s)`.
+We do this using the `kubectl get <kind>` command, in this case the `<kind>` will be `pod(s)`.
 
 Verify that your pod was created and is running using kubectl:
 
@@ -76,7 +76,7 @@ Awesome! Nginx is running.
 ## Make the application accessible from the internet
 
 We are getting a little ahead of our exercises here, but to illustrate that we actually have
-a functioning web-server running in our pod, let's try exposing it to the internet and access it from a browser!
+a functioning webserver running in our pod, let's try exposing it to the internet and access it from a browser!
 
 First use the following command to create a `service` for your `deployment`:
 
@@ -93,7 +93,7 @@ Expected output:
 service/nginx exposed
 ```
 
-Get the `service` called `nginx` and note down the NodePort (the port number to the right of the `:`):
+Get the `service` called `nginx` and note down the NodePort, by finding the `PORT(S)` column and noting the number on the right side of the colon `:`
 
 ```
 kubectl get service nginx
@@ -106,13 +106,15 @@ NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 nginx       NodePort   10.96.223.218   <none>        80:32458/TCP   12s
 ```
 
-In this example, Kubernetes has chosen port `32458`.
+In this example, Kubernetes has chosen port `32458`, you will most likely get a different number.
 
 Finally, look up the IP address of a node in the cluster with:
 
 ```
-kubectl get nodes -o wide           # The -o wide flag makes the output more verbose, i.e. to include the IPs
+kubectl get nodes -o wide
 ```
+
+> :bulb: The `-o wide` flag makes the output more verbose, i.e. to include the IPs
 
 Expected output:
 
@@ -124,11 +126,11 @@ node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
 
 In the example your external IPs are either `35.240.20.246` or `35.205.245.42`.
 
-Since your `service` is of type `NodePort` it will be exposed on _any_ of the nodes,
-on the port from before, so choose one of the `EXTERNAL-IP`'s,
-and point your web browser to the URL `<EXTERNAL-IP>:<PORT>`.
+Since your `service` is of type `NodePort` it will be exposed on _all_ of the nodes. The service will be exposed on the port with the number you noted down above.
 
-In this example, the URL could be `35.240.20.246:32458`.
+Choose one of the `EXTERNAL-IP`'s, and point your web browser to the address: `<EXTERNAL-IP>:<PORT>`.
+
+In this example, the address could be `35.240.20.246:32458`, or `35.205.245.42:32458`.
 
 You should see the default nginx webpage in your browser.
 

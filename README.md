@@ -1,15 +1,27 @@
 New order of exercises:
 
-- basic-deployment
-- declarative-deployment
-- Manifests
-- network-basic
-- services
-- deployments-loadbalancing
-- configmaps-secrets
-- persistent-storage
+- basic-deployment.md
+- declarative-deployment.md
+- Manifests.md
+- accessing-your-application.md
+- services.md
+- deployments-loadbalancing.md
+- configmaps-secrets.md
+- persistent-storage.md
 
 Below is old readme
+
+---
+
+```
+
+ _            _                         _       _
+| |_ ___   __| | ___    _   _ _ __   __| | __ _| |_ ___
+| __/ _ \ / _` |/ _ \  | | | | '_ \ / _` |/ _` | __/ _ \
+| || (_) | (_| | (_) | | |_| | |_) | (_| | (_| | ||  __/
+ \__\___/ \__,_|\___/   \__,_| .__/ \__,_|\__,_|\__\___|
+                             |_|
+```
 
 ---
 
@@ -17,7 +29,7 @@ Below is old readme
 
 # kubernetes-katas
 
-A selection of [katas][kata-def] for Kubernetes (K8s).
+A selection of [katas][kata-def] for Kubernetes (k8s).
 
 The exercises are ordered in the way we think it makes sense to introduce
 Kubernetes concepts.
@@ -44,28 +56,16 @@ You can find a summary of many of the commands used in the exercises in the
 - [configmaps-secrets](configmaps-secrets.md)
 - [persistent-storage](persistent-storage.md)
 
-## Extra Credits
-
-- Ingress
-  - [ingress-gke.md](old/extras/08-ingress-gke.md)
-  - [ingress-nginx.md](old/extras/08-ingress-nginx.md)
-  - [ingress-traefik.md](old/extras/08-ingress-traefik.md)
-- [helm-package-manager.md](old/extras/09-helm-package-manager.md)
-- [secrets-ssl-certs-in-nginx.md](old/extras/10-secrets-ssl-certs-in-nginx.md)
-
 ## Setup
 
-There are several ways to get a free Kubernetes cluster for running the
-exercises.
+There are several ways to get a free Kubernetes cluster for running the exercises.
 
-Both [Amazon][eks], [Google][gke], [Microsoft][aks] and [Oracle][oke] provide
-various degrees of free managed clusters.
+[Amazon][eks], [Google][gke], [Microsoft][aks] and [Oracle][oke] provide various degrees of free managed clusters.
 
 Alternatively, you can set up a local cluster with [Docker
 Desktop][docker-desktop] or [Kind][kind].
 
-Once you have access to a cluster, the following exercises will help you get
-setup for running the katas.
+Once you have access to a cluster, the following exercises will help you get setup for running the katas.
 
 - [setup-kubectl-linux](old/exercise_setup/00-setup-kubectl-linux.md) - Skip if
   you've already installed `kubectl` and have access to a cluster.

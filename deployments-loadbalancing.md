@@ -215,8 +215,8 @@ spec:
         app: backend
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/flask-quotes-backend:release
-        name: flask-quotes-backend
+      - image: ghcr.io/eficode-academy/quotes-flask-backend:release
+        name: quotes-flask-backend
 ```
 </details>
 
