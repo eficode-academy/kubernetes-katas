@@ -6,6 +6,7 @@ New order of exercises:
 - accessing-your-application.md
 - services.md
 - deployments-loadbalancing.md
+- rolling-updates.md
 - configmaps-secrets.md
 - persistent-storage.md
 
