@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: backend
+  name: backend
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - image: ghcr.io/eficode-academy/quotes-flask-backend:release
+        name: quotes-flask-backend
+        imagePullPolicy: Always
+        ### using hardcoded env vars
+        env:
+        - name: db_host
+          value: postgres
+        - name: db_port
+          value: "5432"
+        - name: db_user
+          value: superuser
+        - name: db_password
+          value: complicated
+        - name: db_name
+          value: quotes

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  db_host: postgres
+  db_port: "5432"
+  db_user: superuser
+  db_name: quotes
