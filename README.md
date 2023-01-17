@@ -1,43 +1,10 @@
-New order of exercises:
-
-- basic-deployment.md
-- declarative-deployment.md
-- Manifests.md
-- accessing-your-application.md
-- services.md
-- deployments-loadbalancing.md
-- rolling-updates.md
-- configmaps-secrets.md
-- persistent-storage.md
-
-Below is old readme
-
----
-
-```
-
- _            _                         _       _
-| |_ ___   __| | ___    _   _ _ __   __| | __ _| |_ ___
-| __/ _ \ / _` |/ _ \  | | | | '_ \ / _` |/ _` | __/ _ \
-| || (_) | (_| | (_) | | |_| | |_) | (_| | (_| | ||  __/
- \__\___/ \__,_|\___/   \__,_| .__/ \__,_|\__,_|\__\___|
-                             |_|
-```
-
----
-
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
 
 # kubernetes-katas
 
 A selection of [katas][kata-def] for Kubernetes (k8s).
 
-The exercises are ordered in the way we think it makes sense to introduce
-Kubernetes concepts.
-
-There are three variants of the ingress exercise - one of them is Google
-Kubernetes Engine (gke) specific, whereas the two others are generic and should
-work on any Kubernetes cluster.
+The exercises are ordered in the way we think it makes sense to introduce Kubernetes concepts.
 
 You can find a summary of many of the commands used in the exercises in the
 [cheatsheet.md](cheatsheet.md).
@@ -46,14 +13,15 @@ You can find a summary of many of the commands used in the exercises in the
 > Please have a look at the [Setup](#setup) section if that is not the case.
 > There are plenty of free and easy options.
 
-## Katas
+## Katas in suggested order:
 
 - [basic-deployment](basic-deployment.md)
 - [declarative-deployment](declarative-deployment.md)
 - [manifests](manifests.md)
-- [network-basic](network-basic.md)
+- [accessing-your-application](accessing-your-application.md)
 - [services](services.md)
 - [deployments-loadbalancing](deployments-loadbalancing.md)
+- [rolling-updates](rolling-updates.md)
 - [configmaps-secrets](configmaps-secrets.md)
 - [persistent-storage](persistent-storage.md)
 
@@ -82,12 +50,9 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 . ~/.bashrc
 ```
 
-The commands above will enable kubectl autocompletion when you start a new bash
-session and source (reload) bashrc i.e. enable kubectl autocompletion in your
-current session.
+The commands above will enable kubectl autocompletion when you start a new bash session and source (reload) bashrc i.e. enable kubectl autocompletion in your current session.
 
-See: [Kubernetes.io - Enabling shell autocompletion][autocompletion] for more
-info.
+See: [Kubernetes.io - Enabling shell autocompletion][autocompletion] for more info.
 
 # Cheatsheet
 
