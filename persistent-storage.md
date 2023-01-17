@@ -13,14 +13,14 @@ In this exercise you will learn how to persist the filesystem state of your cont
 Kubernetes, a persistent volume claim (PVC) is a request for storage by a user.
 It is a way for a pod to request a specific amount of storage from the cluster. When a PVC is created, it is automatically bound to a persistant volume (PV) that satisfies the PVC's requirements.
 
-A storage class (SC) is a way to define the properties of a PV. It is a blueprint for creating PVs, and it specifies things like the type of storage, the amount of storage, and the access modes for the PV. 
+A storage class (SC) is a way to define the properties of a PV. It is a blueprint for creating PVs, and it specifies things like the type of storage, the amount of storage, and the access modes for the PV.
 The cluster then uses the storage class to find or create a PV that matches the PVC's requirements.
 
 In summary:
 
-* PVs are the actual storage resources in the cluster
-* PVCs are requests for storage made by users
-* SCs are the specifications for creating PVs.
+- PVs are the actual storage resources in the cluster
+- PVCs are requests for storage made by users
+- SCs are the specifications for creating PVs.
 
 ## Exercise
 
@@ -35,7 +35,9 @@ In summary:
 ### Step by step instructions:
 
 <details>
-<summary>Step-by-Step</summary>
+<summary>
+Step by step:
+</summary>
 
 ### Observe that the state of the postgres database is not persisted between pod lifecycles
 
@@ -107,7 +109,7 @@ metadata:
 spec:
   storageClassName:
   accessModes:
-    - 
+    -
   resources:
     requests:
       storage:

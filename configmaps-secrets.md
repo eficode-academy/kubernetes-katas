@@ -147,7 +147,7 @@ spec:
 
 <details>
 <summary>
-Expand
+Step by step:
 </summary>
 
 > :bulb: All files for the exercise are found in the `configmap-secrets/start` folder.

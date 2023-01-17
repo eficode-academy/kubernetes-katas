@@ -54,7 +54,7 @@ More information can be found from [here](https://kubernetes.io/docs/tasks/acces
 
 <details>
 <summary>
-Click to expand
+Step by step:
 </summary>
 
 - Go into the `accessing-your-application` directory and the `start` folder.

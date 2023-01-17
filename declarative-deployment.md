@@ -34,7 +34,9 @@ Kubernetes resources are declared in what is called `manifests` which use a mark
 ### Step by step instructions
 
 <details>
-<summary>More Details</summary>
+<summary>
+Step by step:
+</summary>
 
 ## Inspect existing Kubernetes manifest for a `deployment` object.
 

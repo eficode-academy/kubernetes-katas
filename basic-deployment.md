@@ -36,7 +36,9 @@ To use it, type `kubectl <subcommand> <options>` in a terminal.
 ### Step by step instructions
 
 <details>
-<summary>Step by step:</summary>
+<summary>
+Step by step:
+</summary>
 
 ## Run application using kubectl create command
 

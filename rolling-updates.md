@@ -32,6 +32,11 @@ A rolling update is a deployment strategy that allows you to update your applica
 
 ### Step by step instructions
 
+<details>
+<summary>
+Step by step:
+</summary>
+
 - Create backend deployment
 
 > :bulb: All files for the exercise are found in the `rolling-updates/start` folder.
@@ -136,6 +141,8 @@ spec:
 - Check the rollout process in the first terminal
 
 - Change the `maxSurge` and `maxUnavailable` parameters and see how it affects the rollout. Try to set `maxSurge` and `maxUnavailable` both to 100%. What happens?
+
+</details>
 
 ## Clean up
 

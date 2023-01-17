@@ -117,7 +117,7 @@ The type LoadBalancer is only available for use, if your Kubernetes cluster is s
 
 <details>
 <summary>
-Expand to see steps
+Step by step:
 </summary>
 
 - Go into the `deployments-loadbalancer` directory and the `start` directory.

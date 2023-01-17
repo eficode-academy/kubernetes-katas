@@ -49,7 +49,7 @@ spec:# The desired state of the object
 
 <details>
 <summary>
-Step by step instructions
+Step by step:
 </summary>
 
 ### Write your own `pod` manifest.

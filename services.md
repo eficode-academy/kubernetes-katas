@@ -179,7 +179,7 @@ In this exercise you will start both the frontend and backend quotes-flask pods.
 
 <details>
 <summary>
-Instuctions
+Step by step:
 </summary>
 
 - Go into the `services` directory and the `start` folder.
