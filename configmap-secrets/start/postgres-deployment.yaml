@@ -29,4 +29,3 @@ spec:
               value: complicated
             - name: POSTGRES_DB
               value: quotes
-
