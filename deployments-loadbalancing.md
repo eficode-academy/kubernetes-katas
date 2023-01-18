@@ -51,11 +51,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx
+      run: nginx
   template:
     metadata:
     labels:
-      app: nginx
+      run: nginx
     spec:
       containers:
         - name: nginx
@@ -171,17 +171,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: backend
+    run: backend
   name: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      run: backend
   template:
     metadata:
       labels:
-        app: backend
+        run: backend
     spec:
       containers:
         - image: ghcr.io/eficode-academy/quotes-flask-backend:release
@@ -210,7 +210,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      run: backend
   template:
   ...
 ```
@@ -290,8 +290,8 @@ kubectl get deployments
 Expected output:
 
 ```
-NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-backend   3         3         3            3           2m
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+backend   3/3     3            3           3m29s
 ```
 
 - Check that the pods have been scaled.
@@ -365,9 +365,9 @@ kubectl get deployments
 Expected output:
 
 ```
-NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-backend    3         3         3            3           3m
-frontend   3         3         3            3           1m
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+backend    3/3     3            3           2m41s
+frontend   3/3     3            3           2m41s
 ```
 
 - Check that the pod has been created.
@@ -395,18 +395,18 @@ frontend-47b45fb8b-4x7xg   1/1       Running   0          1m
 
 **Add frontend service type loadbalancer**
 
-- Change the frontend service type to `LoadBalancer` in the frontend-service.yaml file.
+- Change the frontend service type to `LoadBalancer` in the frontend-svc.yaml file.
 
 - Apply the frontend service manifest file again.
 
 ```
-kubectl apply -f frontend-service.yaml
+kubectl apply -f frontend-svc.yaml
 ```
 
 Expected output:
 
 ```
-service/frontend-service configured
+service/frontend-svc configured
 ```
 
 - Check that the service has been created.
@@ -449,8 +449,8 @@ kubectl delete -f backend-deployment.yaml
 - Delete the services
 
 ```
-kubectl delete -f frontend-service.yaml
-kubectl delete -f backend-service.yaml
+kubectl delete -f frontend-svc.yaml
+kubectl delete -f backend-svc.yaml
 ```
 
 > :bulb: If you ever want to delete all resources from a particular directory, you can use a shell wildcard: `kubectl delete -f *.yaml` which will point at **all** `.yaml` files in that directory!

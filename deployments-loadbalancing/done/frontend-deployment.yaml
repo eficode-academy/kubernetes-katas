@@ -1,18 +1,19 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: frontend
+    run: frontend
   name: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      run: frontend
   template:
     metadata:
       labels:
-        app: frontend
+        run: frontend
     spec:
       containers:
         - image: ghcr.io/eficode-academy/quotes-flask-frontend:release
@@ -21,4 +22,4 @@ spec:
             - name: BACKEND_HOST
               value: backend
             - name: BACKEND_PORT
-              value: "5000"
+              value: '5000'

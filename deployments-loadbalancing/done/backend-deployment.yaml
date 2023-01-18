@@ -1,18 +1,19 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: backend
+    run: backend
   name: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      run: backend
   template:
     metadata:
       labels:
-        app: backend
+        run: backend
     spec:
       containers:
         - image: ghcr.io/eficode-academy/quotes-flask-backend:release
