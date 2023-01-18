@@ -15,5 +15,5 @@ spec:
         app: backend
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/quotes-flask-backend:release
-        name: quotes-flask-backend
+        - image: ghcr.io/eficode-academy/quotes-flask-backend:release
+          name: quotes-flask-backend

@@ -61,8 +61,13 @@ Step by step:
 - Deploy the frontend pod
 
 <details>
-<summary>Hint on doing that</summary>
-You can use the `kubectl apply -f` command to deploy the pod. The pod is defined in the `frontend-pod.yaml` file.
+<summary>
+Hint on doing that
+</summary>
+
+You can use the `kubectl apply -f <filename>` command to deploy the pod.
+The pod is defined in the `frontend-pod.yaml` file.
+
 </details>
 
 - Check that the pod is running with `kubectl get pods` command.
@@ -91,6 +96,7 @@ And can then be accessed on `inst<number>.<prefix>.eficode.academy:8080` (from t
 
 Now we will deploy both the frontend and backend pods.
 
+- Stop the port-forward process by pressing `Ctrl-c` in the terminal.
 - Delete the frontend pod with `kubectl delete pod frontend` command.
 - Deploy the backend pod with `kubectl apply -f backend-pod.yaml` command.
 - Check that the pod is running, and note down the IP with `kubectl get pods -o wide` command.
@@ -99,11 +105,11 @@ You should see something like this:
 
 ```
 k get pods frontend -o wide
-NAME          READY   STATUS    RESTARTS   AGE    IP       		NODE   	 NOMINATED NODE   READINESS GATES
-frontend      1/1 	  Running   1 		   29s    172.17.0.8   	minikube <none>       	  <none>
+NAME      READY   STATUS    RESTARTS   AGE   IP            NODE                                        NOMINATED NODE   READINESS GATES
+backend   1/1     Running   0          11s   10.0.40.196   ip-10-0-35-102.eu-west-1.compute.internal   <none>           <none>
 ```
 
-In this case the IP is `172.17.0.8`, but it will be different in your case.
+In this case the IP is `10.0.40.196`, but it will be different in your case.
 
 **Add environment variables to the frontend pod**
 
@@ -112,7 +118,7 @@ In this case the IP is `172.17.0.8`, but it will be different in your case.
 ```yaml
 env:
   - name: BACKEND_HOST
-    value: "172.17.0.8" # Use the IP address you noted down above
+    value: "10.0.40.196" # Use the IP address you noted down above
   - name: BACKEND_PORT
     value: "5000"
 ```
@@ -151,7 +157,7 @@ spec:
         - containerPort: 5000
       env:
         - name: BACKEND_HOST
-          value: "172.17.0.8"
+          value: "10.0.40.196"
         - name: BACKEND_PORT
           value: "5000"
 ```

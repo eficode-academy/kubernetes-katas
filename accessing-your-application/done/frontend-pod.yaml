@@ -11,6 +11,6 @@ spec:
         - containerPort: 5000
       env:
         - name: BACKEND_HOST
-          value: 172.17.0.8
+          value: 10.0.40.196
         - name: BACKEND_PORT
           value: '5000'

@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: postgres-config
 data:
-  db_host: postgres
-  db_port: "5432"
-  db_user: superuser
-  db_name: quotes
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_USER: superuser
+  DB_NAME: quotes

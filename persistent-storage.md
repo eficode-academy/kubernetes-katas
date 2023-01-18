@@ -118,7 +118,7 @@ spec:
 Next we fill in the values:
 
 - The `apiVersion` should be `v1`
-- The `kind` is `PersistenVolumeClaim`
+- The `kind` is `PersistentVolumeClaim`
 - The `metadata.name` should be `postgres-pvc`
 - From the previous section we know that we have one available `StorageClass`, so the value of `spec.storageClassName` is the name of that, in this case `"gp2"` (with quotes)
 - The `spec.accessModes` list should contain one item with the value `ReadWriteOnce`
@@ -258,7 +258,7 @@ Fill in the values:
 - `name` should be the name we specified above when we declared the available volumes.
   In this case this should be `postgres-pvc`
 - `mountPath` is the path in container to mount the volume to. For postgres, the database state is stored to the path `/var/lib/postgresql/data`
-- `subPath` should be `postgres`, and specifies a directory to be created within the volume, we need because of a quirk with combining `AWS EBS` with Postgres.
+- `subPath` should be `postgres`, and specifies a directory to be created within the volume, we need this because of a quirk with combining `AWS EBS` with Postgres.
   (If you are curios why: https://stackoverflow.com/a/51174380)
 
 <details>

@@ -157,7 +157,7 @@ Step by step:
 We have already created the database part of the application, with a deployment and a service.
 
 - Look at the database deployment file `postgres-deployment.yaml`.
-  Notice the database username and password are stored injected as hardcoded environment variables.
+  Notice the database username and password are injected as hardcoded environment variables.
 
 > :bulb: This is not a good practice, as we do not want to store these values in version control.
 > We will fix this in the next steps.
@@ -188,11 +188,11 @@ We want to change the database user into a configmap, so that we can change it i
 
 ```yaml
 data:
-  db_host: postgres
-  db_port: 5432
-  db_user: superuser
-  db_password: complicated
-  db_name: quotes
+  DB_HOST: postgres
+  DB_PORT: "5432'
+  DB_USER: superuser
+  DB_PASSWORD: complicated
+  DB_NAME: quotes
 ```
 
 :bulb: If you are unsure how to do this, look at the [configmap section](#configmaps) above.
@@ -205,7 +205,7 @@ If you are stuck, here is the solution:
 This will generate the file:
 
 ```
-kubectl create configmap my-config --from-literal=db_host=postgres --from-literal=db_port=5432 --from-literal=db_user=superuser --from-literal=db_password=complicated --from-literal=db_name=quotes --dry-run=client -o yaml > postgres-config.yaml
+kubectl create configmap postgres-config --from-literal=DB_HOST=postgres --from-literal=DB_PORT=5432 --from-literal=DB_USER=superuser --from-literal=DB_PASSWORD=complicated --from-literal=DB_NAME=quotes --dry-run=client -o yaml > postgres-config.yaml
 ```
 
 You can also write it by hand:
@@ -216,11 +216,11 @@ kind: ConfigMap
 metadata:
   name: postgres-config
 data:
-  db_host: postgres
-  db_port: 5432
-  db_user: superuser
-  db_name: quotes
-  db_password: complicated
+  DB_HOST: postgres
+  DB_PORT: "5432'
+  DB_USER: superuser
+  DB_NAME: quotes
+  DB_PASSWORD: complicated
 ```
 
 </details>
@@ -231,25 +231,24 @@ Change this:
 
 ```yaml
 env:
-  - name: db_host
+  - name: DB_HOST
     value: postgres
-  - name: db_port
+  - name: DB_PORT
     value: "5432"
-  - name: db_user
+  - name: DB_USER
     value: superuser
-  - name: db_password
+  - name: DB_PASSWORD
     value: complicated
-  - name: db_name
+  - name: DB_NAME
     value: quotes
 ```
 
 To this:
 
 ```yaml
-env:
-  - envFrom:
-      - configMapRef:
-          name: postgres-config
+envFrom:
+  - configMapRef:
+      name: postgres-config
 ```
 
 - re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
@@ -264,7 +263,7 @@ In order for this, we need to change the backend deployment to use the secret in
 
 ```yaml
 data:
-  db_password: complicated
+  DB_PASSWORD: Y29tcGxpY2F0ZWQ=
 ```
 
 <details>
@@ -275,7 +274,7 @@ Help me out!
 If you are stuck, here is the solution:
 
 ```
-kubectl create secret generic postgres-secret --from-literal=db_password=complicated --dry-run=client -o yaml > postgres-secret.yaml
+kubectl create secret generic postgres-secret --from-literal=DB_PASSWORD=Y29tcGxpY2F0ZWQ= --dry-run=client -o yaml > postgres-secret.yaml
 ```
 
 You can also write the secret by hand:
@@ -286,7 +285,7 @@ kind: Secret
 metadata:
   name: postgres-secret
 data:
-  db_password: complicated
+  DB_PASSWORD: Y29tcGxpY2F0ZWQ=
 ```
 
 </details>
@@ -298,21 +297,19 @@ data:
 Change this:
 
 ```yaml
-env:
-  - envFrom:
-      - configMapRef:
-          name: postgres-config
+envFrom:
+  - configMapRef:
+      name: postgres-config
 ```
 
 To this:
 
 ```yaml
-env:
-  - envFrom:
-      - configMapRef:
-          name: postgres-config
-      - secretRef:
-          name: postgres-secret
+envFrom:
+  - configMapRef:
+      name: postgres-config
+  - secretRef:
+      name: postgres-secret
 ```
 
 - Delete the password from the configmap, and re-apply the configmap with `kubectl apply -f postgres-config.yaml`
@@ -339,17 +336,17 @@ env:
     valueFrom:
       configMapKeyRef:
         name: postgres-config
-        key: db_user
+        key: DB_USER
   - name: POSTGRES_DB
     valueFrom:
       configMapKeyRef:
         name: postgres-config
-        key: db_name
+        key: DB_NAME
   - name: POSTGRES_PASSWORD
     valueFrom:
       secretKeyRef:
         name: postgres-secret
-        key: db_password
+        key: DB_PASSWORD
 ```
 
 - re-apply the database deployment with `kubectl apply -f database-deployment.yaml`

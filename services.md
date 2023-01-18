@@ -182,8 +182,8 @@ In this exercise you will start both the frontend and backend quotes-flask pods.
 Step by step:
 </summary>
 
-- Go into the `services` directory and the `start` folder.
-- Apply the backend-pod.yaml & frontend-pod.yaml files.
+- Go into the `services/start` directory.
+- Apply the `backend-pod.yaml` & `frontend-pod.yaml` files.
 
 <details>
 <summary>:bulb: Hint </summary>

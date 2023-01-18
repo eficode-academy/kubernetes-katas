@@ -23,15 +23,6 @@ spec:
       - image: ghcr.io/eficode-academy/quotes-flask-backend:release
         name: quotes-flask-backend
         imagePullPolicy: Always
-        ### using hardcoded env vars
-        env:
-        - name: db_host
-          value: postgres
-        - name: db_port
-          value: "5432"
-        - name: db_user
-          value: superuser
-        - name: db_password
-          value: complicated
-        - name: db_name
-          value: quotes
+        envFrom:
+          - configMapRef:
+              name: postgres-config

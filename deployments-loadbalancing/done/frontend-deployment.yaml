@@ -15,10 +15,10 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: ghcr.io/eficode-academy/quotes-flask-frontend:release
-        name: quotes-flask-frontend
-        env:
-        - name: BACKEND_HOST
-          value: backend
-        - name: BACKEND_PORT
-          value: "5000"
+        - image: ghcr.io/eficode-academy/quotes-flask-frontend:release
+          name: quotes-flask-frontend
+          env:
+            - name: BACKEND_HOST
+              value: backend
+            - name: BACKEND_PORT
+              value: "5000"

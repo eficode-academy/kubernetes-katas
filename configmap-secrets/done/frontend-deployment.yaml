@@ -19,6 +19,6 @@ spec:
         name: quotes-flask-frontend
         env:
           - name: BACKEND_HOST
-            value: http://backend
+            value: backend
           - name: BACKEND_PORT
             value: "5000"

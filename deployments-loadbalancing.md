@@ -120,7 +120,7 @@ The type LoadBalancer is only available for use, if your Kubernetes cluster is s
 Step by step:
 </summary>
 
-- Go into the `deployments-loadbalancer` directory and the `start` directory.
+- Go into the `deployments-loadbalancing/start` directory.
 
 In the directory we have the pod manifests for the backend and frontend that have created in the previous exercises.
 We also have two services, one for the backend (type ClusterIP) and one for the frontend (type NodePort).
@@ -159,22 +159,33 @@ The pod template is the same as the pod manifest we have been using.
 
 We want to populate the deployment manifest with the information from the pod manifest.
 
-- Copy the `metadata` and `spec` contents of the backend-pod.yaml file into the backend-deployment.yaml file under the `spec.template` key.
+- Copy the `metadata.labels` (do not copy `metadata.name`) and `spec` contents of the backend-pod.yaml file into the backend-deployment.yaml file under the `spec.template` key.
 
 <details>
-<summary>:bulb: hint</summary>
+<summary>
+:bulb: hint (solution)
+</summary>
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: # Deployment name
-  labels: # Deployment labels
+  labels:
+    app: backend
+  name: backend
 spec:
-  replicas: # the number of pods to run
-  selector: # How to select pods belonging to this deployment. Must match the pod template's labels
-    matchLabels: # List of labels
-  template: # This is the pod template, paste in the pod spec from frontend-pod.yaml
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - image: ghcr.io/eficode-academy/quotes-flask-backend:release
+          name: quotes-flask-backend
 ```
 
 </details>
@@ -187,13 +198,21 @@ We need to add a selector to the deployment manifest.
   The matchLabels key should have a `run: backend` key-value pair.
 
 <details>
-<summary>:bulb: hint</summary>
+<summary>
+:bulb: hint
+</summary>
 
-The matchLabels key should look like this:
+The `matchLabels` key should look like this:
 
 ```yaml
-matchLabels:
-  run: backend
+...
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+  ...
 ```
 
 The same as the labels key in the metadata key of the pod template.
@@ -436,7 +455,7 @@ kubectl delete -f backend-service.yaml
 
 > :bulb: If you ever want to delete all resources from a particular directory, you can use a shell wildcard: `kubectl delete -f *.yaml` which will point at **all** `.yaml` files in that directory!
 
-# Bonus Exercise
+# Extra Exercise
 
 Test Kubernetes promise of resiliency and high availability
 

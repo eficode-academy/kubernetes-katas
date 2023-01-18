@@ -25,13 +25,13 @@ spec:
         imagePullPolicy: Always
         ### using hardcoded env vars
         env:
-        - name: db_host
+        - name: DB_HOST
           value: postgres
-        - name: db_port
+        - name: DB_PORT
           value: "5432"
-        - name: db_user
+        - name: DB_USER
           value: superuser
-        - name: db_password
+        - name: DB_PASSWORD
           value: complicated
-        - name: db_name
+        - name: DB_NAME
           value: quotes

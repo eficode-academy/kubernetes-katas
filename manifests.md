@@ -54,7 +54,7 @@ Step by step:
 
 ### Write your own `pod` manifest.
 
-- Go into the `manifests` directory and the `start` folder.
+- Go into the `manifests/start` directory.
 - Open the `frontend-pod.yaml` file in a text editor.
 
 It looks like this:
