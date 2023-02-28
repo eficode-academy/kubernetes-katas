@@ -429,10 +429,10 @@ frontend   LoadBalancer   172.20.30.195   a99b267dc38c94ec3b0507427c1a2665-36277
 
 > Note: Even though it is called "EXTERNAL-IP" it is actually a DNS name (this is an AWS quirk).
 
-- Access the frontend through the EXTERNAL-IP from the browser. Rembmer to add the port to the url like:
+- Access the frontend through the EXTERNAL-IP from the browser. Remember to add the port to the url like:
 
 ```
-http://a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com
+http://a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com:5000
 ```
 
 </details>
