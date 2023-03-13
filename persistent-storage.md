@@ -91,11 +91,7 @@ Let's create a `PersistentVolume` (pv)!
 
 While we could create a manifest for a `PersistentVolume` manually we will not do that in this exercise.
 
-Instead we will do this automatically by creating a `PersistentVolumeClaim` (pvc), which in turn will use the specified `StorageClass` to create a `PersistentVolumes`, based on the specification of our `PersistentVolumeClaim`.
-
-> :bulb: In practice we will almost always create a `PersistentVolume` by creating `PersistentVolumeClaim`, which uses a `StorageClass` to create the actual volume.
-
-We will use the files located in `persistent-storage/start` to solve this exercise.
+In practice we will almost always create a `PersistentVolume` by creating `PersistentVolumeClaim`, which uses a `StorageClass` to create the actual volume.
 
 Create a new file `persistent-storage/start/postgres-pvc.yaml`
 
