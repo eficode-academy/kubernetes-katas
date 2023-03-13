@@ -327,7 +327,7 @@ By populating these specific values we can configure the credentials for root us
 
 This means that we need to change the way we are injecting the environment variables, in order to make sure the environment variables have the correct names.
 
-- Open the `database-deployment.yaml` file, and change the way the environment variables are injected to use the configmap and secret.
+- Open the `postgres-deployment.yaml` file, and change the way the environment variables are injected to use the configmap and secret.
 
 ```yaml
 ### using configMapKeyRef
@@ -349,7 +349,7 @@ env:
         key: DB_PASSWORD
 ```
 
-- re-apply the database deployment with `kubectl apply -f database-deployment.yaml`
+- re-apply the database deployment with `kubectl apply -f postgres-deployment.yaml`
 - check that the website is still running, and that the new database can be reached from the backend.
 
 Congratulations! You have now created a configmap and a secret, and used them in your application.
