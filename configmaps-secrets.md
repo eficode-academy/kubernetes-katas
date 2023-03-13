@@ -274,7 +274,7 @@ Help me out!
 If you are stuck, here is the solution:
 
 ```
-kubectl create secret generic postgres-secret --from-literal=DB_PASSWORD=Y29tcGxpY2F0ZWQ= --dry-run=client -o yaml > postgres-secret.yaml
+kubectl create secret generic postgres-secret --from-literal=DB_PASSWORD=complicated --dry-run=client -o yaml > postgres-secret.yaml
 ```
 
 You can also write the secret by hand:
