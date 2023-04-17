@@ -69,7 +69,7 @@ spec:
 Use the `kubectl apply -f <file>` command to send the manifest with your desired state to Kubernetes:
 
 ```
-kubectl apply -f declarative-deployment/nginx-deployment.yaml
+kubectl apply -f desired-state/nginx-deployment.yaml
 ```
 
 Expected output:
