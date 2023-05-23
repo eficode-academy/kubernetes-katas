@@ -1,26 +1,18 @@
-# Declarative Deployment
+# Desired State
 
-In this exercise you will create the same `nginx` deployment as the `basic-deployment` exercise, but instead of creating the deployment **imperatively** you will do it **declaratively**.
+Desired state is one of the core concepts of Kubernetes. It is the state that you want your cluster to be in. It is the state that you define in your Kubernetes manifests.
+It means that the cluster continously will try to fulfill your desired state, even if it will never be posible to reach it.
+
+In this exercise you will apply Kubernetes manifests to your cluster, and learn how Kubernetes fulfills your desired state.
+
+## Controllers
+
+Kubernetes controllers are the components that fulfills your desired state. As the example we will use here, a deployment controller will attempt to do so that the number of pods that you have defined in your manifest is always running in the cluster.
 
 ## Learning Goals
 
-- Reading Kubernetes manifest files.
 - Applying Kubernetes manifests using `kubectl apply -f <file>`.
 - Verifying Kubernetes promise of fulfilling your desired state.
-
-## Introduction
-
-Doing things **imperatively** is fine for _hacking_ on things, but most of the time we want to work with Kubernetes **declaratively**.
-
-What we mean by imperatively, is that you are actively _creating, deleting and modifying_ resources.
-The potential problems with doing things imperatively is that we have no way of knowing what changes were made, by who, and why - which we might need to know at later point if something breaks.
-
-Therefore we much prefer to do things **declaratively**.
-Declaratively means that we _declare what we want,_ and _not how_ Kubernetes should do it.
-
-This declaration is what we call our `desired state`.
-
-Kubernetes resources are declared in what is called `manifests` which use a markup language called `yaml` to express the desired state of resources.
 
 ## Exercise
 
@@ -42,7 +34,7 @@ Step by step:
 
 We have prepared a Kubernetes manifest for you.
 
-You can find the manifest in the file: `declarative-deployment/nginx-deployment.yaml`.
+You can find the manifest in the file: `desired-state/nginx-deployment.yaml`.
 
 Below is the contents of the manifest:
 
@@ -77,7 +69,7 @@ spec:
 Use the `kubectl apply -f <file>` command to send the manifest with your desired state to Kubernetes:
 
 ```
-kubectl apply -f declarative-deployment/nginx-deployment.yaml
+kubectl apply -f desired-state/nginx-deployment.yaml
 ```
 
 Expected output:
@@ -178,10 +170,11 @@ You have also seen that Kubernetes keeps it's promise of fulfilling your desired
 
 </details>
 
+
 ### Clean up
 
 Delete your desired state by using the `kubectl delete -f <file>` command.
 
 ```
-kubectl delete -f declarative-deployment/nginx-deployment.yaml
+kubectl delete -f desired-state/nginx-deployment.yaml
 ```
