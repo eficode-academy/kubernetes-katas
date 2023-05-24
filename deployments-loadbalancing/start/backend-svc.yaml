@@ -6,9 +6,9 @@ metadata:
   name: backend
 spec:
   ports:
-  - port: 5000
-    protocol: TCP
-    targetPort: 5000
+    - port: 5000
+      protocol: TCP
+      targetPort: 5000
   selector:
     run: backend
   type: ClusterIP

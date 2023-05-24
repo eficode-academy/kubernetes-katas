@@ -4,7 +4,7 @@ metadata:
   name: # Deployment name
   labels: # Deployment labels
 spec:
-    replicas: # the number of pods to run
-    selector: # How to select pods belonging to this deployment. Must match the pod template's labels
-        matchLabels: # List of labels
-    template: # This is the pod template, paste in the pod spec from frontend-pod.yaml
+  replicas: # the number of pods to run
+  selector: # How to select pods belonging to this deployment. Must match the pod template's labels
+    matchLabels: # List of labels
+  template: # This is the pod template, paste in the pod spec from frontend-pod.yaml
