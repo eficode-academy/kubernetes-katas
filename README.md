@@ -15,8 +15,8 @@ You can find a summary of many of the commands used in the exercises in the
 
 ## Katas in suggested order:
 
-- [basic-deployment](basic-deployment.md)
-- [declarative-deployment](declarative-deployment.md)
+- [intro](intro.md)
+- [desired-state](desired-state.md)
 - [manifests](manifests.md)
 - [accessing-your-application](accessing-your-application.md)
 - [services](services.md)
