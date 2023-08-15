@@ -176,8 +176,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      run: backend
+    matchLabels:  # List of labels
   template:
     metadata:
       labels:
@@ -307,6 +306,7 @@ NAME                      READY     STATUS    RESTARTS   AGE
 backend-5f4b8b7b4-5x7xg   1/1       Running   0          2m
 backend-5f4b8b7b4-6j6xg   1/1       Running   0          1m
 backend-5f4b8b7b4-7x7xg   1/1       Running   0          1m
+frontend                  1/1       Running   0          20m
 ```
 
 - Access the frontend again from the browser. It should now periodically change the `hostname` part of the website.
