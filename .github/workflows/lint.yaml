@@ -40,5 +40,4 @@ jobs:
       run: sh .test/extract_all_k8s_from_md.sh
 
     - name: Lint Kubernetes Resources
-      run: sh .test/lint_kubeval.sh
-
+      run: sh .test/lint_kube.sh
