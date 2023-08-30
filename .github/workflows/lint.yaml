@@ -13,7 +13,7 @@ jobs:
         kubernetes-version: [ '1.16.0', '1.21.0' ]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Extract K8s YAML from Markdown files
       run: sh .test/extract_all_k8s_from_md.sh
@@ -34,10 +34,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Extract K8s YAML from Markdown files
-      run: sh .test/extract_all_k8s_from_md.sh
+      run: bash .test/extract_all_k8s_from_md.sh
 
     - name: Lint Kubernetes Resources
-      run: sh .test/lint_kube.sh
+      run: bash .test/lint_kube.sh
