@@ -10,7 +10,7 @@ metadata:
 spec:
   rules:
     # you need to change the host to match your own
-    - host: frontend-<yourname>.<prefix>.eficode.academy
+    - host: quotes-<yourname>.<prefix>.eficode.academy
       http:
         paths:
           - pathType: Prefix
@@ -20,4 +20,5 @@ spec:
                 # change this to match your service name
                 name: <name of the frontend service>
                 port:
-                  number: 80
+                # this is the port your service is listening on
+                  number: 5000

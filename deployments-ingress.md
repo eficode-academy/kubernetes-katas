@@ -481,7 +481,7 @@ kubectl delete -f backend-svc.yaml
 kubectl delete -f frontend-ingress.yaml
 ```
 
-> :bulb: If you ever want to delete all resources from a particular directory, you can use a shell wildcard: `kubectl delete -f *.yaml` which will point at **all** `.yaml` files in that directory!
+> :bulb: If you ever want to delete all resources from a particular directory, you can use: `kubectl delete -f .` which will point at **all** files in that directory!
 
 # Extra Exercise
 
