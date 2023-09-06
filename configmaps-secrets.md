@@ -189,7 +189,7 @@ We want to change the database user into a configmap, so that we can change it i
 ```yaml
 data:
   DB_HOST: postgres
-  DB_PORT: "5432'
+  DB_PORT: "5432"
   DB_USER: superuser
   DB_PASSWORD: complicated
   DB_NAME: quotes
