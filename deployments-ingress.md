@@ -2,10 +2,10 @@
 
 ## Learning Goals
 
+- Learn how to expose a deployment using Ingress
 - Learn how to use `deployments`
 - Learn how to scale deployments
 - Learn how to use `services` to do loadbalance between the pods of a scaled deployment
-- Learn how to expose a deployment using Ingress
 
 ## Introduction
 
@@ -78,11 +78,11 @@ To scale a deployment, we change the number of `replicas` in the manifest file, 
 
 ## Ingress
 
-Ingress in Kubernetes is an API object that manages external access to the services in a cluster, typically HTTP and HTTPS.
+Ingress in Kubernetes that manages external access to the services in a cluster, typically HTTP and HTTPS.
 
 Ingress can provide load balancing, SSL termination, and name-based virtual routing.
 
-Ingress builds on top of the `service` and `deployment` concepts, and is implemented by an `ingress controller`.
+Ingress builds on top of the `service` concept, and is implemented by an `ingress controller`.
 
 An example Ingress manifest to be used in AWS looks like this:
 
@@ -114,6 +114,8 @@ spec:
                   number: 80
 ```
 
+When you apply this manifest, an A-record will be created in Route53, pointing to our ingress-controller called ALB, and the ALB will route traffic to the service.
+
 ## Exercise
 
 ### Overview
@@ -142,9 +144,11 @@ We also have two services, one for the backend (type ClusterIP) and one for the 
 
 **Add Ingress to frontend service**
 
+As it might take a while for the ingress to work, we will start by adding the ingress to the frontend service, even though we have not applied the service yet.
 
 - Open the `frontend-ingress.yaml` file in your editor.
 - Change the hostname to `quotes-<yourname>.<prefix>.eficode.academy`. Just as long as it is unique.
+- Change the service name to match the name of the frontend service.
 - Apply the ingress manifest.
 
 ```
@@ -170,19 +174,15 @@ NAME              HOSTS                                   ADDRESS   PORTS   AGE
 frontend-ingress   quotes-<yourname>.<prefix>.eficode.academy             80      1m
 ```
 
+Congratulations, you have now added an ingress to the frontend service.
+It will take a while for the ingress to work, so we will continue with the backend deployment.
+
 **Turn the backend pod manifests into a deployment manifest**
 
-- Deploy the frontend pod as well as the two services.
+- Deploy the frontend pod as well as the two services `backend-svc.yaml` and `frontend-svc.yaml`.
   Use the `kubectl apply -f` command.
 
 - Verify that the frontend is accessible from the browser.
-- If ingress is working, you should be able to access the frontend from the browser using the hostname you specified in the ingress manifest.
-
-```
-http://quotes-<yourname>.<prefix>.eficode.academy
-```
-
-It might take up to 5 minutes, so if you are fast, you can check it through NodePort service instead.
 
 <details>
 
@@ -314,7 +314,16 @@ backend-5f4b8b7b4-5x7xg   1/1       Running   0          1m
 ```
 
 - Access the frontend again from the browser. Now the Ingress should work and you should be able to access the frontend from the browser using the hostname you specified in the ingress manifest.
-  It should now be able to access the backend.
+
+The url should look something like this:
+
+```
+http://quotes-<yourname>.<prefix>.eficode.academy
+```
+
+- If it still does not work, you can check it through NodePort service instead.
+
+- You should now see the backend.
 
 - If this works, please delete the `backend-pod.yaml` file, as we now have upgraded to a deployment and no longer need it!
 
@@ -464,6 +473,12 @@ kubectl delete -f backend-deployment.yaml
 ```
 kubectl delete -f frontend-svc.yaml
 kubectl delete -f backend-svc.yaml
+```
+
+- Delete the ingress
+
+```
+kubectl delete -f frontend-ingress.yaml
 ```
 
 > :bulb: If you ever want to delete all resources from a particular directory, you can use a shell wildcard: `kubectl delete -f *.yaml` which will point at **all** `.yaml` files in that directory!
