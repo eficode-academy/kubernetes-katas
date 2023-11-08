@@ -103,8 +103,6 @@ Expected output:
 configmap/backend-config created
 deployment.apps/backend created
 service/backend created
-clusterrole.rbac.authorization.k8s.io/pods-list created
-clusterrolebinding.rbac.authorization.k8s.io/pods-list created
 deployment.apps/frontend created
 service/frontend created
 configmap/postgres-config created
