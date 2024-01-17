@@ -195,6 +195,7 @@ data:
   DB_NAME: quotes
 ```
 
+
 :bulb: If you are unsure how to do this, look at the [configmap section](#configmaps) above.
 
 <details>
@@ -224,6 +225,9 @@ data:
 ```
 
 </details>
+
+
+- apply the configmap with `kubectl apply -f postgres-config.yaml`
 
 - In the `backend-deployment.yaml`, change the environment variables to use the configmap instead of the hardcoded values.
 
