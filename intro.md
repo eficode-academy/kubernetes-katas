@@ -192,3 +192,18 @@ To clean up, run the following command:
 kubectl delete -f quotes-flask/
 ```
 
+### Extra
+
+If you have more time, take a look at the YAML manifests that we used to deploy the application.
+They are in the `quotes-flask` folder.
+First take a look at the deployment manifest, and see if you can find the following information:
+
+- The name of the deployment
+- The number of replicas
+- The image used for the container
+
+Then take a look at the service manifest, and see if you can find the following information:
+
+- The name of the service
+- The port the service listens on
+

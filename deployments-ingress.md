@@ -2,14 +2,14 @@
 
 ## Learning Goals
 
+- Learn how to expose a deployment using Ingress
 - Learn how to use `deployments`
 - Learn how to scale deployments
 - Learn how to use `services` to do loadbalance between the pods of a scaled deployment
-- Learn how to expose a deployment using a service type LoadBalancer
 
 ## Introduction
 
-In this exercise you'll learn how to deploy a pod using a deployment, and how to scale it. You'll also learn how to expose a deployment using a service type LoadBalancer.
+In this exercise, you'll learn how to deploy a pod using a deployment, how to scale it, and how to expose it using an `Ingress` resource with URL routing.
 
 ## Deployments
 
@@ -76,39 +76,56 @@ In Kubernetes this is done in practice by `scaling` a deployment, e.g. by adding
 
 To scale a deployment, we change the number of `replicas` in the manifest file, and then apply the changes using `kubectl apply -f <manifest-file>`.
 
-### Service type: LoadBalancer
+## Ingress
 
-Similar to pods, deployments can also be exposed using services.
-For all practical purposes, deployments are used along with services.
-We have seen how to expose a pod using a service type `ClusterIP`.
-This service type is only accessible from within the cluster.
-We have also seen how to expose a pod using a service type `NodePort`.
-This service type is accessible from the internet, but only on the port that is exposed on the worker nodes.
-We do not expect the users to know the IP addresses of our worker nodes, nor do we necessarily want to expose the worker nodes to the internet.
+Ingress in Kubernetes that manages external access to the services in a cluster, typically HTTP and HTTPS.
 
-The only thing that changes when we change the service type from NodePort to LoadBalancer is that the service type LoadBalancer will create a load balancer in the cloud provider, and will expose the service on an IP and port that is accessible from the internet.
+Ingress can provide load balancing, SSL termination, and name-based virtual routing.
 
-This also means that the exact behaviour of `services` of type `LoadBalancer` is different from Kubernetes provider to Kubernetes provider!
+Ingress builds on top of the `service` concept, and is implemented by an `ingress controller`.
 
-<details>
-<summary>
-:bulb: More Details
-</summary>
+An example Ingress manifest to be used in AWS looks like this:
 
-The type LoadBalancer is only available for use, if your Kubernetes cluster is setup in one of the public cloud providers like GCE, AWS, etc. or if the admin of a local cluster has set it up, using for example [metallb](https://metallb.org/).
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    #annotations are used to configure the ingress controller behavior.
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+  name: quotes-ingress
+spec:
+  # rules are used to configure the routing behavior.
+  rules:
+    # each rule has a host and a list of paths. The host is used to match the host header of the request, normally the domain name.
+    - host: quotes-1.prosa.eficode.academy
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            # each path has a backend, which is used to route the request to a service.
+            backend:
+              service:
+                # This is the name of the service to route to.
+                name: quotes-frontend
+                port:
+                  number: 80
+```
 
-</details>
+When you apply this manifest, an A-record will be created in Route53, pointing to our ingress-controller called ALB, and the ALB will route traffic to the service.
 
 ## Exercise
 
 ### Overview
 
+- Add frontend Ingress and let it reconcile
 - Turn the backend pod manifests into a deployment manifest
 - Apply the backend deployment manifest
 - Scale the deployment by adding a replicas key
 - Turn frontend pod manifests into a deployment manifest
 - Apply the frontend deployment manifest
-- Add frontend service type LoadBalancer
 - Test service promise of high availability
 
 > :bulb: If you get stuck somewhere along the way, you can check the solution in the done directory.
@@ -120,12 +137,49 @@ The type LoadBalancer is only available for use, if your Kubernetes cluster is s
 Step by step:
 </summary>
 
-- Go into the `deployments-loadbalancing/start` directory.
+- Go into the `deployments-ingress/start` directory.
 
 In the directory we have the pod manifests for the backend and frontend that have created in the previous exercises.
-We also have two services, one for the backend (type ClusterIP) and one for the frontend (type NodePort).
+We also have two services, one for the backend (type ClusterIP) and one for the frontend (type NodePort) as well as an ingress manifest for the frontend.
 
-- Deploy the frontend pod as well as the two services.
+**Add Ingress to frontend service**
+
+As it might take a while for the ingress to work, we will start by adding the ingress to the frontend service, even though we have not applied the service yet.
+
+- Open the `frontend-ingress.yaml` file in your editor.
+- Change the hostname to `quotes-<yourname>.<prefix>.eficode.academy`. Just as long as it is unique.
+- Change the service name to match the name of the frontend service.
+- Apply the ingress manifest.
+
+```
+kubectl apply -f frontend-ingress.yaml
+```
+
+Expected output:
+
+```
+ingress.networking.k8s.io/frontend-ingress created
+```
+
+- Check that the ingress has been created.
+
+```
+kubectl get ingress
+```
+
+Expected output:
+
+```
+NAME              HOSTS                                   ADDRESS   PORTS   AGE
+frontend-ingress   quotes-<yourname>.<prefix>.eficode.academy             80      1m
+```
+
+Congratulations, you have now added an ingress to the frontend service.
+It will take a while for the ingress to work, so we will continue with the backend deployment.
+
+**Turn the backend pod manifests into a deployment manifest**
+
+- Deploy the frontend pod as well as the two services `backend-svc.yaml` and `frontend-svc.yaml`.
   Use the `kubectl apply -f` command.
 
 - Verify that the frontend is accessible from the browser.
@@ -259,8 +313,17 @@ NAME                      READY     STATUS    RESTARTS   AGE
 backend-5f4b8b7b4-5x7xg   1/1       Running   0          1m
 ```
 
-- Access the frontend again from the browser.
-  It should now be able to access the backend.
+- Access the frontend again from the browser. Now the Ingress should work and you should be able to access the frontend from the browser using the hostname you specified in the ingress manifest.
+
+The url should look something like this:
+
+```
+http://quotes-<yourname>.<prefix>.eficode.academy
+```
+
+- If it still does not work, you can check it through NodePort service instead.
+
+- You should now see the backend.
 
 - If this works, please delete the `backend-pod.yaml` file, as we now have upgraded to a deployment and no longer need it!
 
@@ -393,47 +456,6 @@ frontend-47b45fb8b-4x7xg   1/1       Running   0          1m
 
 - If this works, please delete the `frontend-pod.yaml` file, as we now have upgraded to a deployment and no longer need it!
 
-**Add frontend service type loadbalancer**
-
-- Change the frontend service type to `LoadBalancer` in the frontend-svc.yaml file.
-
-- Apply the frontend service manifest file again.
-
-```
-kubectl apply -f frontend-svc.yaml
-```
-
-Expected output:
-
-```
-service/frontend-svc configured
-```
-
-- Check that the service has been created.
-
-```
-kubectl get services
-```
-
-Expected output:
-
-```
-NAME       TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)          AGE
-backend    ClusterIP      172.20.211.99   <none>                                                                   5000/TCP         3h13m
-frontend   LoadBalancer   172.20.30.195   a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com   5000:32146/TCP   13m
-```
-
-> Note: The EXTERNAL-IP will be different for you.
-
-> Note: It may take a few minutes for the EXTERNAL-IP to be assigned.
-
-> Note: Even though it is called "EXTERNAL-IP" it is actually a DNS name (this is an AWS quirk).
-
-- Access the frontend through the EXTERNAL-IP from the browser. Remember to add the port to the url like:
-
-```
-http://a99b267dc38c94ec3b0507427c1a2665-362778330.eu-west-1.elb.amazonaws.com:5000
-```
 
 </details>
 
@@ -453,7 +475,13 @@ kubectl delete -f frontend-svc.yaml
 kubectl delete -f backend-svc.yaml
 ```
 
-> :bulb: If you ever want to delete all resources from a particular directory, you can use a shell wildcard: `kubectl delete -f *.yaml` which will point at **all** `.yaml` files in that directory!
+- Delete the ingress
+
+```
+kubectl delete -f frontend-ingress.yaml
+```
+
+> :bulb: If you ever want to delete all resources from a particular directory, you can use: `kubectl delete -f .` which will point at **all** files in that directory!
 
 # Extra Exercise
 

@@ -13,5 +13,3 @@ spec:
   selector:
     app: backend
   type: ClusterIP
-status:
-  loadBalancer: {}

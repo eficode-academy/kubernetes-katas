@@ -5,8 +5,8 @@
 KUBERNETES_RESOURCE_FILES=$(find * -type f \( -iname '*.yml' -or -iname '*.yaml' \) -and ! \( -iname "helmfile.yaml" -or -iname "values-*.yaml" -or -iname "*docker-compose*" \))
 
 excludes=(
-  deployments-loadbalancing/start/frontend-deployment.yaml
-  deployments-loadbalancing/start/backend-deployment.yaml
+  deployments-ingress/start/frontend-deployment.yaml
+  deployments-ingress/start/backend-deployment.yaml
   manifests/start/frontend-pod.yaml
   services/start/backend-svc.yaml
   services/start/frontend-svc.yaml

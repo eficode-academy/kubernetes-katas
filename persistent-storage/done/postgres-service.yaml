@@ -13,5 +13,3 @@ spec:
   selector:
     app: postgres
   type: ClusterIP
-status:
-  loadBalancer: {}
