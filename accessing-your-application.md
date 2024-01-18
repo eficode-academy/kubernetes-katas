@@ -104,7 +104,7 @@ Now we will deploy both the frontend and backend pods.
 You should see something like this:
 
 ```
-k get pods frontend -o wide
+k get pods backend -o wide
 NAME      READY   STATUS    RESTARTS   AGE   IP            NODE                                        NOMINATED NODE   READINESS GATES
 backend   1/1     Running   0          11s   10.0.40.196   ip-10-0-35-102.eu-west-1.compute.internal   <none>           <none>
 ```
