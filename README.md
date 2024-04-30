@@ -20,7 +20,7 @@ You can find a summary of many of the commands used in the exercises in the
 - [manifests](manifests.md)
 - [accessing-your-application](accessing-your-application.md)
 - [services](services.md)
-- [deployments-loadbalancing](deployments-loadbalancing.md)
+- [deployments-loadbalancing](deployments-ingress.md)
 - [rolling-updates](rolling-updates.md)
 - [configmaps-secrets](configmaps-secrets.md)
 - [persistent-storage](persistent-storage.md)
