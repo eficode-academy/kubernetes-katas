@@ -98,8 +98,9 @@ Port forward can be achieved with:
 > probably don't want to do this on your own machine in, unless you want to expose something
 > to the internet.
 
-And can then be accessed on `workstation-<number>.<prefix>.eficode.academy:8080`
-(from the internet).
+It can now be accessed on `http://workstation-<number>.<prefix>.eficode.academy:8080`
+(from the internet). Notice the plain, unencrypted `http` connection. It is not `https`, and your
+browser may complain about it. TLS is an advanced topic and out of scope for now.
 
 > :bulb: VSCode will ask you if you what to see the open port. Unfortunately vscode proxy does not
 > proxy requests correctly back to the pod, so use the URL of the instance instead.
