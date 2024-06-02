@@ -8,4 +8,6 @@ spec:
   containers:
   - image: ghcr.io/eficode-academy/quotes-flask-backend:release
     name: quotes-flask-backend
+    ports:
+    - containerPort: 5000
   restartPolicy: Always
