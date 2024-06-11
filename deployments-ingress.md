@@ -148,6 +148,7 @@ As it might take a while for the ingress to work, we will start by adding the in
 
 - Open the `frontend-ingress.yaml` file in your editor.
 - Change the hostname to `quotes-<yourname>.<prefix>.eficode.academy`. Just as long as it is unique.
+  - the prefix normally is what is after your workstation-X.<prefix>.eficode.academy. If you are unsure, ask the trainer.
 - Change the service name to match the name of the frontend service.
 - Apply the ingress manifest.
 
