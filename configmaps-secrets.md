@@ -218,7 +218,7 @@ metadata:
   name: postgres-config
 data:
   DB_HOST: postgres
-  DB_PORT: "5432'
+  DB_PORT: "5432"
   DB_USER: superuser
   DB_NAME: quotes
   DB_PASSWORD: complicated
