@@ -12,7 +12,7 @@ This makes it easy to update the configuration in one place, when you want to ch
 
 Both configmaps and secrets are generic `key-value` pairs, but secrets are `base64 encoded` and configmaps are not.
 
-> :bulb: Secrets are not encrypted, they are encoded. This means that if someone gets access to the cluster, they can will be able to read the values.
+> :bulb: Secrets are not encrypted, they are encoded. This means that if someone gets access to the cluster, they will be able to read the values.
 
 ## ConfigMaps
 
