@@ -8,6 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
   name: frontend-ingress
 spec:
+  ingressClassName: "alb"
   rules:
     # you need to change the host to match your own
     - host: quotes-<yourname>.<prefix>.eficode.academy
