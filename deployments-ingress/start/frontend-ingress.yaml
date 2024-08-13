@@ -4,10 +4,10 @@ metadata:
   annotations:
     # These annotations are required to use ALB Ingress Controller
     alb.ingress.kubernetes.io/scheme: internet-facing
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
   name: frontend-ingress
 spec:
+  ingressClassName: "alb"
   rules:
     # you need to change the host to match your own
     - host: quotes-<yourname>.<prefix>.eficode.academy
