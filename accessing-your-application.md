@@ -88,7 +88,7 @@ Port forward can be achieved with:
 > :bulb: We add the `--address 0.0.0.0` option to the port-forward command to make it accept commands coming from remote machines, like your laptop!
 > `0.0.0.0` Means any address, so you probably don't want to do this on your own machine in, unless you want to expose something to the internet.
 
-And can then be accessed on `inst<number>.<prefix>.eficode.academy:8080` (from the internet).
+And can then be accessed on `workstation-<number>.<prefix>.eficode.academy:8080` (from the internet).
 
 > :bulb: VSCode will ask you if you what to see the open port. Unfortunately vscode proxy does not proxy requests correctly back to the pod, so use the URL of the instance instead.
 
