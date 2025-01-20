@@ -10,15 +10,20 @@
 
 Deploying a pod is not enough to make it accessible from outside the cluster.
 
-In this exercise you will learn how to make temporary connections to a pod inside the cluster via `kubectl port-forward`.
+In this exercise you will learn how to make temporary connections to a pod inside the cluster via
+`kubectl port-forward`.
 
 ## Port-forward
 
-The `kubectl port-forward` command allows you to forward one or more local ports to a pod. This can be used to access a pod that is running in the cluster, using for example a web browser or a command line tool like `curl`.
+The `kubectl port-forward` command allows you to forward one or more local ports to a pod. This can
+be used to access a pod that is running in the cluster, using for example a web browser or a
+command line tool like `curl`.
 
-The command takes two arguments: the pod name and the port to forward. The port is specified as `local:remote` to forward a local port to a remote port inside the pod.
+The command takes two arguments: the pod name and the port to forward. The port is specified as
+`local:remote` to forward a local port to a remote port inside the pod.
 
-For example, if you want to forward port 8080 on your local machine to port 5000 in the pod, you can use the following command:
+For example, if you want to forward port 8080 on your local machine to port 5000 in the pod, you
+can use the following command:
 
 `kubectl port-forward frontend 8080:5000`
 
@@ -27,9 +32,12 @@ You can then access the pod on `localhost:8080`.
 <details>
 <summary>:bulb: How does this port-forward work?</summary>
 
-Port forwarding is a network address translation that redirects internet packets form one IP address with specified port number to another `IP:PORT` set.
+Port forwarding is a network address translation that redirects internet packets form one IP address
+with specified port number to another `IP:PORT` set.
 
-In Kubernetes `port-forward` creates a tunnel between your local machine and Kubernetes cluster on the specified `IP:PORT` pairs in order to establish connection to the cluster. `kubectl port-forward` allows you to forward not only pods but also services, deployments and other.
+In Kubernetes `port-forward` creates a tunnel between your local machine and Kubernetes cluster on
+the specified `IP:PORT` pairs in order to establish connection to the cluster.
+`kubectl port-forward` allows you to forward not only pods but also services, deployments and other.
 
 More information can be found from [here](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 
@@ -74,7 +82,7 @@ The pod is defined in the `frontend-pod.yaml` file.
 
 You should see something like this:
 
-```
+```text
 NAME       READY   STATUS    RESTARTS   AGE
 frontend   1/1     Running   0          2m
 ```
@@ -85,12 +93,16 @@ Port forward can be achieved with:
 
 `kubectl port-forward --address 0.0.0.0 frontend 8080:5000`
 
-> :bulb: We add the `--address 0.0.0.0` option to the port-forward command to make it accept commands coming from remote machines, like your laptop!
-> `0.0.0.0` Means any address, so you probably don't want to do this on your own machine in, unless you want to expose something to the internet.
+> :bulb: We add the `--address 0.0.0.0` option to the port-forward command to make it accept
+> commands coming from remote machines, like your laptop! `0.0.0.0` Means any address, so you
+> probably don't want to do this on your own machine in, unless you want to expose something
+> to the internet.
 
-And can then be accessed on `workstation-<number>.<prefix>.eficode.academy:8080` (from the internet).
+And can then be accessed on `workstation-<number>.<prefix>.eficode.academy:8080`
+(from the internet).
 
-> :bulb: VSCode will ask you if you what to see the open port. Unfortunately vscode proxy does not proxy requests correctly back to the pod, so use the URL of the instance instead.
+> :bulb: VSCode will ask you if you what to see the open port. Unfortunately vscode proxy does not
+> proxy requests correctly back to the pod, so use the URL of the instance instead.
 
 - Look at it in the browser.
 
@@ -103,15 +115,16 @@ Now we will deploy both the frontend and backend pods.
 
 You should see something like this:
 
-```
+```shell
 k get pods backend -o wide
+
 NAME      READY   STATUS    RESTARTS   AGE   IP            NODE                                        NOMINATED NODE   READINESS GATES
 backend   1/1     Running   0          11s   10.0.40.196   ip-10-0-35-102.eu-west-1.compute.internal   <none>           <none>
 ```
 
 In this case the IP is `10.0.40.196`, but it will be different in your case.
 
-**Add environment variables to the frontend pod**
+#### Add environment variables to the frontend pod
 
 - Open the `frontend-pod.yaml` file and add the following environment variables to the pod:
 
@@ -191,7 +204,8 @@ Extra exercise
 
 While still having the port-forward running
 
-- Access the frontend in the browser and check that it still works and that frontend has access to the backend.
+- Access the frontend in the browser and check that it still works and that frontend has access to
+  the backend.
 - Try to delete the backend pod with `kubectl delete pod backend` command.
 - Try to recreate the backend pod with `kubectl apply -f backend-pod.yaml` command.
 - Access the frontend in the browser.
@@ -203,9 +217,11 @@ If not, why not?
 <summary>Solution</summary>
 
 The frontend pod is not configured to automatically re-resolve the backend IP address.
-So when we deleted the pod, and recreated it, the IP address changed, but the frontend pod still has the old IP address in its environment variables.
+So when we deleted the pod, and recreated it, the IP address changed, but the frontend pod still
+has the old IP address in its environment variables.
 
-Thankfully Kubernetes has a networking abstraction called `services` which solves this exact (and more!) problem, which we will learn about in the next exercise.
+Thankfully Kubernetes has a networking abstraction called `services` which solves this exact (and
+more!) problem, which we will learn about in the next exercise.
 
 </details>
 </details>
@@ -217,5 +233,6 @@ Thankfully Kubernetes has a networking abstraction called `services` which solve
 - Delete the pod with `kubectl delete pod frontend` command.
 - Delete the pod with `kubectl delete pod backend` command.
 
-Congratulations! You have now learned how to make temporary connections to a pod inside the cluster via `kubectl port-forward`, and how to use environment variables to configure the pod.
+Congratulations! You have now learned how to make temporary connections to a pod inside the cluster
+via `kubectl port-forward`, and how to use environment variables to configure the pod.
 And lastly, you have learned how to use `kubectl exec` to execute commands inside a pod.

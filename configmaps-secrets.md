@@ -7,12 +7,15 @@
 
 ## Introduction
 
-Configmaps and secrets are a way to store information that is used by several deployments and pods in your cluster.
-This makes it easy to update the configuration in one place, when you want to change it.
+Configmaps and secrets are a way to store information that is used by several deployments and pods
+in your cluster. This makes it easy to update the configuration in one place, when you want to
+change it.
 
-Both configmaps and secrets are generic `key-value` pairs, but secrets are `base64 encoded` and configmaps are not.
+Both configmaps and secrets are generic `key-value` pairs, but secrets are `base64 encoded` and
+configmaps are not.
 
-> :bulb: Secrets are not encrypted, they are encoded. This means that if someone gets access to the cluster, they will be able to read the values.
+> :bulb: Secrets are not encrypted, they are encoded. This means that if someone gets access to the
+> cluster, they will be able to read the values.
 
 ## ConfigMaps
 
@@ -20,7 +23,8 @@ You use a ConfigMap to keep your application code separate from your configurati
 
 It is an important part of creating a [Twelve-Factor Application](https://12factor.net/).
 
-This lets you change easily configuration depending on the environment (development, production, testing, etc.) and to dynamically change configuration at runtime.
+This lets you change easily configuration depending on the environment (development, production,
+testing, etc.) and to dynamically change configuration at runtime.
 
 A ConfigMap manifest looks like this in yaml:
 
@@ -78,9 +82,11 @@ data:
 
 </details>
 
-- Use literal key-value pairs defined on the command line with `kubectl create configmap my-config --from-literal=key1=value1 --from-literal=key2=value2`
+- Use literal key-value pairs defined on the command line with
+  `kubectl create configmap my-config --from-literal=key1=value1 --from-literal=key2=value2`
 
-> :bulb: remember the `--dry-run=client -o yaml` trick to see what the yaml file will look like before you apply it.
+> :bulb: remember the `--dry-run=client -o yaml` trick to see what the yaml file will look like
+> before you apply it.
 
 <details>
 <summary>
@@ -95,21 +101,26 @@ data:
 
 `secrets` are used for storing configuration that is considered sensitive, and well ... _secret_.
 
-When you create a `secret` Kubernetes will go out of it's way to not print the actual values of secret object, to things like logs or command output.
+When you create a `secret` Kubernetes will go out of it's way to not print the actual values of
+secret object, to things like logs or command output.
 
 You should use `secrets` to store things like passwords for databases, API keys, certificates, etc.
 
-Rather than hardcode this sensitive information and commit it to git for all the world to see, we source these values from environment variables.
+Rather than hardcode this sensitive information and commit it to git for all the world to see, we
+source these values from environment variables.
 
-`secrets` function for the most part identically to `configmaps`, but with the difference that the actual values are `base64` encoded.
-`base64` encoded means that the values are obscured, but can be trivially decoded.
-When values from a `secret` are used, Kubernetes handles the decoding for you.
+`secrets` function for the most part identically to `configmaps`, but with the difference that the
+actual values are `base64` encoded. `base64` encoded means that the values are obscured, but can be
+trivially decoded. When values from a `secret` are used, Kubernetes handles the decoding for you.
 
-> :bulb: As `secrets` don't actually make their data secret for anyone with access to the cluster, you should think of `secrets` as metadata for humans, to know that the data contained within is considered secret.
+> :bulb: As `secrets` don't actually make their data secret for anyone with access to the cluster,
+> you should think of `secrets` as metadata for humans, to know that the data contained within is
+> considered secret.
 
 ## Using ConfigMaps and Secrets in a deployment
 
-To use a configmap or secret in a deployment, you can either mount it in as a volume, or use it directly as an environment variable.
+To use a configmap or secret in a deployment, you can either mount it in as a volume, or use it
+directly as an environment variable.
 
 ### Injecting a ConfigMap as environment variables
 
@@ -152,7 +163,7 @@ Step by step:
 
 > :bulb: All files for the exercise are found in the `configmap-secrets/start` folder.
 
-**Add the database part of the application**
+#### Add the database part of the application
 
 We have already created the database part of the application, with a deployment and a service.
 
@@ -180,11 +191,13 @@ frontend-5f9b5f46c8-jkw9n  1/1     Running   0          4s
 postgres-6fbd757dd7-ttpqj  1/1     Running   0          4s
 ```
 
-**Refactor the database user into a configmap and implement that in the backend**
+#### Refactor the database user into a configmap and implement that in the backend
 
-We want to change the database user into a configmap, so that we can change it in one place, and use it on all deployments that needs it.
+We want to change the database user into a configmap, so that we can change it in one place, and
+use it on all deployments that needs it.
 
-- Create a configmap with the name `postgres-config` and filename `postgres-config.yaml` and the information about database configuration as follows:
+- Create a configmap with the name `postgres-config` and filename `postgres-config.yaml` and the
+  information about database configuration as follows:
 
 ```yaml
 data:
@@ -195,7 +208,6 @@ data:
   DB_NAME: quotes
 ```
 
-
 :bulb: If you are unsure how to do this, look at the [configmap section](#configmaps) above.
 
 <details>
@@ -205,7 +217,7 @@ If you are stuck, here is the solution:
 
 This will generate the file:
 
-```
+```shell
 kubectl create configmap postgres-config --from-literal=DB_HOST=postgres --from-literal=DB_PORT=5432 --from-literal=DB_USER=superuser --from-literal=DB_PASSWORD=complicated --from-literal=DB_NAME=quotes --dry-run=client -o yaml > postgres-config.yaml
 ```
 
@@ -226,42 +238,43 @@ data:
 
 </details>
 
-
 - apply the configmap with `kubectl apply -f postgres-config.yaml`
+- In the `backend-deployment.yaml`, change the environment variables to use the configmap instead
+  of the hardcoded values.
 
-- In the `backend-deployment.yaml`, change the environment variables to use the configmap instead of the hardcoded values.
+  Change this:
 
-Change this:
+  ```yaml
+  env:
+    - name: DB_HOST
+      value: postgres
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_USER
+      value: superuser
+    - name: DB_PASSWORD
+      value: complicated
+    - name: DB_NAME
+      value: quotes
+  ```
 
-```yaml
-env:
-  - name: DB_HOST
-    value: postgres
-  - name: DB_PORT
-    value: "5432"
-  - name: DB_USER
-    value: superuser
-  - name: DB_PASSWORD
-    value: complicated
-  - name: DB_NAME
-    value: quotes
-```
+  To this:
 
-To this:
-
-```yaml
-envFrom:
-  - configMapRef:
-      name: postgres-config
-```
+  ```yaml
+  envFrom:
+    - configMapRef:
+        name: postgres-config
+  ```
 
 - re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
 - check that the website is still running.
 
-**Change the database password into a secret, and implement that in the backend.**
+#### Change the database password into a secret, and implement that in the backend
 
-We want to change the database password into a secret, so that we can change it in one place, and use it on all deployments that needs it.
-In order for this, we need to change the backend deployment to use the secret instead of the configmap for the password itself.
+We want to change the database password into a secret, so that we can change it in one place, and
+use it on all deployments that needs it.
+In order for this, we need to change the backend deployment to use the secret instead of the
+configmap for the password itself.
 
 - create a secret with the name `postgres-secret` and the following data:
 
@@ -277,7 +290,7 @@ Help me out!
 
 If you are stuck, here is the solution:
 
-```
+```shell
 kubectl create secret generic postgres-secret --from-literal=DB_PASSWORD=complicated --dry-run=client -o yaml > postgres-secret.yaml
 ```
 
@@ -296,7 +309,8 @@ data:
 
 - apply the secret with `kubectl apply -f postgres-secret.yaml`
 
-- In the `backend-deployment.yaml`, change the environment variables to use the secret instead of the configmap for the password.
+- In the `backend-deployment.yaml`, change the environment variables to use the secret instead of
+  the configmap for the password.
 
 Change this:
 
@@ -322,16 +336,20 @@ envFrom:
 
 - Check that the website is still running.
 
-**Change database deployment to use the configmap and secret.**
+#### Change database deployment to use the configmap and secret
 
 We are going to implement the configmap and secret in the database deployment as well.
 
-The standard Postgres docker image can be configured by setting specific environment variables, ([you can see the documentation here](https://hub.docker.com/_/postgres)).
-By populating these specific values we can configure the credentials for root user and the name of the database to be created.
+The standard Postgres docker image can be configured by setting specific environment variables,
+([you can see the documentation here](https://hub.docker.com/_/postgres)).
+By populating these specific values we can configure the credentials for root user and the name of
+the database to be created.
 
-This means that we need to change the way we are injecting the environment variables, in order to make sure the environment variables have the correct names.
+This means that we need to change the way we are injecting the environment variables, in order to
+make sure the environment variables have the correct names.
 
-- Open the `postgres-deployment.yaml` file, and change the way the environment variables are injected to use the configmap and secret.
+- Open the `postgres-deployment.yaml` file, and change the way the environment variables are
+  injected to use the configmap and secret.
 
 ```yaml
 ### using configMapKeyRef
@@ -372,4 +390,5 @@ kubectl get secret <secret-name> -o jsonpath="{.data.password}" | base64 --decod
 
 ### Clean up
 
-Delete the resources you have deployed by running `kubectl delete -f .` in the `configmaps-secrets/start` directory.
+Delete the resources you have deployed by running `kubectl delete -f .` in the
+`configmaps-secrets/start` directory.

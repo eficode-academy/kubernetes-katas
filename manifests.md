@@ -25,7 +25,8 @@ spec:
 <details>
 <summary>:bulb: Extra: The general structure of a declarative manifest</summary>
 
-The general structure of a manifest is like the following. This is not only for pods, but for all Kubernetes resources.
+The general structure of a manifest is like the following. This is not only for pods, but for all
+Kubernetes resources.
 
 ```yaml
 apiVersion: # Version of the API used for the kind/resource
@@ -52,7 +53,7 @@ spec:# The desired state of the object
 Step by step:
 </summary>
 
-### Write your own `pod` manifest.
+### Write your own `pod` manifest
 
 - Go into the `manifests/start` directory.
 - Open the `frontend-pod.yaml` file in a text editor.
@@ -71,7 +72,8 @@ spec:
       ports:
 ```
 
-- Find the API version for the `pod` resource in the [Kubernetes API documentation][pod-api] and fill out the `apiVersion`
+- Find the API version for the `pod` resource in the [Kubernetes API documentation][pod-api] and
+  fill out the `apiVersion`
 
 [pod-api]: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/
 
@@ -107,11 +109,11 @@ spec:
 
 </details>
 
-### Apply the `pod` manifest.
+### Apply the `pod` manifest
 
 Try to apply the manifest with `kubectl apply -f frontend-pod.yaml` command.
 
-### Verify the `pod` is created correctly.
+### Verify the `pod` is created correctly
 
 Check the status of the pod with `kubectl get pods` command.
 
@@ -122,7 +124,8 @@ NAME       READY   STATUS    RESTARTS   AGE
 frontend   1/1     Running   0          1m
 ```
 
-Congratulations! You have now learned how to make a manifest detailing our frontend pod, and applied it to the cluster.
+Congratulations! You have now learned how to make a manifest detailing our frontend pod, and
+applied it to the cluster.
 
 </details>
 

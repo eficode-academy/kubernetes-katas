@@ -9,15 +9,19 @@ The exercise should have the following sections:
 * Exercise (Step-by-step instructions on how to solve the exercise)
 * Extras and wrap-up (optional)
 
-When creating a new exercise, you should use the [exercise template](exercise-template.md) as a starting point.
+When creating a new exercise, you should use the [exercise template](exercise-template.md) as a
+starting point.
+
 ## Best practices
 
 ### Hints
-Use :bulb: `:bulb:` to indicate a hint to the exercise. 
+
+Use :bulb: `:bulb:` to indicate a hint to the exercise.
 
 ### Dealing with text rich content
 
-When ever you think there is too much text, but that it is necessary, please use the `details` tag to make the text toggleable, by clicking the arrow:
+When ever you think there is too much text, but that it is necessary, please use the `details` tag
+to make the text toggleable, by clicking the arrow:
 
 <details>
     <summary>A Hint</summary>

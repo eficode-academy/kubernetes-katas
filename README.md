@@ -1,6 +1,6 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
-
 # kubernetes-katas
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
 
 A selection of [katas][kata-def] for Kubernetes (k8s).
 
@@ -13,7 +13,7 @@ You can find a summary of many of the commands used in the exercises in the
 > Please have a look at the [Setup](#setup) section if that is not the case.
 > There are plenty of free and easy options.
 
-## Katas in suggested order:
+## Katas in suggested order
 
 - [intro](intro.md)
 - [desired-state](desired-state.md)
@@ -29,7 +29,8 @@ You can find a summary of many of the commands used in the exercises in the
 
 There are several ways to get a free Kubernetes cluster for running the exercises.
 
-[Amazon][eks], [Google][gke], [Microsoft][aks] and [Oracle][oke] provide various degrees of free managed clusters.
+[Amazon][eks], [Google][gke], [Microsoft][aks] and [Oracle][oke] provide various degrees of free
+managed clusters.
 
 Alternatively, you can set up a local cluster with [Docker
 Desktop][docker-desktop] or [Kind][kind].
@@ -50,15 +51,16 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 . ~/.bashrc
 ```
 
-The commands above will enable kubectl autocompletion when you start a new bash session and source (reload) bashrc i.e. enable kubectl autocompletion in your current session.
+The commands above will enable kubectl autocompletion when you start a new bash session and source
+(reload) bashrc i.e. enable kubectl autocompletion in your current session.
 
 See: [Kubernetes.io - Enabling shell autocompletion][autocompletion] for more info.
 
-# Cheatsheet
+## Cheatsheet
 
 A collection of useful commands to use throughout the exercises:
 
-```
+```shell
 kubectl api-resources         # List resource types
 
 
