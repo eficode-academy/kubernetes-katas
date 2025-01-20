@@ -25,7 +25,8 @@ spec:
 <details>
 <summary>:bulb: Extra: The general structure of a declarative manifest</summary>
 
-The general structure of a manifest is like the following. This is not only for pods, but for all Kubernetes resources.
+The general structure of a manifest is like the following. This is not only for pods, but for all
+Kubernetes resources.
 
 ```yaml
 apiVersion: # Version of the API used for the kind/resource
@@ -71,7 +72,8 @@ spec:
       ports:
 ```
 
-- Find the API version for the `pod` resource in the [Kubernetes API documentation][pod-api] and fill out the `apiVersion`
+- Find the API version for the `pod` resource in the [Kubernetes API documentation][pod-api] and
+  fill out the `apiVersion`
 
 [pod-api]: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/
 
@@ -122,7 +124,8 @@ NAME       READY   STATUS    RESTARTS   AGE
 frontend   1/1     Running   0          1m
 ```
 
-Congratulations! You have now learned how to make a manifest detailing our frontend pod, and applied it to the cluster.
+Congratulations! You have now learned how to make a manifest detailing our frontend pod, and
+applied it to the cluster.
 
 </details>
 

@@ -1,15 +1,16 @@
 # Kubernetes-introduction
 
 In this course, we will learn how to deploy applications in Kubernetes.
-We will start by deploying the entire quotes application the way it will be done when we are done with the course.
+We will start by deploying the entire quotes application the way it will be done when we are done
+with the course.
 
 ## Deploying an application
 
-Our small example flask application that displays quotes.
+We will be deploying a small example Python Flask application that displays quotes.
 
-The application consists of three components, frontend, backend and a database.
+The application consists of three components: Frontend, backend and a database.
 
-The frontend and backend are small python flask webservers that listen for HTTP requests.
+The frontend and backend are small Python Flask webservers that listen for HTTP requests.
 For persistent storage, a postgresql database is used.
 
 ## Learning Goals
@@ -20,24 +21,32 @@ For persistent storage, a postgresql database is used.
 
 ## Introduction
 
-In Kubernetes, we run containers, but we don't manage containers directly. Containers are instead placed inside `pods`.
-A `pod` _contains_ containers.
+In Kubernetes, we run containers, but we don't manage containers directly. Containers are instead
+placed inside `pods`. A `pod` _contains_ containers.
 
 Pods in turn are managed by controllers, the most common one is called a `deployment`.
 
-And in order to make the application accessible from the outside, we use a `service`. Don't worry if you feel a bit overwhelmed, we will go through them in detail later in the course.
+And in order to make the application accessible from the outside, we use a `service`. Don't worry
+if you feel a bit overwhelmed, we will go through them in detail later in the course.
 
-Kubernetes resources are declared in what is called `manifests` which use a markup language called `yaml` to express the desired state of resources.
+Kubernetes resources are declared in what is called `manifests` which use a markup language called
+`yaml` to express the desired state of resources.
 
 ### Imperative vs Declarative
 
-You can use the Kubernetes CLI to create, delete and modify resources in two ways - imperatively and declaratively.
+You can use the Kubernetes CLI to create, delete and modify resources in two ways - imperatively
+and declaratively.
 
-Imperatively means that you are actively _creating, deleting and modifying_ resources. And if for example you run a create command twice, you will end up with one resource and a "fail to create" error message, because it is already created.
+Imperatively means that you are actively _creating, deleting and modifying_ resources. And if for
+example you run a create command twice, you will end up with one resource and a "fail to create"
+error message, because it is already created.
 
-Declaratively means that you _declare what you want,_ and _not how_ Kubernetes should do it. If you run the same command twice, you will end up with just one resources. This is because Kubernetes will fulfill your desired state, and if it already exists, it will not create it again.
+Declaratively means that you _declare what you want,_ and _not how_ Kubernetes should do it. If you
+run the same command twice, you will end up with just one resources. This is because Kubernetes
+will fulfill your desired state, and if it already exists, it will not create it again.
 
-Doing things **imperatively** is fine for _hacking_ on things, but most of the time we want to work with Kubernetes **declaratively**.
+Doing things **imperatively** is fine for _hacking_ on things, but most of the time we want to work
+with Kubernetes **declaratively**.
 
 Therefore we much prefer to do things **declaratively**.
 Declaratively means that we _declare what we want,_ and _not how_ Kubernetes should do it.
@@ -65,7 +74,7 @@ To use it, type `kubectl <subcommand> <options>` in a terminal.
 <details>
 <summary>Step by step</summary>
 
-## Inspect existing Kubernetes manifest for a `deployment` object
+### Inspect existing Kubernetes manifest for a `deployment` object
 
 We have prepared all the Kubernetes manifests that you need for the application to run.
 
@@ -82,7 +91,7 @@ Try to see if you can find information about:
 
 Do not worry if you don't understand everything yet, we will go through it in detail later in the course.
 
-## Apply the manifest using the `kubectl apply`
+### Apply the manifest using the `kubectl apply`
 
 Use the `kubectl apply -f <file>` command to send the manifest with your desired state to Kubernetes:
 
@@ -120,17 +129,19 @@ frontend        1/1     1            1           27s
 postgres        1/1     1            1           27s
 ```
 
-> :bulb: You might need to issue the command a couple of times, as it might take a few seconds for the deployment to be created and available.
+> :bulb: You might need to issue the command a couple of times, as it might take a few seconds for
+> the deployment to be created and available.
 
-## Access the application from the Internet
+### Access the application from the Internet
 
 We are getting a little ahead of our exercises here, but to illustrate that we actually have
 a functioning application running in our cluster, let's try accessing it from a browser!
 
-First of, get the `service` called `frontend` and note down the NodePort, by finding the `PORT(S)` column and noting the number on the right side of the colon `:`
+First off, get the `service` called `frontend` and note down the NodePort, by finding the `PORT(S)`
+column and noting the number on the right side of the colon `:`
 
-> :bulb: A `service` is a networking abstraction that enables a lot of the neat networking features of Kubernetes.
-> We will cover `services` in detail in a later exercise, so just go with it for now :-)
+> :bulb: A `service` is a networking abstraction that enables a lot of the neat networking features
+> of Kubernetes. We will cover `services` in detail in a later exercise, so just go with it for now :thumbsup:
 
 ``` bash
 kubectl get service frontend
@@ -140,7 +151,7 @@ Expected output:
 
 ```text
 NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-frontend       NodePort   10.96.223.218   <none>        80:32458/TCP   12s
+frontend    NodePort   10.96.223.218   <none>        80:32458/TCP   12s
 ```
 
 In this example, Kubernetes has chosen port `32458`, you will most likely get a different number.
@@ -163,9 +174,11 @@ node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
 
 In the example your external IPs are either `35.240.20.246` or `35.205.245.42`.
 
-Since your `service` is of type `NodePort` it will be exposed on _all_ of the nodes. The service will be exposed on the port with the number you noted down above.
+The `frontend` `service` is of type `NodePort` and will be exposed on _all_ of the nodes. The
+service will be exposed on the port with the number you noted down above.
 
-Choose one of the `EXTERNAL-IP`'s, and point your web browser to the address: `<EXTERNAL-IP>:<PORT>`.
+Choose one of the `EXTERNAL-IP`'s, and point your web browser to the address:
+`<EXTERNAL-IP>:<PORT>`.
 
 In this example, the address could be `35.240.20.246:32458`, or `35.205.245.42:32458`.
 
@@ -173,8 +186,7 @@ You should see the application in the browser now!
 
 </details>
 
-Congratulations! You have deployed your first application in Kubernetes!
-Easy, right :-)
+Congratulations! You have deployed your first application in Kubernetes! Easy, right :-)
 
 ### Clean up
 

@@ -12,15 +12,20 @@ In this exercise you'll learn about how to update a deployment.
 
 ### maxSurge and maxUnavailable parameters
 
-The `maxSurge` and `maxUnavailable` parameters control how many pods can be created above the desired number of pods and how many pods can be unavailable during the update.
+The `maxSurge` and `maxUnavailable` parameters control how many pods can be created above the
+desired number of pods and how many pods can be unavailable during the update.
 
-- `maxSurge` is the maximum number of pods that can be created above the desired number of pods. It can be a number or a percentage. The default value is 25%.
+- `maxSurge` is the maximum number of pods that can be created above the desired number of pods. It
+  can be a number or a percentage. The default value is 25%.
 
-- `maxUnavailable` is the maximum number of pods that can be unavailable during the update. It can be a number or a percentage. The default value is 25%.
+- `maxUnavailable` is the maximum number of pods that can be unavailable during the update. It can
+  be a number or a percentage. The default value is 25%.
 
 ### Rolling update
 
-A rolling update is a deployment strategy that allows you to update your application without downtime. It works by creating a new version of the application and then slowly replacing the old version with the new one.
+A rolling update is a deployment strategy that allows you to update your application without
+downtime. It works by creating a new version of the application and then slowly replacing the old
+version with the new one.
 
 ## Exercise
 
@@ -58,9 +63,11 @@ Now go ahead and `apply` the deployments and the services:
 
 - Get the nodes EXTERNAL-IP address. Run `kubectl get nodes -o wide`.
 
-Copy the external IP address of any one of the nodes, for example, `34.244.123.152` and paste it in your browser.
+Copy the external IP address of any one of the nodes, for example, `34.244.123.152` and paste it in
+your browser.
 
-Copy the port from your frontend service that looks something like `31941` and paste it next to your IP in the browser, for example, `34.244.123.152:31941` and hit it.
+Copy the port from your frontend service that looks something like `31941` and paste it next to
+your IP in the browser, for example, `34.244.123.152:31941` and hit it.
 
 </details>
 
@@ -99,7 +106,8 @@ It might be that you only see the last line, as the rollout is very fast.
 
 - Check the version of the backend image in the browser
 
-- Try rolling out other image version while looking at the frontend. You can do it by repeating the commands from above. Suggested image versions are `1.0.0` and `3.0.0`.
+- Try rolling out other image version while looking at the frontend. You can do it by repeating the
+  commands from above. Suggested image versions are `1.0.0` and `3.0.0`.
 
 - Try also rolling out a version that does not exist:
 
@@ -120,7 +128,8 @@ What happens to the pods that are running the old version?
 
 ## maxSurge and maxUnavailable
 
-We will now try to control the rollout process a bit more by setting `maxSurge` and `maxUnavailable` parameters.
+We will now try to control the rollout process a bit more by setting `maxSurge` and
+`maxUnavailable` parameters.
 
 - open up two terminals and run `kubectl get pods --watch` in one of them
 
@@ -139,7 +148,8 @@ spec:
 
 - Check the rollout process in the first terminal
 
-- Change the `maxSurge` and `maxUnavailable` parameters and see how it affects the rollout. Try to set `maxSurge` and `maxUnavailable` both to 100%. What happens?
+- Change the `maxSurge` and `maxUnavailable` parameters and see how it affects the rollout. Try to
+  set `maxSurge` and `maxUnavailable` both to 100%. What happens?
 
 </details>
 
@@ -149,4 +159,5 @@ Delete deployments and services as follow:
 
 - `kubectl delete -f .`
 
-Congratulations! You have now learned how to update a deployment and how to control the rollout process with `maxSurge` and `maxUnavailable` parameters.
+Congratulations! You have now learned how to update a deployment and how to control the rollout
+process with `maxSurge` and `maxUnavailable` parameters.

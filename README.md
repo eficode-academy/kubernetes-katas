@@ -29,7 +29,8 @@ You can find a summary of many of the commands used in the exercises in the
 
 There are several ways to get a free Kubernetes cluster for running the exercises.
 
-[Amazon][eks], [Google][gke], [Microsoft][aks] and [Oracle][oke] provide various degrees of free managed clusters.
+[Amazon][eks], [Google][gke], [Microsoft][aks] and [Oracle][oke] provide various degrees of free
+managed clusters.
 
 Alternatively, you can set up a local cluster with [Docker
 Desktop][docker-desktop] or [Kind][kind].
@@ -50,7 +51,8 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 . ~/.bashrc
 ```
 
-The commands above will enable kubectl autocompletion when you start a new bash session and source (reload) bashrc i.e. enable kubectl autocompletion in your current session.
+The commands above will enable kubectl autocompletion when you start a new bash session and source
+(reload) bashrc i.e. enable kubectl autocompletion in your current session.
 
 See: [Kubernetes.io - Enabling shell autocompletion][autocompletion] for more info.
 

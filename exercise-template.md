@@ -13,7 +13,8 @@ Here you will provide the bare minimum of information people need to solve the e
 You can have several subsections if needed.
 
 <details>
-<summary>:bulb: If an explanaition becomes too long, the more detailed parts can be encapsulated in a drop down section</summary>
+<summary>:bulb: If an explanaition becomes too long, the more detailed parts can be encapsulated in
+a drop down section</summary>
 </details>
 
 ## Exercise
@@ -27,7 +28,8 @@ You can have several subsections if needed.
 <details>
 <summary>More Details</summary>
 
-> **NOTE**: Take **the same bullet names as above** and put them in to illustrate how far the student have gone. Then **delete this line**.
+> **NOTE**: Take **the same bullet names as above** and put them in to illustrate how far the
+> student have gone. Then **delete this line**.
 
 - all actions that you believe the student should do, should be in a bullet
 
