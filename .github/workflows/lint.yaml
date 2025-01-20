@@ -41,3 +41,13 @@ jobs:
 
     - name: Lint Kubernetes Resources
       run: bash .test/lint_kube.sh
+  
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: DavidAnson/markdownlint-cli2-action@v19
+      with:
+        globs: '**/*.md'
