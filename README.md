@@ -1,6 +1,6 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
-
 # kubernetes-katas
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)][gitpod]
 
 A selection of [katas][kata-def] for Kubernetes (k8s).
 
@@ -13,7 +13,7 @@ You can find a summary of many of the commands used in the exercises in the
 > Please have a look at the [Setup](#setup) section if that is not the case.
 > There are plenty of free and easy options.
 
-## Katas in suggested order:
+## Katas in suggested order
 
 - [intro](intro.md)
 - [desired-state](desired-state.md)
@@ -54,11 +54,11 @@ The commands above will enable kubectl autocompletion when you start a new bash 
 
 See: [Kubernetes.io - Enabling shell autocompletion][autocompletion] for more info.
 
-# Cheatsheet
+## Cheatsheet
 
 A collection of useful commands to use throughout the exercises:
 
-```
+```shell
 kubectl api-resources         # List resource types
 
 

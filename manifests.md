@@ -52,7 +52,7 @@ spec:# The desired state of the object
 Step by step:
 </summary>
 
-### Write your own `pod` manifest.
+### Write your own `pod` manifest
 
 - Go into the `manifests/start` directory.
 - Open the `frontend-pod.yaml` file in a text editor.
@@ -107,11 +107,11 @@ spec:
 
 </details>
 
-### Apply the `pod` manifest.
+### Apply the `pod` manifest
 
 Try to apply the manifest with `kubectl apply -f frontend-pod.yaml` command.
 
-### Verify the `pod` is created correctly.
+### Verify the `pod` is created correctly
 
 Check the status of the pod with `kubectl get pods` command.
 

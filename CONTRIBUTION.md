@@ -10,10 +10,12 @@ The exercise should have the following sections:
 * Extras and wrap-up (optional)
 
 When creating a new exercise, you should use the [exercise template](exercise-template.md) as a starting point.
+
 ## Best practices
 
 ### Hints
-Use :bulb: `:bulb:` to indicate a hint to the exercise. 
+
+Use :bulb: `:bulb:` to indicate a hint to the exercise.
 
 ### Dealing with text rich content
 

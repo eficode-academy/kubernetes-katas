@@ -1,11 +1,9 @@
 # Kubernetes-introduction
 
-## Introduction
-
 In this course, we will learn how to deploy applications in Kubernetes.
-We will start by deploying the entire quotes application the way it will be done when we are done with the course. 
+We will start by deploying the entire quotes application the way it will be done when we are done with the course.
 
-# Deploying an application
+## Deploying an application
 
 Our small example flask application that displays quotes.
 
@@ -19,7 +17,6 @@ For persistent storage, a postgresql database is used.
 - Use the Kubernetes command line interface (CLI) `kubectl`.
 - Familiarize yourself with the quotes application.
 - Access the application from outside the cluster through a service.
-
 
 ## Introduction
 
@@ -47,7 +44,6 @@ Declaratively means that we _declare what we want,_ and _not how_ Kubernetes sho
 
 This declaration is what we call our `desired state`.
 
-
 ### Interacting with Kubernetes using kubectl
 
 We will be interacting with Kubernetes using the command line.
@@ -69,10 +65,7 @@ To use it, type `kubectl <subcommand> <options>` in a terminal.
 <details>
 <summary>Step by step</summary>
 
-**take the same bullet names as above and put them in to illustrate how far the student have gone**
-
-## Inspect existing Kubernetes manifest for a `deployment` object.
-
+## Inspect existing Kubernetes manifest for a `deployment` object
 
 We have prepared all the Kubernetes manifests that you need for the application to run.
 
@@ -89,7 +82,7 @@ Try to see if you can find information about:
 
 Do not worry if you don't understand everything yet, we will go through it in detail later in the course.
 
-## Apply the manifest using the `kubectl apply`.
+## Apply the manifest using the `kubectl apply`
 
 Use the `kubectl apply -f <file>` command to send the manifest with your desired state to Kubernetes:
 
@@ -99,7 +92,7 @@ kubectl apply -f quotes-flask/
 
 Expected output:
 
-```
+```text
 configmap/backend-config created
 deployment.apps/backend created
 service/backend created
@@ -120,7 +113,7 @@ kubectl get deployments
 
 Expected output:
 
-```
+```text
 NAME            READY   UP-TO-DATE   AVAILABLE   AGE
 backend         1/1     1            1           27s
 frontend        1/1     1            1           27s
@@ -129,7 +122,7 @@ postgres        1/1     1            1           27s
 
 > :bulb: You might need to issue the command a couple of times, as it might take a few seconds for the deployment to be created and available.
 
-##  Access the application from the Internet
+## Access the application from the Internet
 
 We are getting a little ahead of our exercises here, but to illustrate that we actually have
 a functioning application running in our cluster, let's try accessing it from a browser!
@@ -145,7 +138,7 @@ kubectl get service frontend
 
 Expected output:
 
-```
+```text
 NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 frontend       NodePort   10.96.223.218   <none>        80:32458/TCP   12s
 ```
@@ -162,7 +155,7 @@ kubectl get nodes -o wide
 
 Expected output:
 
-```
+```text
 NAME    STATUS   . . . INTERNAL-IP  EXTERNAL-IP     . . .
 node1   Ready    . . . 10.123.0.8   35.240.20.246   . . .
 node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
@@ -180,15 +173,14 @@ You should see the application in the browser now!
 
 </details>
 
-Congratulations! You have deployed your first application in Kubernetes! 
+Congratulations! You have deployed your first application in Kubernetes!
 Easy, right :-)
-
 
 ### Clean up
 
 To clean up, run the following command:
 
-```
+```shell
 kubectl delete -f quotes-flask/
 ```
 
@@ -206,4 +198,3 @@ Then take a look at the service manifest, and see if you can find the following 
 
 - The name of the service
 - The port the service listens on
-

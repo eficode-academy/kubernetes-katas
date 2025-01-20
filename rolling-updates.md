@@ -47,8 +47,7 @@ Step by step:
 Now go ahead and `apply` the deployments and the services:
 
 - `kubectl apply -f .`. This will apply all the files in the current directory
-
-* Access the frontend by the NodePort service
+- Access the frontend by the NodePort service
 
 <details>
 <summary>:bulb: How is it that you do that?</summary>
@@ -84,7 +83,7 @@ Now we will try to roll out an update to the backend image.
 
 Expected output:
 
-```
+```text
 Waiting for deployment "backend" rollout to finish: 1 out of 3 new replicas have been updated...
 Waiting for deployment "backend" rollout to finish: 1 out of 3 new replicas have been updated...
 Waiting for deployment "backend" rollout to finish: 1 out of 3 new replicas have been updated...

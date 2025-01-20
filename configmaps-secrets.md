@@ -152,7 +152,7 @@ Step by step:
 
 > :bulb: All files for the exercise are found in the `configmap-secrets/start` folder.
 
-**Add the database part of the application**
+#### Add the database part of the application
 
 We have already created the database part of the application, with a deployment and a service.
 
@@ -180,7 +180,7 @@ frontend-5f9b5f46c8-jkw9n  1/1     Running   0          4s
 postgres-6fbd757dd7-ttpqj  1/1     Running   0          4s
 ```
 
-**Refactor the database user into a configmap and implement that in the backend**
+#### Refactor the database user into a configmap and implement that in the backend
 
 We want to change the database user into a configmap, so that we can change it in one place, and use it on all deployments that needs it.
 
@@ -195,7 +195,6 @@ data:
   DB_NAME: quotes
 ```
 
-
 :bulb: If you are unsure how to do this, look at the [configmap section](#configmaps) above.
 
 <details>
@@ -205,7 +204,7 @@ If you are stuck, here is the solution:
 
 This will generate the file:
 
-```
+```shell
 kubectl create configmap postgres-config --from-literal=DB_HOST=postgres --from-literal=DB_PORT=5432 --from-literal=DB_USER=superuser --from-literal=DB_PASSWORD=complicated --from-literal=DB_NAME=quotes --dry-run=client -o yaml > postgres-config.yaml
 ```
 
@@ -226,39 +225,37 @@ data:
 
 </details>
 
-
 - apply the configmap with `kubectl apply -f postgres-config.yaml`
-
 - In the `backend-deployment.yaml`, change the environment variables to use the configmap instead of the hardcoded values.
 
-Change this:
+  Change this:
 
-```yaml
-env:
-  - name: DB_HOST
-    value: postgres
-  - name: DB_PORT
-    value: "5432"
-  - name: DB_USER
-    value: superuser
-  - name: DB_PASSWORD
-    value: complicated
-  - name: DB_NAME
-    value: quotes
-```
+  ```yaml
+  env:
+    - name: DB_HOST
+      value: postgres
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_USER
+      value: superuser
+    - name: DB_PASSWORD
+      value: complicated
+    - name: DB_NAME
+      value: quotes
+  ```
 
-To this:
+  To this:
 
-```yaml
-envFrom:
-  - configMapRef:
-      name: postgres-config
-```
+  ```yaml
+  envFrom:
+    - configMapRef:
+        name: postgres-config
+  ```
 
 - re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
 - check that the website is still running.
 
-**Change the database password into a secret, and implement that in the backend.**
+#### Change the database password into a secret, and implement that in the backend
 
 We want to change the database password into a secret, so that we can change it in one place, and use it on all deployments that needs it.
 In order for this, we need to change the backend deployment to use the secret instead of the configmap for the password itself.
@@ -277,7 +274,7 @@ Help me out!
 
 If you are stuck, here is the solution:
 
-```
+```shell
 kubectl create secret generic postgres-secret --from-literal=DB_PASSWORD=complicated --dry-run=client -o yaml > postgres-secret.yaml
 ```
 
@@ -322,7 +319,7 @@ envFrom:
 
 - Check that the website is still running.
 
-**Change database deployment to use the configmap and secret.**
+#### Change database deployment to use the configmap and secret
 
 We are going to implement the configmap and secret in the database deployment as well.
 

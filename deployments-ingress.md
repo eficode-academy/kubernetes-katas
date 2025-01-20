@@ -142,35 +142,35 @@ Step by step:
 In the directory we have the pod manifests for the backend and frontend that have created in the previous exercises.
 We also have two services, one for the backend (type ClusterIP) and one for the frontend (type NodePort) as well as an ingress manifest for the frontend.
 
-**Add Ingress to frontend service**
+#### Add Ingress to frontend service
 
 As it might take a while for the ingress to work, we will start by adding the ingress to the frontend service, even though we have not applied the service yet.
 
 - Open the `frontend-ingress.yaml` file in your editor.
 - Change the hostname to `quotes-<yourname>.<prefix>.eficode.academy`. Just as long as it is unique.
-  - the prefix normally is what is after your workstation-X.<prefix>.eficode.academy. If you are unsure, ask the trainer.
+  - the prefix normally is what is after your workstation-X.`<prefix>`.eficode.academy. If you are unsure, ask the trainer.
 - Change the service name to match the name of the frontend service.
 - Apply the ingress manifest.
 
-```
+```shell
 kubectl apply -f frontend-ingress.yaml
 ```
 
 Expected output:
 
-```
+```text
 ingress.networking.k8s.io/frontend-ingress created
 ```
 
 - Check that the ingress has been created.
 
-```
+```shell
 kubectl get ingress
 ```
 
 Expected output:
 
-```
+```text
 NAME              HOSTS                                   ADDRESS   PORTS   AGE
 frontend-ingress   quotes-<yourname>.<prefix>.eficode.academy             80      1m
 ```
@@ -178,7 +178,7 @@ frontend-ingress   quotes-<yourname>.<prefix>.eficode.academy             80    
 Congratulations, you have now added an ingress to the frontend service.
 It will take a while for the ingress to work, so we will continue with the backend deployment.
 
-**Turn the backend pod manifests into a deployment manifest**
+#### Turn the backend pod manifests into a deployment manifest
 
 - Deploy the frontend pod as well as the two services `backend-svc.yaml` and `frontend-svc.yaml`.
   Use the `kubectl apply -f` command.
@@ -194,13 +194,13 @@ How do I connect to a pod through a NodePort service?
 > :bulb: In previous exercises you learned how connect to a pod exposed through a NodePort service, you need to find the nodePort using `kubectl get service` and the IP address of one of the nodes using `kubectl get nodes -o wide`
 > Then combine the node IP address and nodePort with a colon between them, in a browser or using curl:
 
-```
+```text
 http://<node-ip>:<nodePort>
 ```
 
 </details>
 
-**Turn the backend pod manifests into a deployment manifest**
+#### Apply the backend deployment manifest
 
 - Open both the backend-deployment.yaml and the backend-pod.yaml files in your editor.
 
@@ -274,42 +274,42 @@ The same as the labels key in the metadata key of the pod template.
 
 </details>
 
-**Apply the deployment manifest**
+#### Apply the deployment manifest
 
 - Apply the deployment manifest, the same way we have applied the pod manifests, just pointing to a different file.
 
-```
+```shell
 kubectl apply -f backend-deployment.yaml
 ```
 
 Expected output:
 
-```
+```text
 deployment.apps/backend-deployment created
 ```
 
 - Check that the deployment has been created.
 
-```
+```shell
 kubectl get deployments
 ```
 
 Expected output:
 
-```
+```text
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 backend   1         1         1            1           1m
 ```
 
 - Check that the pod has been created.
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                      READY     STATUS    RESTARTS   AGE
 backend-5f4b8b7b4-5x7xg   1/1       Running   0          1m
 ```
@@ -318,7 +318,7 @@ backend-5f4b8b7b4-5x7xg   1/1       Running   0          1m
 
 The url should look something like this:
 
-```
+```text
 http://quotes-<yourname>.<prefix>.eficode.academy
 ```
 
@@ -328,45 +328,45 @@ http://quotes-<yourname>.<prefix>.eficode.academy
 
 - If this works, please delete the `backend-pod.yaml` file, as we now have upgraded to a deployment and no longer need it!
 
-**Scale the deployment by adding a replicas key**
+#### Scale the deployment by adding a replicas key
 
 - Scale the deployment by changing the replicas key in the deployment manifest.
   Set the replicas key to 3.
 
 - Apply the deployment manifest again.
 
-```
+```shell
 kubectl apply -f backend-deployment.yaml
 ```
 
 Expected output:
 
-```
+```text
 deployment.apps/backend-deployment configured
 ```
 
 - Check that the deployment has been scaled.
 
-```
+```shell
 kubectl get deployments
 ```
 
 Expected output:
 
-```
+```text
 NAME      READY   UP-TO-DATE   AVAILABLE   AGE
 backend   3/3     3            3           3m29s
 ```
 
 - Check that the pods have been scaled.
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                      READY     STATUS    RESTARTS   AGE
 backend-5f4b8b7b4-5x7xg   1/1       Running   0          2m
 backend-5f4b8b7b4-6j6xg   1/1       Running   0          1m
@@ -380,7 +380,7 @@ backend-5f4b8b7b4-7x7xg   1/1       Running   0          1m
 <!-- TODO: explain relationship between pod name and deployment name -->
 <!-- </details> -->
 
-**Turn frontend pod manifests into a deployment manifest**
+#### Turn frontend pod manifests into a deployment manifest
 
 You will now do the exact same thing for the frontend, we will walk you through it again, but at a higher level, if get stuck you can go back and double check how you did it for the backend.
 
@@ -394,41 +394,41 @@ You will now do the exact same thing for the frontend, we will walk you through 
   The selector key should have a matchLabels key.
   The matchLabels key should have a `run: frontend` key-value pair.
 
-**Apply the frontend deployment manifest**
+#### Apply the frontend deployment manifest
 
 - First, delete the frontend pod.
 
-```
+```shell
 kubectl delete pod frontend
 ```
 
 Expected output:
 
-```
+```text
 pod "frontend" deleted
 ```
 
 - Apply the frontend deployment manifest.
 
-```
+```shell
 kubectl apply -f frontend-deployment.yaml
 ```
 
 Expected output:
 
-```
+```text
 deployment.apps/frontend-deployment created
 ```
 
 - Check that the deployment has been created.
 
-```
+```shell
 kubectl get deployments
 ```
 
 Expected output:
 
-```
+```text
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 backend    3/3     3            3           2m41s
 frontend   3/3     3            3           2m41s
@@ -436,13 +436,13 @@ frontend   3/3     3            3           2m41s
 
 - Check that the pod has been created.
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                       READY     STATUS    RESTARTS   AGE
 backend-5f4b8b7b4-5x7xg    1/1       Running   0          3m
 backend-5f4b8b7b4-6j6xg    1/1       Running   0          2m
@@ -457,34 +457,33 @@ frontend-47b45fb8b-4x7xg   1/1       Running   0          1m
 
 - If this works, please delete the `frontend-pod.yaml` file, as we now have upgraded to a deployment and no longer need it!
 
-
 </details>
 
 ### Clean up
 
 - Delete the deployments.
 
-```
+```shell
 kubectl delete -f frontend-deployment.yaml
 kubectl delete -f backend-deployment.yaml
 ```
 
 - Delete the services
 
-```
+```shell
 kubectl delete -f frontend-svc.yaml
 kubectl delete -f backend-svc.yaml
 ```
 
 - Delete the ingress
 
-```
+```shell
 kubectl delete -f frontend-ingress.yaml
 ```
 
 > :bulb: If you ever want to delete all resources from a particular directory, you can use: `kubectl delete -f .` which will point at **all** files in that directory!
 
-# Extra Exercise
+## Extra Exercise
 
 Test Kubernetes promise of resiliency and high availability
 
@@ -499,7 +498,7 @@ This enables us to see which of a group of network-multitool pods that served th
 
 Create the network-multitool deployment:
 
-```
+```shell
 kubectl create deployment customnginx --image ghcr.io/eficode-academy/network-multitool --port 80 --replicas 4
 ```
 
@@ -507,7 +506,7 @@ We create the network-multitool deployment with the name "customnginx" and with 
 
 We also create a service of type `LoadBalancer`:
 
-```
+```shell
 kubectl expose deployment customnginx --port 80 --type LoadBalancer
 ```
 
@@ -515,13 +514,13 @@ kubectl expose deployment customnginx --port 80 --type LoadBalancer
 
 When the LoadBalancer is ready we setup a loop to keep sending requests to the pods:
 
-```
+```text
 while true; do  curl --connect-timeout 1 -m 1 -s <loadbalancerIP> ; sleep 0.5; done
 ```
 
 Expected output:
 
-```
+```text
 Eficode Academy Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.36 <BR></p>
 Eficode Academy Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.1.150 <BR></p>
 Eficode Academy Network MultiTool (with NGINX) - customnginx-7fcfd947cf-zbvtd - 100.96.2.37 <BR></p>
@@ -534,13 +533,13 @@ None of the curl commands time out.
 Now, if we kill three out of four pods, the service should still respond, without timing out.
 We let the loop run in a separate terminal, and kill three pods of this deployment from another terminal.
 
-```
+```shell
 kubectl delete pod customnginx-3557040084-1z489 customnginx-3557040084-3hhlt customnginx-3557040084-c6skw
 ```
 
 Expected output:
 
-```
+```text
 pod "customnginx-3557040084-1z489" deleted
 pod "customnginx-3557040084-3hhlt" deleted
 pod "customnginx-3557040084-c6skw" deleted
@@ -548,13 +547,13 @@ pod "customnginx-3557040084-c6skw" deleted
 
 Immediately check the other terminal for any failed curl commands or timeouts.
 
-```
+```text
 Eficode Academy Network MultiTool (with NGINX) - customnginx-59db6cff7b-4w4gf - 10.244.0.19
 ```
 
 Expected output:
 
-```
+```text
 Eficode Academy Network MultiTool (with NGINX) - customnginx-59db6cff7b-h2dbg - 10.244.0.21
 Eficode Academy Network MultiTool (with NGINX) - customnginx-59db6cff7b-5xbjc - 10.244.0.22
 Eficode Academy Network MultiTool (with NGINX) - customnginx-59db6cff7b-h2dbg - 10.244.0.21
@@ -569,13 +568,13 @@ Why is that?
 It is because, as soon as the pods are deleted, the deployment sees that it's desired state is four pods, and there is only one running, so it immediately starts three more to reach the desired state of four pods.
 And, while the pods are in process of starting, one surviving pod serves all of the traffic, preventing our application from missing any requests.
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                           READY     STATUS        RESTARTS   AGE
 customnginx-3557040084-0s7l8   1/1       Running       0          15s
 customnginx-3557040084-1z489   1/1       Terminating   0          16m
@@ -590,13 +589,13 @@ This proves, Kubernetes enables high availability, by using multiple replicas of
 
 Remember to clean up the deployment afterwards with:
 
-```
+```shell
 kubectl delete deployment customnginx
 ```
 
 And delete the LoadBalancer service:
 
-```
+```shell
 kubectl delete service customnginx
 ```
 

@@ -74,7 +74,7 @@ The pod is defined in the `frontend-pod.yaml` file.
 
 You should see something like this:
 
-```
+```text
 NAME       READY   STATUS    RESTARTS   AGE
 frontend   1/1     Running   0          2m
 ```
@@ -103,15 +103,16 @@ Now we will deploy both the frontend and backend pods.
 
 You should see something like this:
 
-```
+```shell
 k get pods backend -o wide
+
 NAME      READY   STATUS    RESTARTS   AGE   IP            NODE                                        NOMINATED NODE   READINESS GATES
 backend   1/1     Running   0          11s   10.0.40.196   ip-10-0-35-102.eu-west-1.compute.internal   <none>           <none>
 ```
 
 In this case the IP is `10.0.40.196`, but it will be different in your case.
 
-**Add environment variables to the frontend pod**
+#### Add environment variables to the frontend pod
 
 - Open the `frontend-pod.yaml` file and add the following environment variables to the pod:
 

@@ -32,7 +32,7 @@ In summary:
 - Consume the PersistentVolume using a PersistentVolumeClaim (pvc) and mounting the volume to a pod
 - Delete pod with volume attached and observe that state is persisted when a new pod is created
 
-### Step by step instructions:
+### Step by step instructions
 
 <details>
 <summary>
@@ -59,14 +59,14 @@ In order to fix this, we need to persist the filesystem state of our database co
 
 Use `kubectl` to get the available `StorageClasses` in the cluster, the shortname for `StorageClass` is `sc`:
 
-```
+```shell
 kubectl get StorageClasses
 ```
 
 Expected output:
 
-```
-AME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+```shell
+NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
 gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  54m
 ```
 
@@ -141,38 +141,38 @@ spec:
 
 Apply your new `PersistenVolumeClaim` with `kubectl apply`:
 
-```
+```shell
 kubectl apply -f persistent-storage/start/postgres-pvc.yaml
 ```
 
 Expected output:
 
-```
+```text
 persistentvolumeclaim/postgres-pvc created
 ```
 
 Check that the `PersistenVolumeClaim` was created using `kubectl get`:
 
-```
+```shell
 kubectl get persistentvolumeclaim
 ```
 
 Expected output:
 
-```
+```text
 NAME           STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 postgres-pvc   Pending                                      gp2            3m19s
 ```
 
 Check if a `PersistentVolume` was created using `kubectl get`:
 
-```
+```shell
 kubectl get persistentvolume
 ```
 
 Expected output
 
-```
+```text
 No resources found
 ```
 
@@ -255,7 +255,7 @@ Fill in the values:
   In this case this should be `postgres-pvc`
 - `mountPath` is the path in container to mount the volume to. For postgres, the database state is stored to the path `/var/lib/postgresql/data`
 - `subPath` should be `postgres`, and specifies a directory to be created within the volume, we need this because of a quirk with combining `AWS EBS` with Postgres.
-  (If you are curios why: https://stackoverflow.com/a/51174380)
+  (If you are curios why: <https://stackoverflow.com/a/51174380>)
 
 <details>
 <summary>The finished manifest should look like this</summary>
@@ -291,25 +291,25 @@ spec:
 
 Apply the changes to the postgres deployment using `kubectl apply`:
 
-```
+```shell
 kubectl apply -f persistent-storage/start/postgres-deployment
 ```
 
 Expected output:
 
-```
+```text
 deployment.apps/postgres configured
 ```
 
 Observe that the `PersistentVolume` is now created:
 
-```
+```shell
 kubectl get persistentvolumeclaims,persistentvolumes
 ```
 
 Expected output:
 
-```
+```text
 NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
 persistentvolumeclaim/postgres-pvc   Bound    pvc-60e5235b-e2bb-4d71-9136-3901ca4dece9   5Gi        RWO            gp2            <unset>                 3m55s
 
@@ -423,6 +423,6 @@ Now that the state of our postgres database is persisted to the volume, let's ve
 
 Delete all resources created using `kubectl delete -f <manifest-files>`
 
-```
+```shell
 kubectl delete -f persistent-storage/start
 ```

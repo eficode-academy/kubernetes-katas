@@ -30,7 +30,7 @@ Kubernetes controllers are the components that fulfills your desired state. As t
 Step by step:
 </summary>
 
-## Inspect existing Kubernetes manifest for a `deployment` object.
+## Inspect existing Kubernetes manifest for a `deployment` object
 
 We have prepared a Kubernetes manifest for you.
 
@@ -64,42 +64,42 @@ spec:
             - containerPort: 80 # port the container is listening on
 ```
 
-## Apply the manifest using the `kubectl apply`.
+## Apply the manifest using the `kubectl apply`
 
 Use the `kubectl apply -f <file>` command to send the manifest with your desired state to Kubernetes:
 
-```
+```shell
 kubectl apply -f desired-state/nginx-deployment.yaml
 ```
 
 Expected output:
 
-```
+```text
 deployment.apps/nginx applied
 ```
 
 Verify that the deployment is created:
 
-```
+```shell
 kubectl get deployments
 ```
 
 Expected output:
 
-```
+```text
 NAME        READY   UP-TO-DATE   AVAILABLE   AGE
 nginx       1/1     1            1           36s
 ```
 
 Check if the pods are running:
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                         READY     STATUS    RESTARTS   AGE
 nginx-431080787-9r0lx        1/1       Running   0          40s
 ```
@@ -122,13 +122,13 @@ First, find the name of your pod using `kubectl get pods`, like you did above.
 
 The name will be something like `nginx-431080787-9r0lx`. **Yours will have a different, but similar name**.
 
-```
+```shell
 kubectl delete pod nginx-431080787-9r0lx
 ```
 
 Expected output:
 
-```
+```text
 pod "nginx-431080787-9r0lx" deleted
 ```
 
@@ -140,26 +140,26 @@ Therefore Kubernetes must make a change to the state of the cluster to once agai
 
 We use `kubectl get` to verify that a **new** nginx pod is created (with a different name):
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                         READY     STATUS              RESTARTS   AGE
 nginx-431080787-tx5m7        0/1       ContainerCreating   0          5s
 ```
 
 And after few more seconds:
 
-```
+```shell
 kubectl get pods
 ```
 
 Expected output:
 
-```
+```text
 NAME                         READY     STATUS    RESTARTS   AGE
 nginx-431080787-tx5m7        1/1       Running   0          12s
 ```
@@ -170,11 +170,10 @@ You have also seen that Kubernetes keeps it's promise of fulfilling your desired
 
 </details>
 
-
 ### Clean up
 
 Delete your desired state by using the `kubectl delete -f <file>` command.
 
-```
+```text
 kubectl delete -f desired-state/nginx-deployment.yaml
 ```

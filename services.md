@@ -198,7 +198,7 @@ Hint: the apply command can take more than one `-f` parameter to apply more than
 
 You should see something like this:
 
-```
+```text
 NAME          READY   STATUS    RESTARTS   AGE
 pod/backend   1/1     Running   0          28s
 pod/frontend  1/1     Running   0          20s
@@ -221,7 +221,7 @@ Now that we have the pods running, we can create a service that will expose the 
 
 You should see something like this:
 
-```
+```text
 NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 service/backend   ClusterIP   172.20.114.230   <none>        5000/TCP   23s
 ```
@@ -231,7 +231,7 @@ service/backend   ClusterIP   172.20.114.230   <none>        5000/TCP   23s
 
 You should see something like this:
 
-```
+```shell
 root@frontend:/app#
 ```
 
@@ -239,19 +239,19 @@ Make sure that you are inside a pod and not in your terminal window.
 
 - Try to reach backend pod through backend service `Cluster-IP` from within your frontend pod
 
-```sh
+```shell
 curl 172.20.114.230:5000
 ```
 
 You should see something like this:
 
-```
+```text
 Hello from the backend!
 ```
 
 - Try accessing the service using dns name now
 
-```sh
+```shell
 curl backend:5000
 ```
 
@@ -275,7 +275,7 @@ You can type `exit` or press `Ctrl-d` to exit from your container.
 
 You should see something like this:
 
-```
+```text
 NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
 frontend          NodePort    10.106.136.250   <none>        5000:31941/TCP   23s
 service/backend   ClusterIP   172.20.114.230   <none>        5000/TCP         23s
@@ -287,7 +287,7 @@ service/backend   ClusterIP   172.20.114.230   <none>        5000/TCP         23
 
 You should see something like this:
 
-```
+```text
 NAME                                        STATUS   ROLES    AGE    VERSION               INTERNAL-IP   EXTERNAL-IP      OS-IMAGE         KERNEL-VERSION                 CONTAINER-RUNTIME
 ip-10-0-33-234.eu-west-1.compute.internal   Ready    <none>   152m   v1.23.9-eks-ba74326   10.0.33.234   54.194.220.73    Amazon Linux 2
 5.4.219-126.411.amzn2.x86_64   docker://20.10.17
@@ -305,13 +305,13 @@ Copy the port from your frontend service that looks something like `31941` and p
 
 Alternatively, you could also test it using curl from your terminal window.
 
-```sh
+```shell
 curl 34.244.123.152:31941 | grep h1
 ```
 
 You should see something like this:
 
-```
+```text
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  3051  100  3051    0     0   576k      0 --:--:-- --:--:-- --:--:--  595k
@@ -361,7 +361,7 @@ Try to apply the manifests again and write four commands that does the following
 - List only the pods where label app is not frontend
 - List only the pods where label app is not backend
 
-The documentation on this can be found here: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+The documentation on this can be found here: <https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/>
 
 Remember to clean up after you are done.
 
