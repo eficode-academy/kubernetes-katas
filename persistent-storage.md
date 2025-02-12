@@ -128,9 +128,9 @@ Next we fill in the values:
 - The `apiVersion` should be `v1`
 - The `kind` is `PersistentVolumeClaim`
 - The `metadata.name` should be `postgres-pvc`
-- From the previous section we know that we have one two `StorageClass` available, so we should choose one of them.
-  "gp3" is faster and cheaper than "gp2" in AWS, so let's go with that by setting 
-  `spec.storageClassName` to `"gp3"` (with quotes)
+- From the previous section we know that we have one two `StorageClass` available, so we should
+  choose one of them. "gp3" is faster and cheaper than "gp2" in AWS, so let's go with that by
+  setting `spec.storageClassName` to `"gp3"` (with quotes)
 - The `spec.accessModes` list should contain one item with the value `ReadWriteOnce`
 - the `spec.resources.requests.storage` is the size of the volume in Gibibytes (Gi), set it to `5Gi`
 
