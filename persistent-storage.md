@@ -86,7 +86,7 @@ We see that we indeed have a `StorageClass` available and ready for use!
 
 The output of the `kubectl get sc` command provides some useful information about the StorageClass:
 
-- `PROVISIONNER` what is the underlying storage provider, in this case `AWS EBS` (Elastic Block Storage)
+- `PROVISIONER` what is the underlying storage provider, in this case `AWS EBS` (Elastic Block Storage)
 - `RECLAIMPOLICY` what will happen with the volume when the `PersistentVolume` resource is deleted,
   in this case `Delete` will delete the block storage.
 - `VOLUMEBINDINGMODE` specifies how to provision the actual volume, `WaitForFirstConsumer` will
@@ -163,7 +163,7 @@ Expected output:
 persistentvolumeclaim/postgres-pvc created
 ```
 
-Check that the `PersistenVolumeClaim` was created using `kubectl get`:
+Check that the `PersistentVolumeClaim` was created using `kubectl get`:
 
 ```shell
 kubectl get persistentvolumeclaim
