@@ -3,12 +3,12 @@
 ## Learning Goals
 
 - Learn about how to update deployments
-- Learn about how to test resiliency of your deployment
+- Learn about how to test the resiliency of your deployment
 - Learn about how to control the rollout process with `maxSurge` and `maxUnavailable`
 
 ## Introduction
 
-In this exercise you'll learn about how to update a deployment.
+In this exercise, you'll learn about how to update a deployment.
 
 ### maxSurge and maxUnavailable parameters
 
@@ -31,11 +31,11 @@ version with the new one.
 
 ### Overview
 
-- Roll out new version of either the frontend or backend and see the changes
+- Roll out a new version of either the frontend or backend and see the changes
 - Roll out a new version that does not exist
 - Change the `maxSurge` and `maxUnavailable` parameters and see how it affects the rollout
 
-### Step by step instructions
+### Step-by-step instructions
 
 <details>
 <summary>
@@ -57,17 +57,17 @@ Now go ahead and `apply` the deployments and the services:
 <details>
 <summary>:bulb: How is it that you do that?</summary>
 
-- Find the service with `kubectl get services` command.
+- Find the service with the `kubectl get services` command.
 
-- Note down the port number for the frontend service. In this case it is `31941`
+- Note down the port number for the frontend service. In this case, it is `31941`
 
 - Get the nodes EXTERNAL-IP address. Run `kubectl get nodes -o wide`.
 
-Copy the external IP address of any one of the nodes, for example, `34.244.123.152` and paste it in
+Copy the external IP address of any one of the nodes, for example, `34.244.123.152`, and paste it in
 your browser.
 
-Copy the port from your frontend service that looks something like `31941` and paste it next to
-your IP in the browser, for example, `34.244.123.152:31941` and hit it.
+Copy the port from your frontend service that looks something like `31941` and paste it next to your
+IP in the browser separated by colon `:`, for example, `34.244.123.152:31941` and hit it.
 
 </details>
 
@@ -106,7 +106,7 @@ It might be that you only see the last line, as the rollout is very fast.
 
 - Check the version of the backend image in the browser
 
-- Try rolling out other image version while looking at the frontend. You can do it by repeating the
+- Try rolling out another image version while looking at the frontend. You can do it by repeating the
   commands from above. Suggested image versions are `1.0.0` and `3.0.0`.
 
 - Try also rolling out a version that does not exist:
@@ -118,7 +118,7 @@ spec:
       name: backend
 ```
 
-What happened - do the frontend still work? And are you able to see the backend version in the browser?
+What happened - does the frontend still work? And are you able to see the backend version in the browser?
 
 - Investigate the running pods with: `kubectl get pods`
 
@@ -155,7 +155,7 @@ spec:
 
 ## Clean up
 
-Delete deployments and services as follow:
+Delete deployments and services as follows:
 
 - `kubectl delete -f .`
 

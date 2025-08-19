@@ -32,14 +32,14 @@ You can then access the pod on `localhost:8080`.
 <details>
 <summary>:bulb: How does this port-forward work?</summary>
 
-Port forwarding is a network address translation that redirects Internet packets from one IP address to another.
-with a specified port number to another `IP:PORT` set.
+Port forwarding is a network address translation that redirects Internet packets from one IP address
+to another with a specified port number to another `IP:PORT` set.
 
 In Kubernetes `port-forward` creates a tunnel between your local machine and the Kubernetes cluster on
 the specified `IP:PORT` pairs to establish a connection to the cluster.
 `kubectl port-forward` allows you to forward not only pods but also services, deployments, and others.
 
-More information can be found from [port-forward-access-application-cluste](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
+More information can be found from [Use Port Forwarding to Access Applications in a Cluster](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 
 </details>
 

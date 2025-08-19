@@ -1,11 +1,11 @@
 # Persistent Storage
 
-In this exercise you will learn how to persist the filesystem state of your containers using
+In this exercise, you will learn how to persist the filesystem state of your containers using
 dynamic volume provisioning.
 
 ## Learning Goals
 
-- How to attach a volume to container in a pod
+- How to attach a volume to a container in a pod
 - How to use dynamic volume provisioning to create persistent block storage to save the
   state of your applications
 - How to create PersistentVolumes and use them with PersistentVolumeClaims
@@ -14,7 +14,7 @@ dynamic volume provisioning.
 
 Kubernetes, a persistent volume claim (PVC) is a request for storage by a user. It is a way for a
 pod to request a specific amount of storage from the cluster. When a PVC is created, it is
-automatically bound to a persistant volume (PV) that satisfies the PVC's requirements.
+automatically bound to a persistent volume (PV) that satisfies the PVC's requirements.
 
 A storage class (SC) is a way to define the properties of a PV. It is a blueprint for creating PVs,
 and it specifies things like the type of storage, the amount of storage, and the access modes for
@@ -31,20 +31,20 @@ In summary:
 
 ### Overview
 
-- Observe that the state of the postgres database is not persisted between pod lifecycles
+- Observe that the state of the PostgreSQL database is not persisted between pod lifecycles
 - Inspect the Available StorageClasses (sc) of the cluster
-- Create a PersistentVolume (pv) using dynamic volume provisioning
-- Consume the PersistentVolume using a PersistentVolumeClaim (pvc) and mounting the volume to a pod
-- Delete pod with volume attached and observe that state is persisted when a new pod is created
+- Create a PersistentVolume (PV) using dynamic volume provisioning
+- Consume the PersistentVolume using a PersistentVolumeClaim (PVC) and mount the volume to a pod
+- Delete the pod with the volume attached and observe that the state is persisted when a new pod is created
 
-### Step by step instructions
+### Step-by-step instructions
 
 <details>
 <summary>
 Step by step:
 </summary>
 
-### Observe that the state of the postgres database is not persisted between pod lifecycles
+### Observe that the state of the PostgreSQL database is not persisted between pod lifecycles
 
 Deploy the manifests located in `persistent-storage/start`
 
@@ -53,14 +53,14 @@ Deploy the manifests located in `persistent-storage/start`
 
 - Open the frontend webpage in your browser.
 - Observe that the frontend reports that it is connected to the database.
-- Add some quotes. We will need them later to test persistency
-- Retrieve all of the quotes, observe that your quotes are part of the retrieved quotes.
+- Add some quotes. We will need them later to test persistence
+- Retrieve all of the quotes, and observe that your quotes are part of the retrieved quotes.
 - Now delete the postgres pod using `kubectl delete pod <pod-name>`
 - In the frontend webpage, retrieve quotes, and observe that you now only get the default 5 quotes
   from the database.
 
 What we have observed here is that the state of our database is not persisted between pod lifecycles!
-In order to fix this, we need to persist the filesystem state of our database container to a `volume`.
+To fix this, we need to persist the filesystem state of our database container to a `volume`.
 
 ### Inspect the Available StorageClasses (sc) of the cluster
 
@@ -87,8 +87,8 @@ We see that we indeed have a `StorageClass` available and ready for use!
 
 The output of the `kubectl get sc` command provides some useful information about the StorageClass:
 
-- `PROVISIONER` what is the underlying storage provider, in this case `AWS EBS` (Elastic Block Storage)
-- `RECLAIMPOLICY` what will happen with the volume when the `PersistentVolume` resource is deleted,
+- `PROVISIONER` The underlying storage provider, in this case `AWS EBS` (Elastic Block Storage)
+- `RECLAIMPOLICY` What will happen with the volume when the `PersistentVolume` resource is deleted,
   in this case `Delete` will delete the block storage.
 - `VOLUMEBINDINGMODE` specifies how to provision the actual volume, `WaitForFirstConsumer` will
   provision the actual volume object once there is a matching claim.
@@ -96,13 +96,13 @@ The output of the `kubectl get sc` command provides some useful information abou
 
 </details>
 
-### Create a PersistentVolume (pv) using dynamic volume provisioning
+### Create a PersistentVolume (PV) using dynamic volume provisioning
 
-Let's create a `PersistentVolume` (pv)!
+Let's create a `PersistentVolume` (PV)!
 
-While we could create a manifest for a `PersistentVolume` manually we will not do that in this exercise.
+While we could create a manifest for a `PersistentVolume` manually, we will not do that in this exercise.
 
-In practice we will almost always create a `PersistentVolume` by creating `PersistentVolumeClaim`,
+In practice, we will almost always create a `PersistentVolume` by creating a `PersistentVolumeClaim`,
 which uses a `StorageClass` to create the actual volume.
 
 Create a new file `persistent-storage/start/postgres-pvc.yaml`
@@ -128,7 +128,7 @@ Next we fill in the values:
 - The `apiVersion` should be `v1`
 - The `kind` is `PersistentVolumeClaim`
 - The `metadata.name` should be `postgres-pvc`
-- From the previous section we know that we have one two `StorageClass` available, so we should
+- From the previous section, we know that we have one or two `StorageClass` available, so we should
   choose one of them. "gp3" is faster and cheaper than "gp2" in AWS, so let's go with that by
   setting `spec.storageClassName` to `"gp3"` (with quotes)
 - The `spec.accessModes` list should contain one item with the value `ReadWriteOnce`
@@ -153,7 +153,7 @@ spec:
 
 </details>
 
-Apply your new `PersistenVolumeClaim` with `kubectl apply`:
+Apply your new `PersistentVolumeClaim` with `kubectl apply`:
 
 ```shell
 kubectl apply -f persistent-storage/start/postgres-pvc.yaml
@@ -190,12 +190,12 @@ Expected output
 No resources found
 ```
 
-> :bulb: `PersistentVolumes` objects are `cluster-wide`, ie. "not-namespaced", so you might see
+> :bulb: `PersistentVolumes` objects are `cluster-wide`, ie, "not-namespaced", so you might see
 > `PersistentVolumes` belonging to other users.
 
 We expect that a PersistentVolume has not been created _yet._
 
-As we can see in the `kubectl get persistentvolumeclaim` output above, our `PersistenVolumeClaim`
+As we can see in the `kubectl get persistentvolumeclaim` output above, our `PersistentVolumeClaim`
 is in the `Pending` status.
 
 This is because the `VOLUMEBINDINGMODE` of the StorageClass is set to `WaitForFirstConsumer`, as we
@@ -203,13 +203,13 @@ saw in the previous section.
 
 `WaitForFirstConsumer` will not create the actual volume object until it is used by a pod.
 
-> :bulb: The reason you might not want to not always create volumes as soon as `pvc` objects are
+> :bulb: The reason you might not want to always create volumes as soon as `pvc` objects are
 > created is to reduce costs, by not creating resources that are not used before they are attached
 > to a pod.
 
-Let's attach the PersistenVolumeClaim to our postgres pod!
+Let's attach the PersistentVolumeClaim to our postgres pod!
 
-### Consume the PersistentVolume using a PersistentVolumeClaim (pvc) and mounting the volume to a pod
+### Consume the PersistentVolume using a PersistentVolumeClaim (PVC) and mount the volume to a pod
 
 Open the postgres deployment manifest in your text editor `persistent-storage/start/postgres-deployment.yaml`.
 
@@ -230,9 +230,9 @@ Add the values to the snippet:
 - `spec.template.spec.volumes[0].name` is the name we will reference when we mount the volume to a
   container in a moment. Set it to `postgres-pvc`.
 - `spec.template.spec.volumes[0].persistentVolumeClaim.claimName` is the `name` of the
-  `PersistenVolumeClaim` we have created above, set it to the name you used, e.g. `postgres-pvc`.
+  `PersistentVolumeClaim` we have created above, set it to the name you used, e.g., `postgres-pvc`.
 
-> :bulb: In this case the volume name and reference to the `pvc` name are the same, this is
+> :bulb: In this case, the volume name and reference to the `pvc` name are the same; this is
 > coincidental, and they can be different.
 
 <details>
@@ -259,9 +259,9 @@ spec:
 
 </details>
 
-Next we mount the volume we have defined to the postgres container:
+Next, we mount the volume we have defined to the postgres container:
 
-In the deployment manifest file, add the following section to the postgres container spec, e.g. `spec.template.spec.containers[0].volumeMounts`
+In the deployment manifest file, add the following section to the postgres container spec, e.g., `spec.template.spec.containers[0].volumeMounts`
 
 ```yaml
 volumeMounts:
@@ -273,11 +273,11 @@ volumeMounts:
 Fill in the values:
 
 - `name` should be the name we specified above when we declared the available volumes.
-  In this case this should be `postgres-pvc`
-- `mountPath` is the path in container to mount the volume to. For postgres, the database state is
+  In this case, this should be `postgres-pvc`
+- `mountPath` is the path in the container to mount the volume to. For postgres, the database state is
   stored to the path `/var/lib/postgresql/data`
-- `subPath` should be `postgres`, and specifies a directory to be created within the volume, we need
-  this because of a quirk with combining `AWS EBS` with Postgres. (If you are curios why:
+- `subPath` should be `postgres`, and specifies a directory to be created within the volume. We need
+  this because of a quirk with combining `AWS EBS` with Postgres. (If you are curious, why:
   <https://stackoverflow.com/a/51174380>)
 
 <details>
@@ -297,7 +297,7 @@ spec:
       volumes:
         - name: postgres-pvc # name we can reference below in container
           persistentVolumeClaim:
-            claimName: postgres-pvc # name of the actual pvc
+            claimName: postgres-pvc # name of the actual PVC
       containers:
         - image: docker.io/library/postgres:14.3
           name: postgres
@@ -312,7 +312,7 @@ spec:
 
 </details>
 
-Apply the changes to the postgres deployment using `kubectl apply`:
+Apply the changes to the PostgreSQL deployment using `kubectl apply`:
 
 ```shell
 kubectl apply -f persistent-storage/start/postgres-deployment
@@ -432,13 +432,13 @@ persistentvolume/pvc-fc17f2e1-c7bc-4a43-8e3d-956dbedb0e97   8Gi        RWO      
 
 ### Delete pod with volume attached and observe that state is persisted when a new pod is created
 
-Now that the state of our postgres database is persisted to the volume, let's verify:
+Now that the state of our PostgreSQL database is persisted to the volume, let's verify:
 
 - Open the frontend webpage and add some quotes
 - Retrieve quotes from the database, and observe that your quotes are among them
 - Delete the database pod with `kubectl delete pod <postgres-pod-name>`
 - Wait for the postgres pod to be recreated (you can watch for pod changes with `kubectl get pods --watch`)
-- In the frontend webpage, retrieve quotes and obeserve that your quotes are among them
+- In the frontend webpage, retrieve quotes and observe that your quotes are among them
 
 </details>
 

@@ -2,7 +2,7 @@
 
 ## Learning Goals
 
-- Write your own declarative manifest to run a simple web application in a pod.
+- Write your declarative manifest to run a simple web application in a pod.
 
 ## Introduction
 
@@ -111,11 +111,11 @@ spec:
 
 ### Apply the `pod` manifest
 
-Try to apply the manifest with `kubectl apply -f frontend-pod.yaml` command.
+Try to apply the manifest with the `kubectl apply -f frontend-pod.yaml` command.
 
 ### Verify the `pod` is created correctly
 
-Check the status of the pod with `kubectl get pods` command.
+Check the status of the pod with the `kubectl get pods` command.
 
 Expected output:
 
@@ -131,6 +131,6 @@ applied it to the cluster.
 
 ### Clean up
 
-Delete the pod with `kubectl delete pod frontend` command.
+Delete the pod with the `kubectl delete pod frontend` command.
 
 Congratulations! You have now learned how to make a manifest detailing our frontend pod.

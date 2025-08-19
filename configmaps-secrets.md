@@ -8,13 +8,13 @@
 ## Introduction
 
 Configmaps and secrets are a way to store information that is used by several deployments and pods
-in your cluster. This makes it easy to update the configuration in one place, when you want to
+in your cluster. This makes it easy to update the configuration in one place when you want to
 change it.
 
 Both configmaps and secrets are generic `key-value` pairs, but secrets are `base64 encoded` and
 configmaps are not.
 
-> :bulb: Secrets are not encrypted, they are encoded. This means that if someone gets access to the
+> :bulb: Secrets are not encrypted; they are encoded. This means that if someone gets access to the
 > cluster, they will be able to read the values.
 
 ## ConfigMaps
@@ -23,10 +23,10 @@ You use a ConfigMap to keep your application code separate from your configurati
 
 It is an important part of creating a [Twelve-Factor Application](https://12factor.net/).
 
-This lets you change easily configuration depending on the environment (development, production,
+This lets you change configuration easily depending on the environment (development, production,
 testing, etc.) and to dynamically change configuration at runtime.
 
-A ConfigMap manifest looks like this in yaml:
+A ConfigMap manifest looks like this in YAML:
 
 ```yaml
 apiVersion: v1
@@ -101,7 +101,7 @@ data:
 
 `secrets` are used for storing configuration that is considered sensitive, and well ... _secret_.
 
-When you create a `secret` Kubernetes will go out of it's way to not print the actual values of
+When you create a `secret`, Kubernetes will go out of its way to not print the actual values of
 secret object, to things like logs or command output.
 
 You should use `secrets` to store things like passwords for databases, API keys, certificates, etc.
@@ -113,19 +113,19 @@ source these values from environment variables.
 actual values are `base64` encoded. `base64` encoded means that the values are obscured, but can be
 trivially decoded. When values from a `secret` are used, Kubernetes handles the decoding for you.
 
-> :bulb: As `secrets` don't actually make their data secret for anyone with access to the cluster,
+> :bulb: As `secrets` don't make their data secret for anyone with access to the cluster,
 > you should think of `secrets` as metadata for humans, to know that the data contained within is
 > considered secret.
 
 ## Using ConfigMaps and Secrets in a deployment
 
-To use a configmap or secret in a deployment, you can either mount it in as a volume, or use it
+To use a configmap or secret in a deployment, you can either mount it as a volume or use it
 directly as an environment variable.
 
 ### Injecting a ConfigMap as environment variables
 
 This will inject all key-value pairs from a configmap as environment variables in a container.
-The keys will be the name of variables, and the values will be values of the variables.
+The keys will be the names of variables, and the values will be the values of the variables.
 
 ```yaml
 apiVersion: apps/v1
@@ -151,10 +151,10 @@ spec:
 
 - Add the database part of the application
 - Change the database user into a configmap and implement that in the backend
-- Change the database password into a secret, and implement that in the backend.
+- Change the database password to a secret, and implement that in the backend.
 - Change database deployment to use the configmap and secret.
 
-### Step by step instructions
+### Step-by-step instructions
 
 <details>
 <summary>
@@ -168,7 +168,7 @@ Step by step:
 We have already created the database part of the application, with a deployment and a service.
 
 - Look at the database deployment file `postgres-deployment.yaml`.
-  Notice the database username and password are injected as hardcoded environment variables.
+  Notice that the database username and password are injected as hardcoded environment variables.
 
 > :bulb: This is not a good practice, as we do not want to store these values in version control.
 > We will fix this in the next steps.
@@ -194,10 +194,10 @@ postgres-6fbd757dd7-ttpqj  1/1     Running   0          4s
 #### Refactor the database user into a configmap and implement that in the backend
 
 We want to change the database user into a configmap, so that we can change it in one place, and
-use it on all deployments that needs it.
+use it on all deployments that need it.
 
 - Create a configmap with the name `postgres-config` and filename `postgres-config.yaml` and the
-  information about database configuration as follows:
+  information about the database configuration as follows:
 
 ```yaml
 data:
@@ -238,7 +238,7 @@ data:
 
 </details>
 
-- apply the configmap with `kubectl apply -f postgres-config.yaml`
+- Apply the configmap with `kubectl apply -f postgres-config.yaml`
 - In the `backend-deployment.yaml`, change the environment variables to use the configmap instead
   of the hardcoded values.
 
@@ -266,14 +266,14 @@ data:
         name: postgres-config
   ```
 
-- re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
-- check that the website is still running.
+- Re-apply the backend deployment with `kubectl apply -f backend-deployment.yaml`
+- Check that the website is still running.
 
 #### Change the database password into a secret, and implement that in the backend
 
-We want to change the database password into a secret, so that we can change it in one place, and
-use it on all deployments that needs it.
-In order for this, we need to change the backend deployment to use the secret instead of the
+We want to change the database password to a secret, so that we can change it in one place, and
+use it on all deployments that need it.
+For this, we need to change the backend deployment to use the secret instead of the
 configmap for the password itself.
 
 - create a secret with the name `postgres-secret` and the following data:
@@ -340,12 +340,12 @@ envFrom:
 
 We are going to implement the configmap and secret in the database deployment as well.
 
-The standard Postgres docker image can be configured by setting specific environment variables,
+The standard Postgres Docker image can be configured by setting specific environment variables,
 ([you can see the documentation here](https://hub.docker.com/_/postgres)).
-By populating these specific values we can configure the credentials for root user and the name of
-the database to be created.
+By populating these specific values, we can configure the credentials for the root user and the name
+of the database to be created.
 
-This means that we need to change the way we are injecting the environment variables, in order to
+This means that we need to change the way we are injecting the environment variables, to
 make sure the environment variables have the correct names.
 
 - Open the `postgres-deployment.yaml` file, and change the way the environment variables are
@@ -371,8 +371,8 @@ env:
         key: DB_PASSWORD
 ```
 
-- re-apply the database deployment with `kubectl apply -f postgres-deployment.yaml`
-- check that the website is still running, and that the new database can be reached from the backend.
+- Re-apply the database deployment with `kubectl apply -f postgres-deployment.yaml`
+- Check that the website is still running, and that the new database can be reached from the backend.
 
 Congratulations! You have now created a configmap and a secret, and used them in your application.
 
