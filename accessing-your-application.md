@@ -39,7 +39,7 @@ In Kubernetes `port-forward` creates a tunnel between your local machine and the
 the specified `IP:PORT` pairs to establish a connection to the cluster.
 `kubectl port-forward` allows you to forward not only pods but also services, deployments, and others.
 
-More information can be found from [here](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
+More information can be found from [port-forward-access-application-cluste](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 
 </details>
 

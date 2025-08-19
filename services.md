@@ -186,7 +186,7 @@ service from the internet.
 
 There are other types of services, like `LoadBalancer`, but we won't cover them in this exercise.
 
-If you want to know more about Services, you can read more about them [here](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+If you want to know more about Services, you can read more about them [publishing-services-service-types](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 > :bulb: Hint: You can use the `kubectl explain` command to get more information about the fields
 > in the yaml file. For example, `kubectl explain service.spec` will give you more information
