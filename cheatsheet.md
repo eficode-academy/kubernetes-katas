@@ -7,7 +7,7 @@ kubectl config set-context $(kubectl config current-context) --namespace=my-name
                                                          # Change default namespace
 
 kubectl help run                                         # See help about run (or other commands)
-kubectl explain pod.spec                                 # Documenation on any resource attribute
+kubectl explain pod.spec                                 # Documentation on any resource attribute
 
 kubectl get nodes                                        # See nodes in cluster
 kubectl get pods -o wide                                 # See pods in current namespace
@@ -15,7 +15,7 @@ kubectl get pod <name> -o yaml                           # See info about pod <n
 kubectl describe pod <name>                              # Show information about pod <name>
 kubectl describe service <name>                          # Show information about service <name>
 
-kubectl api-resources                                    # See resources types and abbreviations
+kubectl api-resources                                    # See resource types and abbreviations
 
 kubectl create namespace my-namespace                    # Create namespace
                                                          # Set default namespace
