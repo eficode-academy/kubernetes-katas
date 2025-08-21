@@ -1,7 +1,7 @@
 # Kubernetes-introduction
 
 In this course, we will learn how to deploy applications in Kubernetes.
-We will start by deploying the entire quotes application the way it will be done when we are done
+We will start by deploying the entire quotes application, the way it will be done when we are done
 with the course.
 
 ## Deploying an application
@@ -11,7 +11,7 @@ We will be deploying a small example Python Flask application that displays quot
 The application consists of three components: Frontend, backend and a database.
 
 The frontend and backend are small Python Flask webservers that listen for HTTP requests.
-For persistent storage, a postgresql database is used.
+For persistent storage, a PostgreSQL database is used.
 
 ## Learning Goals
 
@@ -24,31 +24,31 @@ For persistent storage, a postgresql database is used.
 In Kubernetes, we run containers, but we don't manage containers directly. Containers are instead
 placed inside `pods`. A `pod` _contains_ containers.
 
-Pods in turn are managed by controllers, the most common one is called a `deployment`.
+Pods, in turn, are managed by controllers, the most common one is called a `deployment`.
 
 And in order to make the application accessible from the outside, we use a `service`. Don't worry
 if you feel a bit overwhelmed, we will go through them in detail later in the course.
 
-Kubernetes resources are declared in what is called `manifests` which use a markup language called
+Kubernetes resources are declared in what is called `manifests`, which use a markup language called
 `yaml` to express the desired state of resources.
 
 ### Imperative vs Declarative
 
-You can use the Kubernetes CLI to create, delete and modify resources in two ways - imperatively
+You can use the Kubernetes CLI to create, delete, and modify resources in two ways - imperatively
 and declaratively.
 
-Imperatively means that you are actively _creating, deleting and modifying_ resources. And if for
-example you run a create command twice, you will end up with one resource and a "fail to create"
+Imperatively means that you are actively _creating, deleting, and modifying_ resources. So if you
+run a create command twice, you will end up with one resource and a "fail to create"
 error message, because it is already created.
 
 Declaratively means that you _declare what you want,_ and _not how_ Kubernetes should do it. If you
-run the same command twice, you will end up with just one resources. This is because Kubernetes
+run the same command twice, you will end up with just one resource. This is because Kubernetes
 will fulfill your desired state, and if it already exists, it will not create it again.
 
 Doing things **imperatively** is fine for _hacking_ on things, but most of the time we want to work
 with Kubernetes **declaratively**.
 
-Therefore we much prefer to do things **declaratively**.
+Therefore, we prefer to do things **declaratively**.
 Declaratively means that we _declare what we want,_ and _not how_ Kubernetes should do it.
 
 This declaration is what we call our `desired state`.
@@ -69,7 +69,7 @@ To use it, type `kubectl <subcommand> <options>` in a terminal.
 - Apply the Quotes flask application using the `kubectl apply` command.
 - Access the application from the Internet
 
-### Step by step instructions
+### Step-by-step instructions
 
 <details>
 <summary>Step by step</summary>
@@ -89,7 +89,7 @@ Try to see if you can find information about:
 - The image used for the container
 - The port the container listens on
 
-Do not worry if you don't understand everything yet, we will go through it in detail later in the course.
+Do not worry if you don't understand everything yet; we will go through it in detail later in the course.
 
 ### Apply the manifest using the `kubectl apply`
 
@@ -134,7 +134,7 @@ postgres        1/1     1            1           27s
 
 ### Access the application from the Internet
 
-We are getting a little ahead of our exercises here, but to illustrate that we actually have
+We are getting a little ahead of our exercises here, but to illustrate that we have
 a functioning application running in our cluster, let's try accessing it from a browser!
 
 First off, get the `service` called `frontend` and note down the NodePort, by finding the `PORT(S)`
@@ -154,7 +154,7 @@ NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 frontend    NodePort   10.96.223.218   <none>        80:32458/TCP   12s
 ```
 
-In this example, Kubernetes has chosen port `32458`, you will most likely get a different number.
+In this example, Kubernetes has chosen port `32458`; you will most likely get a different number.
 
 Finally, look up the IP address of a node in the cluster with:
 
@@ -162,7 +162,7 @@ Finally, look up the IP address of a node in the cluster with:
 kubectl get nodes -o wide
 ```
 
-> :bulb: The `-o wide` flag makes the output more verbose, i.e. to include the IPs
+> :bulb: The `-o wide` flag makes the output more verbose, i.e., to include the IPs
 
 Expected output:
 
@@ -172,13 +172,13 @@ node1   Ready    . . . 10.123.0.8   35.240.20.246   . . .
 node2   Ready    . . . 10.123.0.7   35.205.245.42   . . .
 ```
 
-In the example your external IPs are either `35.240.20.246` or `35.205.245.42`.
+In the example, your external IP address is either `35.240.20.246` or `35.205.245.42`.
 
-The `frontend` `service` is of type `NodePort` and will be exposed on _all_ of the nodes. The
+The `frontend` service is of type `NodePort` and will be exposed on _all_ of the nodes. The
 service will be exposed on the port with the number you noted down above.
 
 Choose one of the `EXTERNAL-IP`'s, and point your web browser to the address:
-`<EXTERNAL-IP>:<PORT>`.
+`<EXTERNAL-IP>:<PORT>` - note the colon `:` that separates EXTERNAL-IP and PORT
 
 In this example, the address could be `35.240.20.246:32458`, or `35.205.245.42:32458`.
 
@@ -200,7 +200,7 @@ kubectl delete -f quotes-flask/
 
 If you have more time, take a look at the YAML manifests that we used to deploy the application.
 They are in the `quotes-flask` folder.
-First take a look at the deployment manifest, and see if you can find the following information:
+First, take a look at the deployment manifest, and see if you can find the following information:
 
 - The name of the deployment
 - The number of replicas

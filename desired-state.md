@@ -2,21 +2,21 @@
 
 Desired state is one of the core concepts of Kubernetes. It is the state that you want your cluster
 to be in. It is the state that you define in your Kubernetes manifests. It means that the cluster
-continously will try to fulfill your desired state, even if it will never be posible to reach it.
+continuously will try to fulfill your desired state, even if that will never be possible.
 
-In this exercise you will apply Kubernetes manifests to your cluster, and learn how Kubernetes
+In this exercise, you will apply Kubernetes manifests to your cluster and learn how Kubernetes
 fulfills your desired state.
 
 ## Controllers
 
-Kubernetes controllers are the components that fulfills your desired state. As the example we will
-use here, a deployment controller will attempt to do so that the number of pods that you have
-defined in your manifest is always running in the cluster.
+Kubernetes controllers are the components that fulfill your desired state. The example we will
+use is a deployment controller, which will attempt to ensure that the number of pods that you have
+defined in your manifest are always running in the cluster.
 
 ## Learning Goals
 
 - Applying Kubernetes manifests using `kubectl apply -f <file>`.
-- Verifying Kubernetes promise of fulfilling your desired state.
+- Verifying the Kubernetes promise of fulfilling your desired state.
 
 ## Exercise
 
@@ -25,9 +25,9 @@ defined in your manifest is always running in the cluster.
 - Inspect existing Kubernetes manifest for a `deployment` object.
 - Apply the manifest using the `kubectl apply` command.
 - Delete a pod managed by the deployment controller.
-- Observe that a new pod is created in it's place by the controller.
+- Observe that a new pod is created in its place by the controller.
 
-### Step by step instructions
+### Step-by-step instructions
 
 <details>
 <summary>
@@ -58,7 +58,7 @@ spec:
   template:
     metadata:
       labels:
-        app: nginx # pod labels that must match selector
+        app: nginx # pod labels that must match the selector
         version: latest # arbitrary label we can match on elsewhere
     spec:
       containers:
@@ -108,14 +108,14 @@ NAME                         READY     STATUS    RESTARTS   AGE
 nginx-431080787-9r0lx        1/1       Running   0          40s
 ```
 
-Kubernetes is now doing everything it can to satisfy our desired state of running our nginx webserver.
+Kubernetes is now doing everything it can to satisfy our desired state of running our nginx web server.
 
-Let's test that Kubernetes actually keeps it's promise of fulfilling the desired state.
+Let's test that Kubernetes keeps its promise of fulfilling the desired state.
 
 ## Test Kubernetes promise of desired state by deleting a pod
 
 Since we have asked Kubernetes to run our nginx pod using a `deployment`, the deployment controller
-will keep monitoring our pods and make sure that a nginx pod keeps running.
+will keep monitoring our pods and make sure that an nginx pod keeps running.
 
 Let's see this in action:
 
@@ -138,13 +138,13 @@ pod "nginx-431080787-9r0lx" deleted
 ```
 
 The desired state we have defined specifies that exactly one nginx pod should exist, since we have
-now deleted the nginx pod, we have forced our `deployment` to drift away from the desired state, as
-there are now zero nginx pods.
+now deleted the nginx pod, we have forced our `deployment` to drift away from the desired state, because
+now there are zero nginx pods.
 
-Therefore Kubernetes must make a change to the state of the cluster to once again fulfill our
-desired state, therefore Kubernetes will create a new nginx pod to replace the one we have deleted.
+Therefore, Kubernetes must make a change to the state of the cluster to once again fulfill our
+desired state and create a new nginx pod to replace the one we have deleted.
 
-## Observe that a new pod is created in it's place by the deployment controller
+## Observe that a new pod is created in its place by the deployment controller
 
 We use `kubectl get` to verify that a **new** nginx pod is created (with a different name):
 
@@ -159,7 +159,7 @@ NAME                         READY     STATUS              RESTARTS   AGE
 nginx-431080787-tx5m7        0/1       ContainerCreating   0          5s
 ```
 
-And after few more seconds:
+And after a few more seconds:
 
 ```shell
 kubectl get pods
@@ -174,7 +174,7 @@ nginx-431080787-tx5m7        1/1       Running   0          12s
 
 Congratulations! You have now created a deployment using a Kubernetes manifest.
 
-You have also seen that Kubernetes keeps it's promise of fulfilling your desired state, by creating
+You have also seen that Kubernetes keeps its promise of fulfilling your desired state by creating
 a new pod in the place of the deleted pod.
 
 </details>
