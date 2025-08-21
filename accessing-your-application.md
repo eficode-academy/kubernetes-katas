@@ -35,11 +35,13 @@ You can then access the pod on `localhost:8080`.
 Port forwarding is a network address translation that redirects Internet packets from one IP address
 to another with a specified port number to another `IP:PORT` set.
 
-In Kubernetes `port-forward` creates a tunnel between your local machine and the Kubernetes cluster on
-the specified `IP:PORT` pairs to establish a connection to the cluster.
-`kubectl port-forward` allows you to forward not only pods but also services, deployments, and others.
+The `port-forward` command in Kubernetes forwards incoming traffic to the machine, the command is
+executed on, to the specified `IP:PORT` pairs inside the Kubernetes cluster. This effectively
+lets traffic from outside the cluster reach applications running inside the cluster.
+`kubectl port-forward` allows you to forward traffic to pods, services, deployments, and others.
 
-More information can be found from [Use Port Forwarding to Access Applications in a Cluster](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
+More information can be found in the Kubernetes docs at
+[Use Port Forwarding to Access Applications in a Cluster](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 
 </details>
 
@@ -78,7 +80,7 @@ The pod is defined in the `frontend-pod.yaml` file.
 
 </details>
 
-- Check that the pod is running with the `kubectl get pods` command.
+- Use the `kubectl get pods` command to verify that the pod is running.
 
 You should see something like this:
 
@@ -87,7 +89,7 @@ NAME       READY   STATUS    RESTARTS   AGE
 frontend   1/1     Running   0          2m
 ```
 
-- Expose the frontend with port-forward
+- Expose the frontend with `port-forward`
 
 Port forwarding can be achieved with:
 

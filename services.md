@@ -13,7 +13,7 @@ between them.
 
 ## Service Discovery & Services
 
-One of the features of Kubernetes is that we do not have to care which machine our pods are
+One of the features of Kubernetes is that we do not have to know which machine our pods are
 running on. This does create an interesting problem for us - if we don't know where (the IP address)
 the pod is, how can we route traffic to it? This is solved by what is called **service discovery**,
 as the words imply, Kubernetes will look for your pods and dynamically route traffic to them.
@@ -32,9 +32,9 @@ the rest!
 The `service` then routes traffic to the pods that it selects. You can think of `service` as a kind of
 proxy - you route traffic to the service, and the service routes the traffic to your pods.
 
-While the `service` gets a static IP address, we prefer not to use it, because Kubernetes
-runs its own DNS server in the cluster network, and every time we create a `service`, a DNS record is
-created that points to the `service` IP address.
+While the `service` gets a static IP address, we prefer not to use it. Kubernetes
+runs its own DNS server in the cluster network, and every time we create a `service`,
+a DNS record that points to the `service` IP address is automatically created.
 The DNS record is always the `name` of the service, and can be referenced either from the same
 namespace by using the name or from a different namespace by using the long form:
 `<name>.<namespace>.svc.cluster.local`.
@@ -161,7 +161,7 @@ internet, but we can still access it from within the cluster using its `CLUSTER-
 - No matter what type of service you choose while _exposing_ your pod, Cluster-IP is always
   assigned to that particular service.
 
-- Every service has endpoints, which point to the actual pod serving as the backend of a particular
+- Every service has end-points, which point to the actual pod serving as the backend of a particular
   service.
 
 - As soon as a service is created and is assigned a Cluster-IP, an entry is made in Kubernetes'
@@ -186,7 +186,8 @@ service from the internet.
 
 There are other types of services, like `LoadBalancer`, but we won't cover them in this exercise.
 
-If you want to know more about Services, you can read more about them [Service types](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+If you want to know more about Services, you can read more about them in the Kubernetes docs for
+[Service types](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 > :bulb: Hint: You can use the `kubectl explain` command to get more information about the fields
 > in the YAML file. For example, `kubectl explain service.spec` will give you more information

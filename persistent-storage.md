@@ -277,7 +277,7 @@ Fill in the values:
 - `mountPath` is the path in the container to mount the volume to. For postgres, the database state is
   stored to the path `/var/lib/postgresql/data`
 - `subPath` should be `postgres`, and specifies a directory to be created within the volume. We need
-  this because of a quirk with combining `AWS EBS` with Postgres. (If you are curious, why:
+  this because of a quirk with combining `AWS EBS` with Postgres. (If you are curious why:
   <https://stackoverflow.com/a/51174380>)
 
 <details>

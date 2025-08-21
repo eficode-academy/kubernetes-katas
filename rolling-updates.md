@@ -118,7 +118,7 @@ spec:
       name: backend
 ```
 
-What happened - does the frontend still work? And are you able to see the backend version in the browser?
+What happened? Does the frontend still work? Are you able to see the backend version in the browser?
 
 - Investigate the running pods with: `kubectl get pods`
 
