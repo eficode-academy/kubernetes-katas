@@ -17,3 +17,9 @@ spec:
       containers:
       - image: ghcr.io/eficode-academy/quotes-flask-backend:release
         name: quotes-flask-backend
+        readinessProbe:
+          exec:
+            command:
+              - /bin/true
+            initialDelaySeconds: 10
+            periodSeconds: 10
