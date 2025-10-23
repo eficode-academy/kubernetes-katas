@@ -173,7 +173,7 @@ We have already created the database part of the application, with a deployment 
 > :bulb: This is not a good practice, as we do not want to store these values in version control.
 > We will fix this in the next steps.
 
-- Look at the service file in `postgres-svc.yaml`.
+- Look at the service file in `postgres-service.yaml`.
   It provides a service for the database, so that the backend can connect to it.
 
 - Apply the whole folder with `kubectl apply -f .`
