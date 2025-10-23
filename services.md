@@ -404,10 +404,10 @@ with the value bar, you would run the following command:
 
 Try to apply the manifests again and write four commands that do the following:
 
-- List only the pods with the label app=frontend
-- List only the pods with the label app=backend
-- List only the pods where the label app is not frontend
-- List only the pods where the label app is not backend
+- List only the pods with the label run=frontend
+- List only the pods with the label run=backend
+- List only the pods where the label run is not frontend
+- List only the pods where the label run is not backend
 
 The documentation on this can be found here:
 <https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/>
