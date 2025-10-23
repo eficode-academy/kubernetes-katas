@@ -194,7 +194,8 @@ You should see something like this:
 
 (If you don't, you might need to refresh the page.)
 
-- Exec into the frontend pod with the command `kubectl exec -it frontend -- /bin/sh`.
+- In a new terminal (in vscode you can click the "+" button on the right side of the current terminal),
+  exec into the frontend pod with the command `kubectl exec -it frontend -- /bin/sh`.
 
 - Execute a curl command to the backend `curl http://<BACKEND_IP>:5000`.
 
